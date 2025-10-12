@@ -1,73 +1,11 @@
-# React + TypeScript + Vite
+# Todosh-2.0
+Multiuser web-application for managing own tasks
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Todosh - это многопользовательское веб-приложение, которое сочетает в себе лучшие функции современных таск-менеджеров воедино.
 
-Currently, two official plugins are available:
+Наш проект предоставляет возможность управления списками, как в Microsoft ToDo - можно перетаскивать задачи, выполонять их, помечать избранными, назначать дату для выполнения или дату для завершения, назначать метку задаче, перемещая ее в "папку". 
+Но основынм функционалом нашего приложения будет являться календарь. Все задачи, которые вы создали и которым назначили дату во вкладке задачи, будут отображены на новой вкладке - календарь. 
+По сути эти две вкладки - просто разное отображение одних и тех же задач, в календаре вы так же можете их создавать, помечать меткой и избранным, менять содержимое и заголовок, НО календарь, в отличие от обычного спска позволяет эти задачи лучше воспринимать, лучше воспринимать сроки выполнения, хронологию их выполнения, фильтровать метки и т.д. 
+Но самое главное - вы можете удобно назначать новую дату для выполнения простым переносом задачи на новый день или растягивая задау назначая другой день на ее окончание. Это выглядит как календарь в приложении Yonote: <img width="1489" height="854" alt="{0FC50175-50A6-4473-AF42-A50327777F13}" src="https://github.com/user-attachments/assets/7df49042-b3ab-4eab-a736-5170f68813da" />
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Наше приложение будет сочетать самое лучшее от Yonote и Microsoft ToDo и синхронизировать это каждого пользователя через базу данных.

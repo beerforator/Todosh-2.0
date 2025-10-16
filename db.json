@@ -8,7 +8,7 @@
       "endDate": "2025-10-15T11:00:00.000Z",
       "userId": "user-1",
       "listId": "list-1",
-      "isCompleted": false,
+      "isCompleted": true,
       "isFavourite": true
     },
     {
@@ -18,7 +18,7 @@
       "endDate": "2025-10-17T18:00:00.000Z",
       "userId": "user-1",
       "listId": "list-2",
-      "isCompleted": false,
+      "isCompleted": true,
       "isFavourite": false
     },
     {
@@ -26,6 +26,15 @@
       "title": "Позвонить маме",
       "userId": "user-1",
       "listId": "list-inbox",
+      "isCompleted": false,
+      "isFavourite": false
+    },
+    {
+      "id": "c20e",
+      "title": "Новая задача",
+      "description": "Add discription for task",
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-inbox",
       "isCompleted": true,
       "isFavourite": false
     }

@@ -2,6 +2,8 @@ import { createSlice, createEntityAdapter, PayloadAction } from '@reduxjs/toolki
 import type { Task } from '@/shared/types/entities';
 import { fetchTasks } from './fetchTasks';
 import { RootState } from '@/app/providers/store/types';
+import { createTask } from '@/features/CreateTask/api/createTask';
+import { deleteTask } from '@/features/DeleteTask/api/deleteTask';
 
 // createEntityAdapter - это мощная утилита от Redux Toolkit для нормализации данных.
 // Она автоматически создает для нас структуру { ids: [], entities: {} } и редьюсеры.
@@ -59,6 +61,12 @@ export const tasksSlice = createSlice({
                 // Когда запрос провалился, ставим статус 'failed' и записываем ошибку
                 state.loading = 'failed'
                 state.error = action.payload as string
+            })
+            .addCase(createTask.fulfilled, (state, action: PayloadAction<Task>) => {
+                tasksAdapter.addOne(state, action.payload)
+            })
+            .addCase(deleteTask.fulfilled, (state, action: PayloadAction<string>) => {
+                tasksAdapter.removeOne(state, action.payload);
             })
     }
 });

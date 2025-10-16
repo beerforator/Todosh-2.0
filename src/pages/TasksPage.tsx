@@ -1,6 +1,10 @@
 import { AppDispatch, RootState } from "@/app/providers/store/types"
 import { fetchTasks } from "@/entities/Task/model/fetchTasks"
 import { tasksSelectors } from "@/entities/Task/model/tasksSlice"
+import { TaskCard } from "@/entities/Task/ui/TaskCard"
+import { CreateTask } from "@/features/CreateTask/CreateTask"
+import { DeleteTask } from "@/features/DeleteTask/DeleteTask"
+import { ToggleTask } from "@/features/ToggleTask/ToggleTask"
 import { Task } from "@/shared/types/entities"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -13,8 +17,10 @@ export const TasksPage = () => {
     const tasksLoadingStatus = useSelector((state: RootState) => state.tasks.loading)
 
     useEffect(() => {
-        dispatch(fetchTasks())
-    }, [dispatch])
+        if (tasksLoadingStatus === 'idle') {
+            dispatch(fetchTasks())
+        }
+    }, [tasksLoadingStatus, dispatch])
 
     if (tasksLoadingStatus === 'pending') {
         return (
@@ -34,10 +40,16 @@ export const TasksPage = () => {
             <ul>
                 {
                     allTasks.map(task => (
-                        <li key={task.id}>{task.title}</li>
+                        <TaskCard
+                            key={task.id}
+                            task={task}
+                            featureSlot={<ToggleTask task={task} />}
+                            actionsSlot={<DeleteTask taskId={task.id} />}
+                        />
                     ))
                 }
             </ul>
+            <CreateTask />
         </div>
     )
 }

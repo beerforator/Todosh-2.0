@@ -11,13 +11,15 @@ const listsAdapter = createEntityAdapter<List>({
 });
 
 interface ListsState {
-    loading: 'idle' | 'pending' | 'succeeded' | 'failed';
-    error: string | null;
+    loading: 'idle' | 'pending' | 'succeeded' | 'failed',
+    error: string | null,
+    selectedListId: string | null
 }
 
 const initialState = listsAdapter.getInitialState<ListsState>({
     loading: 'idle',
     error: null,
+    selectedListId: null
 });
 
 // Создаем сам "слайс"
@@ -40,6 +42,11 @@ export const listsSlice = createSlice({
         // `setTasks` полностью заменит все задачи в стейте.
         // Полезно при получении данных с сервера.
         setLists: listsAdapter.setAll,
+
+
+        selectList: (state, action: PayloadAction<string>) => {
+            state.selectedListId = action.payload
+        }
     },
     // extraReducers используется для асинхронных действий, их мы добавим позже.
     extraReducers: (builder) => {
@@ -54,6 +61,10 @@ export const listsSlice = createSlice({
                 // и с помощью setTasks (который мы создали ранее) полностью заменяем задачи в стейте
                 state.loading = 'succeeded'
                 listsAdapter.setAll(state, action.payload)
+                if (!state.selectedListId && action.payload.length > 0) {
+                    const inbox = action.payload.find(l => l.id === 'list-inbox') || action.payload[0]
+                    state.selectedListId = inbox.id
+                }
             })
             .addCase(fetchLists.rejected, (state, action) => {
                 // Когда запрос провалился, ставим статус 'failed' и записываем ошибку
@@ -64,7 +75,7 @@ export const listsSlice = createSlice({
 });
 
 // Экспортируем наши экшены, чтобы использовать их в компонентах
-export const { addList, updateList, removeList, setLists } = listsSlice.actions;
+export const { addList, updateList, removeList, setLists, selectList } = listsSlice.actions;
 
 // Экспортируем селекторы, которые предоставляет адаптер.
 // Селекторы - это функции для получения данных из стейта.

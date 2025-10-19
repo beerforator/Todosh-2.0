@@ -6,9 +6,9 @@
       "description": "Безлактозное, 1.5%",
       "startDate": "2025-10-15T10:00:00.000Z",
       "endDate": "2025-10-15T11:00:00.000Z",
-      "userId": "user-1",
-      "listId": "list-1",
-      "isCompleted": true,
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-1",
+      "isCompleted": false,
       "isFavourite": true
     },
     {
@@ -16,26 +16,35 @@
       "title": "Закончить отчет по проекту",
       "startDate": "2025-10-16T09:00:00.000Z",
       "endDate": "2025-10-17T18:00:00.000Z",
-      "userId": "user-1",
-      "listId": "list-2",
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-2",
       "isCompleted": true,
       "isFavourite": false
     },
     {
       "id": "3",
       "title": "Позвонить маме",
-      "userId": "user-1",
-      "listId": "list-inbox",
-      "isCompleted": false,
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-inbox",
+      "isCompleted": true,
       "isFavourite": false
     },
     {
-      "id": "c20e",
-      "title": "Новая задача",
+      "id": "acd5",
+      "title": "Созвон",
       "description": "Add discription for task",
       "userOwnerId": "user-1",
       "listOwnerId": "list-inbox",
       "isCompleted": true,
+      "isFavourite": false
+    },
+    {
+      "id": "1b29",
+      "title": "Какая-то задача",
+      "description": "Add discription for task",
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-inbox",
+      "isCompleted": false,
       "isFavourite": false
     }
   ],
@@ -43,17 +52,17 @@
     {
       "id": "list-inbox",
       "name": "Inbox",
-      "userId": "user-1"
+      "userOwnerId": "user-1"
     },
     {
       "id": "list-1",
       "name": "Покупки",
-      "userId": "user-1"
+      "userOwnerId": "user-1"
     },
     {
       "id": "list-2",
       "name": "Работа",
-      "userId": "user-1"
+      "userOwnerId": "user-1"
     }
   ],
   "users": [

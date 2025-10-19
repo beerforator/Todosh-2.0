@@ -29,8 +29,8 @@ export const SortableTaskCard = ({ task, ...props }: SortableTaskCardProps) => {
 
     return (
         // Мы "оборачиваем" нашу TaskCard в div, к которому применяем все магические атрибуты
-        <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            <TaskCard task={task} {...props} />
+        <div ref={setNodeRef} style={style} {...attributes}>
+            <TaskCard task={task} {...props} dndAttributes={attributes} dndListeners={listeners}/>
         </div>
     );
 };

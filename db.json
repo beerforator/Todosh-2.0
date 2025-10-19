@@ -2,7 +2,7 @@
   "tasks": [
     {
       "id": "1",
-      "title": "Купить молоко",
+      "title": "Купить молоко домой и на дачу",
       "description": "Безлактозное, 1.5%",
       "startDate": "2025-10-15T10:00:00.000Z",
       "endDate": "2025-10-15T11:00:00.000Z",
@@ -31,16 +31,34 @@
     },
     {
       "id": "acd5",
-      "title": "Созвон",
+      "title": "Созвон - СРОЧНО",
       "description": "Add discription for task",
       "userOwnerId": "user-1",
       "listOwnerId": "list-inbox",
-      "isCompleted": true,
+      "isCompleted": false,
       "isFavourite": false
     },
     {
-      "id": "1b29",
-      "title": "Какая-то задача",
+      "id": "3546",
+      "title": "Задача 1.1",
+      "description": "Add discription for task",
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-inbox",
+      "isCompleted": false,
+      "isFavourite": false
+    },
+    {
+      "id": "43b9",
+      "title": "Задача 2",
+      "description": "Add discription for task",
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-inbox",
+      "isCompleted": false,
+      "isFavourite": false
+    },
+    {
+      "id": "6c2d",
+      "title": "Задача 1.2 - Продолжение",
       "description": "Add discription for task",
       "userOwnerId": "user-1",
       "listOwnerId": "list-inbox",

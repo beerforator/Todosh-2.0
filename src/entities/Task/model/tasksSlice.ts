@@ -2,8 +2,9 @@ import { createSlice, createEntityAdapter, PayloadAction } from '@reduxjs/toolki
 import type { Task } from '@/shared/types/entities';
 import { fetchTasks } from './fetchTasks';
 import { RootState } from '@/app/providers/store/types';
-import { createTask } from '@/features/CreateTask/api/createTask';
+import { createTask } from '@/features/TaskModal/api/useCreateTask';
 import { deleteTask } from '@/features/DeleteTask/api/deleteTask';
+import { updateTaskApi } from '@/features/EditTask/api/updateTaskApi';
 
 // createEntityAdapter - это мощная утилита от Redux Toolkit для нормализации данных.
 // Она автоматически создает для нас структуру { ids: [], entities: {} } и редьюсеры.
@@ -46,23 +47,21 @@ export const tasksSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchTasks.pending, (state) => {
-                state.loading = 'pending'
-                state.error = null
-            })
             .addCase(fetchTasks.fulfilled, (state, action: PayloadAction<Task[]>) => {
                 state.loading = 'succeeded'
                 tasksAdapter.setAll(state, action.payload)
-            })
-            .addCase(fetchTasks.rejected, (state, action) => {
-                state.loading = 'failed'
-                state.error = action.payload as string
             })
             .addCase(createTask.fulfilled, (state, action: PayloadAction<Task>) => {
                 tasksAdapter.addOne(state, action.payload)
             })
             .addCase(deleteTask.fulfilled, (state, action: PayloadAction<string>) => {
                 tasksAdapter.removeOne(state, action.payload);
+            })
+            .addCase(updateTaskApi.fulfilled, (state, action: PayloadAction<Task>) => {
+                tasksAdapter.updateOne(state, {
+                    id: action.payload.id,
+                    changes: action.payload
+                });
             })
     }
 });

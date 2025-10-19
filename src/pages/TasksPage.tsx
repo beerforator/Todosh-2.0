@@ -1,17 +1,19 @@
 import { AppDispatch, RootState } from "@/app/providers/store/types"
 import { fetchTasks } from "@/entities/Task/model/fetchTasks"
 import { reOrderTask, tasksSelectors } from "@/entities/Task/model/tasksSlice"
-import { CreateTask } from "@/features/CreateTask/CreateTask"
+import { CreateTaskButton, TaskModal } from "@/features/TaskModal/TaskModal"
 import { DeleteTask } from "@/features/DeleteTask/DeleteTask"
 import { ToggleTask } from "@/features/ToggleTask/ToggleTask"
 import { Task } from "@/shared/types/entities"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import { SortableTaskCard } from '@/entities/Task/ui/SortableTaskCard';
+import { IconButton } from "@mui/material"
+import EditIcon from '@mui/icons-material/Edit';
 
 export const TasksPage = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -20,6 +22,11 @@ export const TasksPage = () => {
     const allTasks: Task[] = useSelector(tasksSelectors.selectAll)
     const filteredTasks = allTasks.filter(task => task.listOwnerId === selectedListId)
     const tasksLoadingStatus = useSelector((state: RootState) => state.tasks.loading)
+
+    // const [modalTask, setModalTask] = useState<Task | null>(null)
+    // const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+
+    const [modalState, setModalState] = useState<'closed' | 'create' | Task>('closed');
 
     useEffect(() => {
         if (tasksLoadingStatus === 'idle') {
@@ -37,6 +44,14 @@ export const TasksPage = () => {
             }))
         }
     }
+
+    // const handleOpenEditModal = (task: Task) => {
+    //     setModalTask(task);
+    // };
+
+    const handleCloseModal = () => {
+        setModalState('closed');
+    };
 
     if (tasksLoadingStatus === 'pending') {
         return (
@@ -66,13 +81,28 @@ export const TasksPage = () => {
                                 key={task.id}
                                 task={task}
                                 featureSlot={<ToggleTask task={task} />}
-                                actionsSlot={<DeleteTask taskId={task.id} />}
+                                actionsSlot={
+                                    <>
+                                        <IconButton onClick={() => setModalState(task)}>
+                                            <EditIcon />
+                                        </IconButton>
+                                        <DeleteTask taskId={task.id} />
+                                    </>
+                                }
                             />
                         ))}
                     </div>
                 </SortableContext>
             </DndContext>
-            <CreateTask />
+            <CreateTaskButton onClick={() => setModalState('create')} />
+            {/* 4. Рендерим модальное окно по условию */}
+            {modalState !== 'closed' && (
+                <TaskModal
+                    // Если стейт - это объект, передаем его. Иначе - null.
+                    taskToEdit={typeof modalState === 'object' ? modalState : null}
+                    onClose={handleCloseModal}
+                />
+            )}
         </div>
     )
 }

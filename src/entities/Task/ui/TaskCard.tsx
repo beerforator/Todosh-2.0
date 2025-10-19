@@ -4,17 +4,21 @@ import { Task } from '@/shared/types/entities';
 import { Card, CardContent, Typography, IconButton } from '@mui/material';
 import StarBorder from '@mui/icons-material/StarBorder';
 import Star from '@mui/icons-material/Star';
+import { DraggableAttributes } from '@dnd-kit/core';
+import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 
 // Описываем, какие пропсы принимает наш компонент
 interface TaskCardProps {
-    task: Task;
+    task: Task,
     // "Слот" - это место, куда мы сможем вставить другую JSX-разметку.
     // Сюда мы позже вставим наш "умный" чекбокс из слоя features.
-    featureSlot?: React.ReactNode;
-    actionsSlot?: React.ReactNode;
+    featureSlot?: React.ReactNode,
+    actionsSlot?: React.ReactNode,
+    dndAttributes: DraggableAttributes,
+    dndListeners: SyntheticListenerMap | undefined
 }
 
-export const TaskCard = ({ task, featureSlot, actionsSlot}: TaskCardProps) => {
+export const TaskCard = ({ task, featureSlot, actionsSlot, dndAttributes, dndListeners }: TaskCardProps) => {
     const cardStyles: React.CSSProperties = {
         marginBottom: '10px',
         display: 'flex',
@@ -31,15 +35,20 @@ export const TaskCard = ({ task, featureSlot, actionsSlot}: TaskCardProps) => {
     return (
         <Card style={cardStyles}>
             {/* Рендерим здесь наш "слот" с фичей (чекбоксом) */}
+            {/* 2. Кнопки и чекбоксы теперь находятся ВНЕ зоны действия dndListeners */}
             {featureSlot}
 
-            <CardContent style={contentStyles}>
+            {/* 3. Оборачиваем контент в div, который и будет нашей "ручкой".
+            Именно за него мы будем "хватать" карточку для перетаскивания. */}
+
+            <CardContent style={contentStyles} {...dndAttributes} {...dndListeners}>
                 {/* Если задача выполнена, перечеркиваем текст */}
                 <Typography style={{ textDecoration: task.isCompleted ? 'line-through' : 'none' }}>
                     {task.title}
                 </Typography>
             </CardContent>
 
+            {/* 4. Все кнопки действий теперь тоже вне зоны dndListeners */}
             <IconButton>
                 {task.isFavourite ? <Star color="primary" /> : <StarBorder />}
             </IconButton>

@@ -12,8 +12,6 @@ export const Sidebar = () => {
     const allLists: List[] = useSelector(listsSelectors.selectAll);
     const selectedListId = useSelector((state: RootState) => state.lists.selectedListId)
 
-    console.log(selectedListId)
-
     useEffect(() => {
         // Запрашиваем списки при первом рендере сайдбара
         dispatch(fetchLists());

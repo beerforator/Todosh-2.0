@@ -46,6 +46,8 @@ export const TaskCard = ({ task, featureSlot, actionsSlot, dndAttributes, dndLis
                 <Typography style={{ textDecoration: task.isCompleted ? 'line-through' : 'none' }}>
                     {task.title}
                 </Typography>
+                {/* all tasks data */}
+                <p>{task.startDate ? task.startDate.toString().slice(0, 10) : ''}</p>
             </CardContent>
 
             {/* 4. Все кнопки действий теперь тоже вне зоны dndListeners */}

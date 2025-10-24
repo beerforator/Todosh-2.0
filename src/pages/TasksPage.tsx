@@ -20,7 +20,13 @@ export const TasksPage = () => {
     const selectedListId = useSelector((state: RootState) => state.lists.selectedListId)
     // Пока просим все задачи
     const allTasks: Task[] = useSelector(tasksSelectors.selectAll)
-    const filteredTasks = allTasks.filter(task => task.listOwnerId === selectedListId)
+    const filteredTasks = allTasks.filter(task => {
+        // all tasks
+        if (selectedListId === 'all')
+            return task
+        else
+            return task.listOwnerId === selectedListId
+    })
     const tasksLoadingStatus = useSelector((state: RootState) => state.tasks.loading)
 
     // const [modalTask, setModalTask] = useState<Task | null>(null)

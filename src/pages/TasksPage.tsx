@@ -1,7 +1,7 @@
 import { AppDispatch, RootState } from "@/app/providers/store/types"
 import { fetchTasks } from "@/entities/Task/model/fetchTasks"
 import { reOrderTask, tasksSelectors } from "@/entities/Task/model/tasksSlice"
-import { CreateTaskButton, TaskModal } from "@/features/TaskModal/TaskModal"
+import { CreateTaskButton, TaskModal } from "@/features/TaskModal/CalendarCreateModal"
 import { DeleteTask } from "@/features/DeleteTask/DeleteTask"
 import { ToggleTask } from "@/features/ToggleTask/ToggleTask"
 import { Task } from "@/shared/types/entities"
@@ -12,8 +12,11 @@ import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import { SortableTaskCard } from '@/entities/Task/ui/SortableTaskCard';
-import { IconButton } from "@mui/material"
+import { Button, IconButton } from "@mui/material"
 import EditIcon from '@mui/icons-material/Edit';
+import { startEditingTask } from "@/widgets/UISlice/UISlice"
+import { InlineCreateTask } from "@/features/InlineCreateTask/InlineCreateTask"
+import AddIcon from '@mui/icons-material/Add';
 
 export const TasksPage = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -32,7 +35,9 @@ export const TasksPage = () => {
     // const [modalTask, setModalTask] = useState<Task | null>(null)
     // const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
-    const [modalState, setModalState] = useState<'closed' | 'create' | Task>('closed');
+    // const [modalState, setModalState] = useState<'closed' | 'create' | Task>('closed');
+
+    const [isFormVisible, setIsFormVisible] = useState(false);
 
     useEffect(() => {
         if (tasksLoadingStatus === 'idle') {
@@ -51,13 +56,21 @@ export const TasksPage = () => {
         }
     }
 
+    const handleEditingTask = (taskId: string) => {
+        dispatch(startEditingTask({
+            taskId: taskId,
+            mode: 'persistent'
+        }))
+    }
+
+
     // const handleOpenEditModal = (task: Task) => {
     //     setModalTask(task);
     // };
 
-    const handleCloseModal = () => {
-        setModalState('closed');
-    };
+    // const handleCloseModal = () => {
+    //     setModalState('closed');
+    // };
 
     if (tasksLoadingStatus === 'pending') {
         return (
@@ -89,7 +102,7 @@ export const TasksPage = () => {
                                 featureSlot={<ToggleTask task={task} />}
                                 actionsSlot={
                                     <>
-                                        <IconButton onClick={() => setModalState(task)}>
+                                        <IconButton onClick={() => handleEditingTask(task.id)}>
                                             <EditIcon />
                                         </IconButton>
                                         <DeleteTask taskId={task.id} />
@@ -100,15 +113,29 @@ export const TasksPage = () => {
                     </div>
                 </SortableContext>
             </DndContext>
-            <CreateTaskButton onClick={() => setModalState('create')} />
+
+            {isFormVisible ? (
+                <InlineCreateTask
+                    listId={selectedListId}
+                    onClose={() => setIsFormVisible(false)}
+                />
+            ) : (
+                <Button
+                    startIcon={<AddIcon />}
+                    onClick={() => setIsFormVisible(true)}
+                >
+                    Добавить задачу
+                </Button>
+            )}
+            {/* <CreateTaskButton onClick={() => setModalState('create')} /> */}
             {/* 4. Рендерим модальное окно по условию */}
-            {modalState !== 'closed' && (
+            {/* {modalState !== 'closed' && (
                 <TaskModal
                     // Если стейт - это объект, передаем его. Иначе - null.
                     taskToEdit={typeof modalState === 'object' ? modalState : null}
                     onClose={handleCloseModal}
                 />
-            )}
+            )} */}
         </div>
     )
 }

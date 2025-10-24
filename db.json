@@ -11,7 +11,7 @@
     {
       "id": "2",
       "title": "Закончить отчет по проекту Q3",
-      "startDate": "2025-10-23T09:00:00.000Z",
+      "startDate": "2025-10-31T09:00:00.000Z",
       "endDate": "2025-10-21T18:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "list-2",
@@ -30,8 +30,8 @@
     {
       "id": "4",
       "title": "Записаться к врачу",
-      "startDate": "2025-10-23T11:00:00.000Z",
-      "endDate": "2025-10-23T12:00:00.000Z",
+      "startDate": "2025-10-22T11:00:00.000Z",
+      "endDate": "2025-10-22T12:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "list-inbox",
       "isCompleted": false,
@@ -59,13 +59,14 @@
     },
     {
       "id": "7",
-      "title": "Купить билеты в театр",
+      "title": "Купить билеты в Малый театр",
       "startDate": "2025-11-01T19:00:00.000Z",
       "endDate": "2025-11-01T22:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "list-inbox",
       "isCompleted": false,
-      "isFavourite": false
+      "isFavourite": false,
+      "description": "Тут я распишу парочку интересных строк\nЧисто для опыта\n\nТут список:\n1. Суп\n2. Гречка\n3. Компотик\n\nСамый классный обед)"
     },
     {
       "id": "8",
@@ -77,25 +78,32 @@
       "isFavourite": false
     },
     {
-      "id": "7c39",
-      "title": "24.10",
-      "description": "Add discription for task",
-      "startDate": "2025-10-23T21:00:00.000Z",
-      "endDate": "2025-10-23T21:00:00.000Z",
+      "id": "0f90",
+      "title": "2",
+      "description": "",
+      "startDate": "2025-10-16T21:00:00.000Z",
+      "endDate": "2025-10-16T21:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "list-inbox",
       "isCompleted": false,
       "isFavourite": false
     },
     {
-      "id": "8667",
-      "title": "17.10",
-      "description": "Add discription for task",
-      "startDate": "2025-10-16T21:00:00.000Z",
-      "endDate": "2025-10-16T21:00:00.000Z",
+      "id": "1c59",
+      "title": "Поставить новые библиотеки",
+      "description": "",
       "userOwnerId": "user-1",
-      "listOwnerId": "list-inbox",
+      "listOwnerId": "list-2",
       "isCompleted": false,
+      "isFavourite": false
+    },
+    {
+      "id": "e173",
+      "title": "Купить велосипед",
+      "description": "",
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-1",
+      "isCompleted": true,
       "isFavourite": false
     }
   ],

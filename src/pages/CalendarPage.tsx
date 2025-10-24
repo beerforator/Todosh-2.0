@@ -6,11 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { tasksSelectors } from '@/entities/Task/model/tasksSlice';
 import { useEffect, useMemo, useState } from 'react';
 import { fetchTasks } from '@/entities/Task/model/fetchTasks';
-import { EventDropArg } from '@fullcalendar/core'; // 3. Импортируем тип для аргумента обработчика
+import { EventClickArg, EventDropArg } from '@fullcalendar/core'; // 3. Импортируем тип для аргумента обработчика
 import { updateTaskApi } from '@/features/EditTask/api/updateTaskApi';
 import { createTask } from '@/features/TaskModal/api/useCreateTask';
-import { TaskModal } from '@/features/TaskModal/TaskModal';
+import { CalendarCreateModal } from '@/features/TaskModal/CalendarCreateModal';
 import { Task } from '@/shared/types/entities';
+import { startEditingTask } from '@/widgets/UISlice/UISlice';
 
 export const CalendarPage = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -59,19 +60,52 @@ export const CalendarPage = () => {
     }
 
     // Создание задач
-    const [modalState, setModalState] = useState<'closed' | 'create' | Task>('closed');
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [taskTitle, setTaskTitle] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleDateClick = (clickInfo: DateClickArg) => {
-        console.log(clickInfo.date)
         setSelectedDate(clickInfo.date);
-        setModalState('create');// Просто открываем модалку
+        setTaskTitle(''); // Сбрасываем заголовок
+        setIsModalOpen(true); // Открываем
     };
 
     const handleCloseModal = () => {
+        setIsModalOpen(false);
+        // Сбрасываем все состояния при закрытии
         setSelectedDate(null);
-        setModalState('closed');
+        setTaskTitle('');
     };
+
+    const handleSubmit = async () => {
+        if (!taskTitle.trim() || !selectedDate) return;
+
+        setIsLoading(true);
+        try {
+            await dispatch(createTask({
+                title: taskTitle,
+                startDate: selectedDate,
+                endDate: selectedDate,
+            })).unwrap();
+            handleCloseModal(); // Закрываем после успеха
+        } catch (error) {
+            console.error('Failed to create task:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Изменение задач
+
+    const handleEditingTask = (clickInfo: EventClickArg) => {
+        const taskId = clickInfo.event.id;
+        dispatch(startEditingTask({
+            taskId: taskId,
+            mode: 'temporary'
+        }))
+    }
 
     return (
         <div>
@@ -82,17 +116,21 @@ export const CalendarPage = () => {
                 weekends={true}
                 events={calendarEvenst}
                 editable={true}
-                eventDrop={handleEventDrop}
-
-                dateClick={handleDateClick}
-
                 firstDay={1}
+
+                eventDrop={handleEventDrop}
+                dateClick={handleDateClick}
+                eventClick={handleEditingTask}
             />
-            {modalState !== 'closed' && (
-                <TaskModal
-                    taskToEdit={null}
-                    defaultDates={{ startDate: selectedDate!, endDate: selectedDate! }}
+            {isModalOpen && (
+                <CalendarCreateModal
+                    isOpen={isModalOpen}
+                    // isEditMode больше не нужен
+                    title={taskTitle}
+                    onTitleChange={setTaskTitle}
+                    onSubmit={handleSubmit}
                     onClose={handleCloseModal}
+                    isLoading={isLoading}
                 />
             )}
         </div>

@@ -11,7 +11,7 @@
     {
       "id": "2",
       "title": "Закончить отчет по проекту Q3",
-      "startDate": "2025-10-22T09:00:00.000Z",
+      "startDate": "2025-10-23T09:00:00.000Z",
       "endDate": "2025-10-21T18:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "list-2",
@@ -30,7 +30,7 @@
     {
       "id": "4",
       "title": "Записаться к врачу",
-      "startDate": "2025-10-30T11:00:00.000Z",
+      "startDate": "2025-10-23T11:00:00.000Z",
       "endDate": "2025-10-23T12:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "list-inbox",

@@ -45,7 +45,11 @@ export const listsSlice = createSlice({
 
 
         selectList: (state, action: PayloadAction<string>) => {
-            state.selectedListId = action.payload
+            // all tasks
+            if (action.payload == '121')
+                state.selectedListId = 'all'
+            else
+                state.selectedListId = action.payload
         }
     },
     // extraReducers используется для асинхронных действий, их мы добавим позже.

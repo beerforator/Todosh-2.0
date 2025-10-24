@@ -44,6 +44,20 @@ export const Sidebar = () => {
                         </ListItemButton>
                     </ListItem>
                 ))}
+
+                {/* all tasks */}
+
+                <ListItem key={'121'} disablePadding>
+                    <ListItemButton
+                        onClick={() => handleSelectList('121')}
+                        // 3. Подсвечиваем активный элемент
+                        selected={'121' === selectedListId}
+                    >
+                        <ListItemText primary={'All tasks'} />
+                    </ListItemButton>
+                </ListItem>
+
+                {/* all tasks */}
             </MuiList>
         </aside>
     );

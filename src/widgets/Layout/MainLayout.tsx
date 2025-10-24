@@ -2,8 +2,16 @@
 import { Outlet } from 'react-router-dom';
 // import { Sidebar } from '@/widgets/Sidebar/DEPRECATED_Sidebar';
 import { UnifiedSidebar } from '../Sidebar/UnifiedSidebar';
+import { TaskDetailsPane } from '../TaskDetailsPane/TaskDetailsPane';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/providers/store/types';
+
+const PANE_WIDTH = 400;
 
 export const MainLayout = () => {
+    const { editingTaskId, detailsPaneMode } = useSelector((state: RootState) => state.uiReducer)
+    const isPanePersistent = !!editingTaskId && detailsPaneMode === 'persistent';
+
     const layoutStyles: React.CSSProperties = {
         display: 'flex',
     };
@@ -12,7 +20,9 @@ export const MainLayout = () => {
         flexGrow: 1,
         padding: '20px',
         height: '100vh',
-        overflow: 'auto'
+        overflow: 'auto',
+        transition: 'margin-right 0.1s ease-in-out',
+        marginRight: isPanePersistent ? `${PANE_WIDTH}px` : '0px'
     };
 
     return (
@@ -23,6 +33,7 @@ export const MainLayout = () => {
             Именно сюда он будет "вставлять" наши страницы (/tasks, /calendar) */}
                 <Outlet />
             </main>
+            <TaskDetailsPane />
         </div>
     );
 };

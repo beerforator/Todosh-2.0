@@ -2,20 +2,20 @@ import { baseApi } from "@/shared/api/base";
 import { Task } from "@/shared/types/entities";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-type CreateTaskArg = Pick<Task, 'title'> & Partial<Pick<Task, 'startDate' | 'endDate'>>
+type CreateTaskArg = Pick<Task, 'title'> & Partial<Pick<Task, 'startDate' | 'endDate' | 'listOwnerId'>>
 
 export const createTask = createAsyncThunk<Task, CreateTaskArg>(
     'task/createTask',
-    async ({ title, startDate, endDate }, thunkApi) => {
+    async ({ title, startDate, endDate, listOwnerId}, thunkApi) => {
         const newTaskData: Omit<Task, 'id'> = {
             title: title,
-            description: "Add discription for task",
+            description: "",
 
             startDate: startDate,
             endDate: endDate,
 
             userOwnerId: 'user-1',
-            listOwnerId: 'list-inbox',
+            listOwnerId: listOwnerId || 'list-inbox',
 
             isCompleted: false,
             isFavourite: false,

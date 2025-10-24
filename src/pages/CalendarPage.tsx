@@ -1,19 +1,23 @@
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid'; // Плагин для вида "сетка"
-import interactionPlugin from '@fullcalendar/interaction'; // Плагин для интерактивности
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'; // Плагин для интерактивности
 import { AppDispatch, RootState } from '@/app/providers/store/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { tasksSelectors } from '@/entities/Task/model/tasksSlice';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { fetchTasks } from '@/entities/Task/model/fetchTasks';
 import { EventDropArg } from '@fullcalendar/core'; // 3. Импортируем тип для аргумента обработчика
 import { updateTaskApi } from '@/features/EditTask/api/updateTaskApi';
+import { createTask } from '@/features/TaskModal/api/useCreateTask';
+import { TaskModal } from '@/features/TaskModal/TaskModal';
+import { Task } from '@/shared/types/entities';
 
 export const CalendarPage = () => {
     const dispatch: AppDispatch = useDispatch()
-
     const allTasks = useSelector(tasksSelectors.selectAll)
     const tasksLoadingStatus = useSelector((state: RootState) => state.tasks.loading)
+
+    // Управление календарем
 
     useEffect(() => {
         if (tasksLoadingStatus === 'idle') {
@@ -54,6 +58,21 @@ export const CalendarPage = () => {
         }
     }
 
+    // Создание задач
+    const [modalState, setModalState] = useState<'closed' | 'create' | Task>('closed');
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+    const handleDateClick = (clickInfo: DateClickArg) => {
+        console.log(clickInfo.date)
+        setSelectedDate(clickInfo.date);
+        setModalState('create');// Просто открываем модалку
+    };
+
+    const handleCloseModal = () => {
+        setSelectedDate(null);
+        setModalState('closed');
+    };
+
     return (
         <div>
             <h1>Calendar page</h1>
@@ -62,11 +81,20 @@ export const CalendarPage = () => {
                 initialView='dayGridMonth'
                 weekends={true}
                 events={calendarEvenst}
-
                 editable={true}
-
                 eventDrop={handleEventDrop}
+
+                dateClick={handleDateClick}
+
+                firstDay={1}
             />
+            {modalState !== 'closed' && (
+                <TaskModal
+                    taskToEdit={null}
+                    defaultDates={{ startDate: selectedDate!, endDate: selectedDate! }}
+                    onClose={handleCloseModal}
+                />
+            )}
         </div>
     )
 }

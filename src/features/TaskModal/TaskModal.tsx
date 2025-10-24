@@ -11,9 +11,10 @@ import { updateTaskApi } from '../EditTask/api/updateTaskApi';
 interface TaskModalProps {
     taskToEdit?: Task | null; // Если эта пропса передана, мы в режиме редактирования
     onClose: () => void; // Функция для закрытия модалки
+    defaultDates?: { startDate: Date, endDate: Date };
 }
 
-export const TaskModal = ({ taskToEdit, onClose }: TaskModalProps) => {
+export const TaskModal = ({ taskToEdit, onClose, defaultDates }: TaskModalProps) => {
     const dispatch: AppDispatch = useDispatch();
     //const [open, setOpen] = useState(false);
     const [title, setTitle] = useState('');
@@ -39,7 +40,12 @@ export const TaskModal = ({ taskToEdit, onClose }: TaskModalProps) => {
                 await dispatch(updateTaskApi({ taskId: taskToEdit.id, changes: { title } })).unwrap()
                 // Здесь нам не нужно делать второй диспатч, т.к. extraReducer сам уберет задачу из стейта.
             } else {
-                await dispatch(createTask({ title })).unwrap();
+                debugger
+                await dispatch(createTask({
+                    title: title,
+                    startDate: defaultDates?.startDate,
+                    endDate: defaultDates?.endDate
+                })).unwrap();
             }
             handleClose()
         } catch (error) {

@@ -57,8 +57,8 @@ export const UnifiedSidebar = () => {
                 <MuiList component="nav">
                     {/* <ListSubheader component="div">Nav</ListSubheader> */}
                     <ListItemButton component={NavLink} to="/profile">
-                        <ListItemIcon> <Avatar sx={{ width: 32, height: 32 }}>TU</Avatar> </ListItemIcon>
-                        {!isCollapsed && <ListItemText primary={"*Test User*"} />}
+                        <ListItemIcon> <Avatar sx={{ width: 32, height: 32 }}>U</Avatar> </ListItemIcon>
+                        {!isCollapsed && <ListItemText primary={"Some User"} />}
                     </ListItemButton>
                     <ListItemButton component={NavLink} to="/dashboard">
                         <ListItemIcon> <DashboardIcon /> </ListItemIcon>

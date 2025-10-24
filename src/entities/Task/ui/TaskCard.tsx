@@ -19,6 +19,13 @@ interface TaskCardProps {
 }
 
 export const TaskCard = ({ task, featureSlot, actionsSlot, dndAttributes, dndListeners }: TaskCardProps) => {
+    const formatDate = (date: Date | undefined) => {
+        if (!date) return null;
+        // new Date(date) - на случай, если дата пришла как строка
+        // .toLocaleDateString() - превратит дату в "16.10.2025" с учетом твоего часового пояса
+        return new Date(date).toLocaleDateString();
+    };
+
     const cardStyles: React.CSSProperties = {
         marginBottom: '10px',
         display: 'flex',
@@ -47,7 +54,12 @@ export const TaskCard = ({ task, featureSlot, actionsSlot, dndAttributes, dndLis
                     {task.title}
                 </Typography>
                 {/* all tasks data */}
-                <p>{task.startDate ? task.startDate.toString().slice(0, 10) : ''}</p>
+                {(task.startDate || task.endDate) && (
+                    <Typography variant="body2" color="text.secondary">
+                        {formatDate(task.startDate)}
+                        {task.endDate && ` - ${formatDate(task.endDate)}`}
+                    </Typography>
+                )}
             </CardContent>
 
             {/* 4. Все кнопки действий теперь тоже вне зоны dndListeners */}

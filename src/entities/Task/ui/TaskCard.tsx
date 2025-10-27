@@ -1,5 +1,5 @@
 // src/entities/Task/ui/TaskCard.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Task } from '@/shared/types/entities';
 import { Card, CardContent, Typography, IconButton } from '@mui/material';
 import StarBorder from '@mui/icons-material/StarBorder';
@@ -14,11 +14,14 @@ interface TaskCardProps {
     // Сюда мы позже вставим наш "умный" чекбокс из слоя features.
     featureSlot?: React.ReactNode,
     actionsSlot?: React.ReactNode,
+    hoverActionsSlot?: React.ReactNode,
     dndAttributes: DraggableAttributes,
     dndListeners: SyntheticListenerMap | undefined
 }
 
-export const TaskCard = ({ task, featureSlot, actionsSlot, dndAttributes, dndListeners }: TaskCardProps) => {
+export const TaskCard = ({ task, featureSlot, actionsSlot, hoverActionsSlot, dndAttributes, dndListeners }: TaskCardProps) => {
+    const [isHovered, setIsHovered] = useState(false);
+
     const formatDate = (date: Date | undefined) => {
         if (!date) return null;
         // new Date(date) - на случай, если дата пришла как строка
@@ -40,7 +43,11 @@ export const TaskCard = ({ task, featureSlot, actionsSlot, dndAttributes, dndLis
     };
 
     return (
-        <Card style={cardStyles}>
+        <Card
+            style={cardStyles}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
             {/* Рендерим здесь наш "слот" с фичей (чекбоксом) */}
             {/* 2. Кнопки и чекбоксы теперь находятся ВНЕ зоны действия dndListeners */}
             {featureSlot}
@@ -48,7 +55,11 @@ export const TaskCard = ({ task, featureSlot, actionsSlot, dndAttributes, dndLis
             {/* 3. Оборачиваем контент в div, который и будет нашей "ручкой".
             Именно за него мы будем "хватать" карточку для перетаскивания. */}
 
-            <CardContent style={contentStyles} {...dndAttributes} {...dndListeners}>
+            <CardContent
+                style={contentStyles}
+                {...dndAttributes}
+                {...dndListeners}
+            >
                 {/* Если задача выполнена, перечеркиваем текст */}
                 <Typography style={{ textDecoration: task.isCompleted ? 'line-through' : 'none' }}>
                     {task.title}
@@ -62,12 +73,9 @@ export const TaskCard = ({ task, featureSlot, actionsSlot, dndAttributes, dndLis
                 )}
             </CardContent>
 
-            {/* 4. Все кнопки действий теперь тоже вне зоны dndListeners */}
-            <IconButton>
-                {task.isFavourite ? <Star color="primary" /> : <StarBorder />}
-            </IconButton>
-
+            {isHovered && hoverActionsSlot}
             {actionsSlot}
+
         </Card>
     );
 };

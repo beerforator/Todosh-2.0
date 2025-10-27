@@ -21,8 +21,9 @@ export const InlineCreateTask = ({ listId, onClose }: InlineCreateTaskProps) => 
         }
 
         setIsLoading(true);
+        let listOwnerId = listId === 'all' ? '': listId
         try {
-            await dispatch(createTask({ title, listOwnerId: listId })).unwrap();
+            await dispatch(createTask({ title, listOwnerId: listOwnerId })).unwrap();
             setTitle('');
             onClose(); // Закрываем форму после успеха
         } catch (error) {
@@ -54,7 +55,7 @@ export const InlineCreateTask = ({ listId, onClose }: InlineCreateTaskProps) => 
                 autoFocus // Автоматически ставим фокус на поле ввода
                 disabled={isLoading}
 
-                onBlur={onClose}
+                // 
             />
             <Button variant="contained" onClick={handleSubmit} disabled={isLoading}>
                 {isLoading ? <CircularProgress size={24} /> : 'Добавить'}

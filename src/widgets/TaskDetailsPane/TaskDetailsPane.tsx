@@ -8,6 +8,11 @@ import { stopEditingTask } from "../UISlice/UISlice";
 import { updateTaskApi } from "@/features/EditTask/api/updateTaskApi";
 import { listsSelectors } from "@/entities/List/model/listsSlice";
 import CircleIcon from '@mui/icons-material/Circle'; // Для иконок списков
+import { ToggleFavourite } from "@/features/ToggleFavourite/ToggleFavourite";
+import { SetTaskToday } from "@/features/SetTaskToday/SetTaskToday";
+import { RemoveTaskDate } from "@/features/RemoveTaskDate/RemoveTaskDate";
+import { ToggleTask } from "@/features/ToggleTask/ToggleTask";
+import { DeleteTask } from "@/features/DeleteTask/DeleteTask";
 
 interface TaskDetailsPaneProps {
     width: number;
@@ -59,8 +64,6 @@ export const TaskDetailsPane = ({ width }: TaskDetailsPaneProps) => {
         }
     }
 
-
-
     return (
         <Drawer
             anchor="right"
@@ -79,6 +82,11 @@ export const TaskDetailsPane = ({ width }: TaskDetailsPaneProps) => {
                 {
                     editingTask ? (
                         <Box component="form" sx={{ mt: 2 }}>
+                            <ToggleTask task={editingTask} />
+                            <ToggleFavourite task={editingTask} />
+                            <SetTaskToday task={editingTask} />
+                            <RemoveTaskDate task={editingTask} />
+                            <DeleteTask taskId={editingTask.id} />
                             <FormControl fullWidth margin="normal">
                                 <InputLabel id="list-select-label">Список</InputLabel>
                                 <Select

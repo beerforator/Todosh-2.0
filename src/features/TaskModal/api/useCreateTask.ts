@@ -19,6 +19,8 @@ export const createTask = createAsyncThunk<Task, CreateTaskArg>(
 
             isCompleted: false,
             isFavourite: false,
+            
+            order: Date.now()
         }
 
         try {

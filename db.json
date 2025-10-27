@@ -6,37 +6,20 @@
       "userOwnerId": "user-1",
       "listOwnerId": "list-1",
       "isCompleted": false,
-      "isFavourite": true
-    },
-    {
-      "id": "2",
-      "title": "Закончить отчет по проекту Q3",
-      "startDate": "2025-10-31T09:00:00.000Z",
-      "endDate": "2025-10-21T18:00:00.000Z",
-      "userOwnerId": "user-1",
-      "listOwnerId": "list-2",
-      "isCompleted": false,
-      "isFavourite": false,
-      "stardDate": "2025-10-23T09:00:00.000Z"
-    },
-    {
-      "id": "3",
-      "title": "Позвонить маме",
-      "userOwnerId": "user-1",
-      "listOwnerId": "list-inbox",
-      "isCompleted": true,
-      "isFavourite": false
+      "isFavourite": true,
+      "order": 7.125
     },
     {
       "id": "4",
       "title": "Записаться к врачу",
-      "startDate": "2025-10-22T11:00:00.000Z",
-      "endDate": "2025-10-22T12:00:00.000Z",
+      "startDate": null,
+      "endDate": null,
       "userOwnerId": "user-1",
       "listOwnerId": "list-inbox",
-      "isCompleted": false,
+      "isCompleted": true,
       "isFavourite": true,
-      "stardDate": "2025-10-31T11:00:00.000Z"
+      "stardDate": "2025-10-31T11:00:00.000Z",
+      "order": 4
     },
     {
       "id": "5",
@@ -46,8 +29,9 @@
       "userOwnerId": "user-1",
       "listOwnerId": "list-2",
       "isCompleted": false,
-      "isFavourite": true,
-      "stardDate": "2025-10-26T08:00:00.000Z"
+      "isFavourite": false,
+      "stardDate": "2025-10-26T08:00:00.000Z",
+      "order": 5
     },
     {
       "id": "6",
@@ -55,7 +39,8 @@
       "userOwnerId": "user-1",
       "listOwnerId": "list-inbox",
       "isCompleted": false,
-      "isFavourite": false
+      "isFavourite": false,
+      "order": 6
     },
     {
       "id": "7",
@@ -66,7 +51,8 @@
       "listOwnerId": "list-inbox",
       "isCompleted": false,
       "isFavourite": false,
-      "description": "Тут я распишу парочку интересных строк\nЧисто для опыта\n\nТут список:\n1. Суп\n2. Гречка\n3. Компотик\n\nСамый классный обед)"
+      "description": "Тут я распишу парочку интересных строк\nЧисто для опыта\n\nТут список:\n1. Суп\n2. Гречка\n3. Компотик\n\nСамый классный обед)",
+      "order": 7
     },
     {
       "id": "8",
@@ -75,16 +61,8 @@
       "startDate": "2025-10-27T21:00:00.000Z",
       "listOwnerId": "list-1",
       "isCompleted": false,
-      "isFavourite": false
-    },
-    {
-      "id": "1c59",
-      "title": "Поставить новые библиотеки",
-      "description": "",
-      "userOwnerId": "user-1",
-      "listOwnerId": "list-2",
-      "isCompleted": false,
-      "isFavourite": false
+      "isFavourite": true,
+      "order": 6.6875
     },
     {
       "id": "684c",
@@ -94,8 +72,9 @@
       "endDate": "2025-10-25T21:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "1e3a",
-      "isCompleted": true,
-      "isFavourite": false
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 11
     },
     {
       "id": "9932",
@@ -105,8 +84,9 @@
       "endDate": "2025-10-25T21:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "1e3a",
-      "isCompleted": true,
-      "isFavourite": false
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 12
     },
     {
       "id": "ff98",
@@ -117,16 +97,8 @@
       "userOwnerId": "user-1",
       "listOwnerId": "list-2",
       "isCompleted": false,
-      "isFavourite": false
-    },
-    {
-      "id": "3003",
-      "title": "Создать новую ветку",
-      "description": "",
-      "userOwnerId": "user-1",
-      "listOwnerId": "list-2",
-      "isCompleted": false,
-      "isFavourite": false
+      "isFavourite": false,
+      "order": 13
     },
     {
       "id": "e7ad",
@@ -137,40 +109,62 @@
       "userOwnerId": "user-1",
       "listOwnerId": "1e3a",
       "isCompleted": false,
-      "isFavourite": false
+      "isFavourite": true,
+      "order": 1
     },
     {
-      "id": "720c",
-      "title": "Учеба1",
+      "id": "6de4",
+      "title": "Покупка 1",
       "description": "",
-      "startDate": "2025-10-27T21:00:00.000Z",
-      "endDate": "2025-10-27T21:00:00.000Z",
+      "startDate": "2025-10-26T21:00:00.000Z",
+      "endDate": "2025-10-26T21:00:00.000Z",
       "userOwnerId": "user-1",
-      "listOwnerId": "1e3a",
+      "listOwnerId": "list-1",
       "isCompleted": false,
-      "isFavourite": false
+      "isFavourite": false,
+      "order": 4.5
     },
     {
-      "id": "c934",
-      "title": "adadadadad",
+      "id": "e4c4",
+      "title": "Покупка2",
       "description": "",
-      "startDate": "2025-10-28T21:00:00.000Z",
-      "endDate": "2025-10-28T21:00:00.000Z",
       "userOwnerId": "user-1",
-      "listOwnerId": "1e3a",
+      "listOwnerId": "list-1",
       "isCompleted": false,
-      "isFavourite": false
+      "isFavourite": false,
+      "order": 6.25,
+      "startDate": "2025-10-26T21:00:00.000Z",
+      "endDate": "2025-10-27T20:59:59.999Z"
     },
     {
-      "id": "92fd",
-      "title": "ГОСНИИП - ПРАКТИКА",
+      "id": "5b2d",
+      "title": "Раб1",
       "description": "",
-      "startDate": "2025-10-27T21:00:00.000Z",
-      "endDate": "2025-10-28T21:00:00.000Z",
       "userOwnerId": "user-1",
-      "listOwnerId": "1e3a",
+      "listOwnerId": "list-2",
       "isCompleted": false,
-      "isFavourite": false
+      "isFavourite": false,
+      "order": 1761555434862
+    },
+    {
+      "id": "ce7a",
+      "title": "Раб2",
+      "description": "",
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-2",
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 0
+    },
+    {
+      "id": "686e",
+      "title": "ААААААААА",
+      "description": "",
+      "userOwnerId": "user-1",
+      "listOwnerId": "all",
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 1761561284691
     }
   ],
   "lists": [

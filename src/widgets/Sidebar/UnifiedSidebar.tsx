@@ -42,6 +42,8 @@ export const UnifiedSidebar = () => {
     }, [dispatch])
 
     const handleListClick = (listId: string) => {
+        if (listId === ALL_TASKS_LIST_ID)
+            console.log("ПРОАНАЛИЗИРУЙ ЛОГИКУ НОВОГО ОТОБРАЖЕНИЯ")
         if (!location.pathname.startsWith("/tasks") && !location.pathname.startsWith("/calendar"))
             navigate('/tasks')
         dispatch(selectList(listId))

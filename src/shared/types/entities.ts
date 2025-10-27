@@ -21,12 +21,14 @@ export interface Task {
     title: string;
     description?: string; // Описание может быть, а может и не быть (необязательное поле)
 
-    startDate?: Date;
-    endDate?: Date;
+    startDate?: Date | null;
+    endDate?: Date | null;
 
     userOwnerId: string;
     listOwnerId: string;
 
     isCompleted: boolean;
     isFavourite: boolean;
+
+    order: number;
 }

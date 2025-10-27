@@ -12,11 +12,15 @@ import { createTask } from '@/features/TaskModal/api/useCreateTask';
 import { CalendarCreateModal } from '@/features/TaskModal/CalendarCreateModal';
 import { Task } from '@/shared/types/entities';
 import { startEditingTask } from '@/widgets/UISlice/UISlice';
+import { ALL_TASKS_LIST_ID, listsSelectors } from '@/entities/List/model/listsSlice';
 
 export const CalendarPage = () => {
     const dispatch: AppDispatch = useDispatch()
+    const allLists = useSelector(listsSelectors.selectAll)
     const allTasks = useSelector(tasksSelectors.selectAll)
     const tasksLoadingStatus = useSelector((state: RootState) => state.tasks.loading)
+    const selectedListId = useSelector((state: RootState) => state.lists.selectedListId);
+
 
     // Управление календарем
 
@@ -27,20 +31,30 @@ export const CalendarPage = () => {
     }, [dispatch, tasksLoadingStatus])
 
     const calendarEvenst = useMemo(() => {
-        return allTasks
+        const filteredTasks = selectedListId === ALL_TASKS_LIST_ID
+            ? allTasks
+            : allTasks.filter(task => task.listOwnerId === selectedListId);
+
+        return filteredTasks
             .filter(task => !!task.startDate)
             .map(task => ({
                 id: task.id,
                 title: task.title,
                 start: task.startDate,
                 end: task.endDate,
+                backgroundColor: allTasks.find(t => t.id === task.id)?.listOwnerId
+                    ? allLists.find(l => l.id === task.listOwnerId)?.color
+                    : '#808080',
+                borderColor: allTasks.find(t => t.id === task.id)?.listOwnerId
+                    ? allLists.find(l => l.id === task.listOwnerId)?.color
+                    : '#808080',
                 // extendedProps - это "мешок" для любых наших данных.
                 // Мы сохраняем сюда всю оригинальную задачу, это понадобится нам в будущем.
                 extendsProps: {
                     task
                 }
             }))
-    }, [allTasks]) // Этот код будет выполняться только тогда, когда изменится allTasks
+    }, [allTasks, selectedListId]) // Этот код будет выполняться только тогда, когда изменится allTasks
 
     const handleEventDrop = async (dropInfo: EventDropArg) => {
         const { event } = dropInfo
@@ -84,10 +98,12 @@ export const CalendarPage = () => {
 
         setIsLoading(true);
         try {
+            let listOwnerId = selectedListId === 'all' ? '': selectedListId
             await dispatch(createTask({
                 title: taskTitle,
+                listOwnerId: listOwnerId,
                 startDate: selectedDate,
-                endDate: selectedDate,
+                endDate: selectedDate
             })).unwrap();
             handleCloseModal(); // Закрываем после успеха
         } catch (error) {
@@ -117,6 +133,7 @@ export const CalendarPage = () => {
                 events={calendarEvenst}
                 editable={true}
                 firstDay={1}
+                eventDisplay="block"
 
                 eventDrop={handleEventDrop}
                 dateClick={handleDateClick}

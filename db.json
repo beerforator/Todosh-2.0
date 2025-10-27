@@ -24,7 +24,7 @@
       "title": "Позвонить маме",
       "userOwnerId": "user-1",
       "listOwnerId": "list-inbox",
-      "isCompleted": false,
+      "isCompleted": true,
       "isFavourite": false
     },
     {
@@ -72,19 +72,8 @@
       "id": "8",
       "title": "Заказать корм для кота",
       "userOwnerId": "user-1",
-      "startDate": "2025-10-23T21:00:00.000Z",
+      "startDate": "2025-10-27T21:00:00.000Z",
       "listOwnerId": "list-1",
-      "isCompleted": false,
-      "isFavourite": false
-    },
-    {
-      "id": "0f90",
-      "title": "2",
-      "description": "",
-      "startDate": "2025-10-16T21:00:00.000Z",
-      "endDate": "2025-10-16T21:00:00.000Z",
-      "userOwnerId": "user-1",
-      "listOwnerId": "list-inbox",
       "isCompleted": false,
       "isFavourite": false
     },
@@ -98,12 +87,89 @@
       "isFavourite": false
     },
     {
-      "id": "e173",
-      "title": "Купить велосипед",
+      "id": "684c",
+      "title": "БСБД ПР8, 9, 11 - сделать",
+      "description": "",
+      "startDate": "2025-10-24T21:00:00.000Z",
+      "endDate": "2025-10-25T21:00:00.000Z",
+      "userOwnerId": "user-1",
+      "listOwnerId": "1e3a",
+      "isCompleted": true,
+      "isFavourite": false
+    },
+    {
+      "id": "9932",
+      "title": "ОТНСЗИ ПР4-7 - сделать",
+      "description": "",
+      "startDate": "2025-10-24T21:00:00.000Z",
+      "endDate": "2025-10-25T21:00:00.000Z",
+      "userOwnerId": "user-1",
+      "listOwnerId": "1e3a",
+      "isCompleted": true,
+      "isFavourite": false
+    },
+    {
+      "id": "ff98",
+      "title": "Доделать приложение",
+      "description": "1. Сделать выбор даты окончания задачи (растягивание задачи)\n2. Запоминать сортировку\n3. Добавление листов",
+      "startDate": "2025-10-25T21:00:00.000Z",
+      "endDate": "2025-10-25T21:00:00.000Z",
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-2",
+      "isCompleted": false,
+      "isFavourite": false
+    },
+    {
+      "id": "3003",
+      "title": "Создать новую ветку",
       "description": "",
       "userOwnerId": "user-1",
-      "listOwnerId": "list-1",
-      "isCompleted": true,
+      "listOwnerId": "list-2",
+      "isCompleted": false,
+      "isFavourite": false
+    },
+    {
+      "id": "e7ad",
+      "title": "Курсач - написать план",
+      "description": "",
+      "startDate": "2025-10-26T21:00:00.000Z",
+      "endDate": "2025-10-26T21:00:00.000Z",
+      "userOwnerId": "user-1",
+      "listOwnerId": "1e3a",
+      "isCompleted": false,
+      "isFavourite": false
+    },
+    {
+      "id": "720c",
+      "title": "Учеба1",
+      "description": "",
+      "startDate": "2025-10-27T21:00:00.000Z",
+      "endDate": "2025-10-27T21:00:00.000Z",
+      "userOwnerId": "user-1",
+      "listOwnerId": "1e3a",
+      "isCompleted": false,
+      "isFavourite": false
+    },
+    {
+      "id": "c934",
+      "title": "adadadadad",
+      "description": "",
+      "startDate": "2025-10-28T21:00:00.000Z",
+      "endDate": "2025-10-28T21:00:00.000Z",
+      "userOwnerId": "user-1",
+      "listOwnerId": "1e3a",
+      "isCompleted": false,
+      "isFavourite": false
+    },
+    {
+      "id": "92fd",
+      "title": "ГОСНИИП - ПРАКТИКА",
+      "description": "",
+      "startDate": "2025-10-27T21:00:00.000Z",
+      "endDate": "2025-10-28T21:00:00.000Z",
+      "userOwnerId": "user-1",
+      "listOwnerId": "1e3a",
+      "isCompleted": false,
       "isFavourite": false
     }
   ],
@@ -111,16 +177,37 @@
     {
       "id": "list-inbox",
       "name": "Inbox",
-      "userOwnerId": "user-1"
+      "userOwnerId": "user-1",
+      "color": "#808080"
     },
     {
       "id": "list-1",
       "name": "Покупки",
-      "userOwnerId": "user-1"
+      "userOwnerId": "user-1",
+      "color": "#2196F3"
     },
     {
       "id": "list-2",
       "name": "Работа",
+      "userOwnerId": "user-1",
+      "color": "#FF9800"
+    },
+    {
+      "id": "7fe4",
+      "name": "New List",
+      "color": "#9C27B0",
+      "userOwnerId": "user-1"
+    },
+    {
+      "id": "9d99",
+      "name": "Test",
+      "color": "#FF9800",
+      "userOwnerId": "user-1"
+    },
+    {
+      "id": "1e3a",
+      "name": "Учеба",
+      "color": "#795548",
       "userOwnerId": "user-1"
     }
   ],

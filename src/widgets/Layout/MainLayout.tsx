@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/app/providers/store/types';
 
 const PANE_WIDTH = 400;
+const MARGIN_RIGHT = PANE_WIDTH + 20
 
 export const MainLayout = () => {
     const { editingTaskId, detailsPaneMode } = useSelector((state: RootState) => state.uiReducer)
@@ -22,7 +23,7 @@ export const MainLayout = () => {
         height: '100vh',
         overflow: 'auto',
         transition: 'margin-right 0.1s ease-in-out',
-        marginRight: isPanePersistent ? `${PANE_WIDTH}px` : '0px'
+        marginRight: isPanePersistent ? `${MARGIN_RIGHT}px` : '0px'
     };
 
     return (
@@ -33,7 +34,7 @@ export const MainLayout = () => {
             Именно сюда он будет "вставлять" наши страницы (/tasks, /calendar) */}
                 <Outlet />
             </main>
-            <TaskDetailsPane />
+            <TaskDetailsPane width={PANE_WIDTH}/>
         </div>
     );
 };

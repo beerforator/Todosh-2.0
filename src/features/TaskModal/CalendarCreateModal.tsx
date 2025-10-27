@@ -33,23 +33,23 @@ export const CalendarCreateModal = (props: CalendarCreateModalProps) => {
     };
 
     return (
-    <Modal open={isOpen} onClose={onClose}>
-      <Box sx={modalStyles}>
-        <Typography variant="h6" component="h2">
-          Новая задача
-        </Typography>
-        <TextField
-          fullWidth
-          label="Название задачи"
-          value={title}
-          onChange={(e) => onTitleChange(e.target.value)}
-          margin="normal"
-          disabled={isLoading}
-        />
-        <Button onClick={onSubmit} variant="contained" disabled={isLoading}>
-          {isLoading ? 'Создание...' : 'Создать'}
-        </Button>
-      </Box>
-    </Modal>
-  );
+        <Modal open={isOpen} onClose={onClose}>
+            <Box sx={modalStyles}>
+                <Typography variant="h6" component="h2">
+                    Новая задача
+                </Typography>
+                <TextField
+                    fullWidth
+                    label="Название задачи"
+                    value={title}
+                    onChange={(e) => onTitleChange(e.target.value)}
+                    margin="normal"
+                    disabled={isLoading}
+                />
+                <Button onClick={onSubmit} variant="contained" disabled={isLoading}>
+                    {isLoading ? 'Создание...' : 'Создать'}
+                </Button>
+            </Box>
+        </Modal>
+    );
 };

@@ -2,9 +2,12 @@ import { createSlice, createEntityAdapter, PayloadAction } from '@reduxjs/toolki
 import type { List } from '@/shared/types/entities';
 import { fetchLists } from './fetchLists';
 import { RootState } from '@/app/providers/store/types';
+import { createList } from '@/features/CreateList/api/createList';
 
 // createEntityAdapter - это мощная утилита от Redux Toolkit для нормализации данных.
 // Она автоматически создает для нас структуру { ids: [], entities: {} } и редьюсеры.
+export const ALL_TASKS_LIST_ID = 'all';
+
 const listsAdapter = createEntityAdapter<List>({
     // Указываем, по какому полю будет идти нормализация
     selectId: (list) => list.id,
@@ -13,13 +16,13 @@ const listsAdapter = createEntityAdapter<List>({
 interface ListsState {
     loading: 'idle' | 'pending' | 'succeeded' | 'failed',
     error: string | null,
-    selectedListId: string | null
+    selectedListId: string
 }
 
 const initialState = listsAdapter.getInitialState<ListsState>({
     loading: 'idle',
     error: null,
-    selectedListId: null
+    selectedListId: ALL_TASKS_LIST_ID
 });
 
 // Создаем сам "слайс"
@@ -45,21 +48,22 @@ export const listsSlice = createSlice({
 
 
         selectList: (state, action: PayloadAction<string>) => {
-            // all tasks
-            if (action.payload == '121')
-                state.selectedListId = 'all'
-            else
-                state.selectedListId = action.payload
+            state.selectedListId = action.payload
         }
     },
     // extraReducers используется для асинхронных действий, их мы добавим позже.
     extraReducers: (builder) => {
         builder
-            .addCase(fetchLists.pending, (state) => {
-                // Когда запрос начался, ставим статус 'pending'
-                state.loading = 'pending'
-                state.error = null
-            })
+            // .addCase(fetchLists.pending, (state) => {
+            //     // Когда запрос начался, ставим статус 'pending'
+            //     state.loading = 'pending'
+            //     state.error = null
+            // })
+            // .addCase(fetchLists.rejected, (state, action) => {
+            //     // Когда запрос провалился, ставим статус 'failed' и записываем ошибку
+            //     state.loading = 'failed'
+            //     state.error = action.payload as string
+            // })
             .addCase(fetchLists.fulfilled, (state, action: PayloadAction<List[]>) => {
                 // Когда запрос успешно завершился, ставим статус 'succeeded'
                 // и с помощью setTasks (который мы создали ранее) полностью заменяем задачи в стейте
@@ -70,10 +74,8 @@ export const listsSlice = createSlice({
                     state.selectedListId = inbox.id
                 }
             })
-            .addCase(fetchLists.rejected, (state, action) => {
-                // Когда запрос провалился, ставим статус 'failed' и записываем ошибку
-                state.loading = 'failed'
-                state.error = action.payload as string
+            .addCase(createList.fulfilled, (state, action: PayloadAction<List>) => {
+                listsAdapter.addOne(state, action.payload)
             })
     }
 });

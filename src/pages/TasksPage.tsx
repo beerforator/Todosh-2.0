@@ -12,24 +12,25 @@ import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import { SortableTaskCard } from '@/entities/Task/ui/SortableTaskCard';
-import { Button, IconButton } from "@mui/material"
+import { Button, IconButton, ListItemIcon } from "@mui/material"
 import EditIcon from '@mui/icons-material/Edit';
 import { startEditingTask } from "@/widgets/UISlice/UISlice"
 import { InlineCreateTask } from "@/features/InlineCreateTask/InlineCreateTask"
 import AddIcon from '@mui/icons-material/Add';
+import { ALL_TASKS_LIST_ID } from "@/entities/List/model/listsSlice"
+import CircleIcon from '@mui/icons-material/Circle'; // Для иконок списков
 
 export const TasksPage = () => {
     const dispatch: AppDispatch = useDispatch()
+    // ЧТО БУДЕТ ЕСЛИ АЙДИ ВЫБРАННОГО ТЭГА НЕ УСЕЕТ ДОЙТИ ?!
     const selectedListId = useSelector((state: RootState) => state.lists.selectedListId)
     // Пока просим все задачи
     const allTasks: Task[] = useSelector(tasksSelectors.selectAll)
-    const filteredTasks = allTasks.filter(task => {
-        // all tasks
-        if (selectedListId === 'all')
-            return task
-        else
-            return task.listOwnerId === selectedListId
-    })
+
+    const filteredTasks = selectedListId === ALL_TASKS_LIST_ID
+        ? allTasks // Если выбраны "все", просто возвращаем все задачи
+        : allTasks.filter(task => task.listOwnerId === selectedListId);
+
     const tasksLoadingStatus = useSelector((state: RootState) => state.tasks.loading)
 
     // const [modalTask, setModalTask] = useState<Task | null>(null)
@@ -96,19 +97,22 @@ export const TasksPage = () => {
                     <div>
                         {/* 8. Рендерим отфильтрованный список, но используем SortableTaskCard */}
                         {filteredTasks.map((task) => (
-                            <SortableTaskCard
-                                key={task.id}
-                                task={task}
-                                featureSlot={<ToggleTask task={task} />}
-                                actionsSlot={
-                                    <>
-                                        <IconButton onClick={() => handleEditingTask(task.id)}>
-                                            <EditIcon />
-                                        </IconButton>
-                                        <DeleteTask taskId={task.id} />
-                                    </>
-                                }
-                            />
+                            <>
+                                {/* <ListItemIcon><CircleIcon fontSize="small" sx={{ color: list.color }} /></ListItemIcon> */}
+                                <SortableTaskCard
+                                    key={task.id}
+                                    task={task}
+                                    featureSlot={<ToggleTask task={task} />}
+                                    actionsSlot={
+                                        <>
+                                            <IconButton onClick={() => handleEditingTask(task.id)}>
+                                                <EditIcon />
+                                            </IconButton>
+                                            <DeleteTask taskId={task.id} />
+                                        </>
+                                    }
+                                />
+                            </>
                         ))}
                     </div>
                 </SortableContext>

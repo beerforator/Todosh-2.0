@@ -12,6 +12,7 @@ export interface List {
     id: string;
     name: string;
     userOwnerId: string;
+    color: string;
 }
 
 // Сама задача

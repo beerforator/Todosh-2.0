@@ -16,7 +16,9 @@ export const InlineCreateTask = ({ listId, onClose }: InlineCreateTaskProps) => 
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async () => {
-        if (!title.trim() || !listId) return;
+        if (!title.trim() || !listId) {
+            return;
+        }
 
         setIsLoading(true);
         try {
@@ -51,6 +53,8 @@ export const InlineCreateTask = ({ listId, onClose }: InlineCreateTaskProps) => 
                 onKeyDown={handleKeyDown}
                 autoFocus // Автоматически ставим фокус на поле ввода
                 disabled={isLoading}
+
+                onBlur={onClose}
             />
             <Button variant="contained" onClick={handleSubmit} disabled={isLoading}>
                 {isLoading ? <CircularProgress size={24} /> : 'Добавить'}

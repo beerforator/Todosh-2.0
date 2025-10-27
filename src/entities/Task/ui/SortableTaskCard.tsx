@@ -11,6 +11,7 @@ interface SortableTaskCardProps {
     // Сюда мы позже вставим наш "умный" чекбокс из слоя features.
     featureSlot?: React.ReactNode;
     actionsSlot?: React.ReactNode;
+    hoverActionsSlot?: React.ReactNode;
 }
 
 export const SortableTaskCard = ({ task, ...props }: SortableTaskCardProps) => {

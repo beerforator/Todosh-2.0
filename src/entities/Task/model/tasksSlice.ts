@@ -5,6 +5,7 @@ import { RootState } from '@/app/providers/store/types';
 import { createTask } from '@/features/TaskModal/api/useCreateTask';
 import { deleteTask } from '@/features/DeleteTask/api/deleteTask';
 import { updateTaskApi } from '@/features/EditTask/api/updateTaskApi';
+import { deleteList } from '@/features/DeleteList/api/deleteList';
 
 // createEntityAdapter - это мощная утилита от Redux Toolkit для нормализации данных.
 // Она автоматически создает для нас структуру { ids: [], entities: {} } и редьюсеры.
@@ -63,6 +64,14 @@ export const tasksSlice = createSlice({
                     changes: action.payload
                 });
             })
+            .addCase(deleteList.fulfilled, (state, action) => {
+                const listId = action.payload;
+                const tasksToRemove = Object.values(state.entities)
+                    .filter(task => task?.listOwnerId === listId)
+                    .map(task => task!.id);
+
+                tasksAdapter.removeMany(state, tasksToRemove);
+            });
     }
 });
 

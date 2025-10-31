@@ -22,6 +22,7 @@ import CircleIcon from '@mui/icons-material/Circle'; // Для иконок сп
 import { ToggleFavourite } from "@/features/ToggleFavourite/ToggleFavourite"
 import { SetTaskToday } from "@/features/SetTaskToday/SetTaskToday"
 import { updateTaskApi } from "@/features/EditTask/api/updateTaskApi"
+import { ListHeader } from "@/widgets/ListHeader/ListHeader"
 
 export const TasksPage = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -145,7 +146,7 @@ export const TasksPage = () => {
 
             return (
                 <>
-                    <Typography variant="h4" gutterBottom>{currentList?.name}</Typography>
+                    <ListHeader />
                     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                         <SortableContext items={filteredAndSortedTasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
                             {filteredAndSortedTasks.map(task => (
@@ -177,7 +178,7 @@ export const TasksPage = () => {
 
         return (
             <>
-                <Typography variant="h4" gutterBottom>Все задачи</Typography>
+                <ListHeader />
                 {/* Отключаем D&D для режима "Все задачи", как ты и хотел! */}
                 {Object.values(groupedTasks).map(({ listName, tasks }) => (
                     <Box key={listName} mb={4}>

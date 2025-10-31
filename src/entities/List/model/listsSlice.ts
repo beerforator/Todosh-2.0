@@ -3,6 +3,8 @@ import type { List } from '@/shared/types/entities';
 import { fetchLists } from './fetchLists';
 import { RootState } from '@/app/providers/store/types';
 import { createList } from '@/features/CreateList/api/createList';
+import { updateListApi } from '@/features/EditList/api/updateList';
+import { deleteList } from '@/features/DeleteList/api/deleteList';
 
 // createEntityAdapter - это мощная утилита от Redux Toolkit для нормализации данных.
 // Она автоматически создает для нас структуру { ids: [], entities: {} } и редьюсеры.
@@ -76,6 +78,15 @@ export const listsSlice = createSlice({
             })
             .addCase(createList.fulfilled, (state, action: PayloadAction<List>) => {
                 listsAdapter.addOne(state, action.payload)
+            })
+            .addCase(updateListApi.fulfilled, (state, action) => {
+                listsAdapter.updateOne(state, {
+                    id: action.payload.id,
+                    changes: action.payload
+                })
+            })
+            .addCase(deleteList.fulfilled, (state, action) => {
+                listsAdapter.removeOne(state, action.payload)
             })
     }
 });

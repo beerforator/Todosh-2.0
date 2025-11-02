@@ -15,15 +15,40 @@ export const InlineCreateTask = ({ listId, onClose }: InlineCreateTaskProps) => 
     const [title, setTitle] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
+    const [selectedDateStart, setSelectedDateStart] = useState<Date | null>(null);
+    const [selectedDateEnd, setSelectedDateEnd] = useState<Date | null>(null);
+
     const handleSubmit = async () => {
         if (!title.trim() || !listId) {
             return;
         }
 
         setIsLoading(true);
-        let listOwnerId = listId === 'all' ? '': listId
+
+        let listOwnerId
+
+        if (listId === 'all' || listId === 'today')
+            listOwnerId = ''
+        else
+            listOwnerId = listId
+
+        let startDate = undefined
+        let endDate = undefined
+
+        if (listId === 'today') {
+            const today = new Date();
+            endDate = new Date(today);
+            startDate = today
+        }
+
         try {
-            await dispatch(createTask({ title, listOwnerId: listOwnerId })).unwrap();
+            await dispatch(createTask({
+                title: title,
+                listOwnerId: listOwnerId,
+                startDate: startDate,
+                endDate: endDate
+            }
+            )).unwrap();
             setTitle('');
             onClose(); // Закрываем форму после успеха
         } catch (error) {
@@ -55,7 +80,7 @@ export const InlineCreateTask = ({ listId, onClose }: InlineCreateTaskProps) => 
                 autoFocus // Автоматически ставим фокус на поле ввода
                 disabled={isLoading}
 
-                // 
+            // 
             />
             <Button variant="contained" onClick={handleSubmit} disabled={isLoading}>
                 {isLoading ? <CircularProgress size={24} /> : 'Добавить'}

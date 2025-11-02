@@ -6,7 +6,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 // import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { ALL_TASKS_LIST_ID, listsSelectors, selectList } from '@/entities/List/model/listsSlice';
+import { ALL_TASKS_LIST_ID, listsSelectors, selectList, TODAY_TASKS_LIST_ID } from '@/entities/List/model/listsSlice';
 import { AppDispatch, RootState } from '@/app/providers/store/types';
 import { fetchLists } from '@/entities/List/model/fetchLists';
 import CircleIcon from '@mui/icons-material/Circle'; // Для иконок списков
@@ -21,6 +21,7 @@ import LastPageRoundedIcon from '@mui/icons-material/LastPageRounded';
 import { CreateListModal } from '@/features/CreateList/CreateListModal';
 import { TAG_COLORS } from '@/shared/config/colors';
 import { createList } from '@/features/CreateList/api/createList';
+import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
 
 export const UnifiedSidebar = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -117,6 +118,14 @@ export const UnifiedSidebar = () => {
                         {!isCollapsed && <ListItemText primary="Все задачи" />}
                     </ListItemButton>
 
+                    <ListItemButton
+                        selected={selectedListId === TODAY_TASKS_LIST_ID}
+                        onClick={() => handleListClick(TODAY_TASKS_LIST_ID)}
+                    >
+                        <ListItemIcon><WbSunnyOutlinedIcon /></ListItemIcon>
+                        <ListItemText primary="Сегодня" />
+                    </ListItemButton>
+
                     {/* <ListSubheader component="div">Task lists</ListSubheader> */}
                     {
                         allList.map(list => (
@@ -130,7 +139,7 @@ export const UnifiedSidebar = () => {
                                     <ListItemIcon><CircleIcon fontSize="small" sx={{ color: list.color }} /></ListItemIcon>
                                     {!isCollapsed && <ListItemText primary={list.name} />}
                                 </ListItemButton>
-                                {list.name==="Inbox" && <Divider sx={{ my: 2 }} />}
+                                {list.name === "Inbox" && <Divider sx={{ my: 2 }} />}
                             </>
                         ))
                     }

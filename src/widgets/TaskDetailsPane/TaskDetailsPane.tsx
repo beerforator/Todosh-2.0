@@ -13,6 +13,7 @@ import { SetTaskToday } from "@/features/SetTaskToday/SetTaskToday";
 import { RemoveTaskDate } from "@/features/RemoveTaskDate/RemoveTaskDate";
 import { ToggleTask } from "@/features/ToggleTask/ToggleTask";
 import { DeleteTask } from "@/features/DeleteTask/DeleteTask";
+import { dataLogicFormatRender } from "@/entities/Task/model/formatDateRender";
 
 interface TaskDetailsPaneProps {
     width: number;
@@ -34,6 +35,8 @@ export const TaskDetailsPane = ({ width }: TaskDetailsPaneProps) => {
             setTitle(editingTask.title)
             setDescription(editingTask.description || '')
             setSelectedListId(editingTask.listOwnerId);
+        } else {
+            handleClose()
         }
     }, [editingTask])
 
@@ -123,6 +126,7 @@ export const TaskDetailsPane = ({ width }: TaskDetailsPaneProps) => {
                             <Button variant="contained" onClick={handleSave} sx={{ mt: 2 }}>
                                 {isSaving ? <CircularProgress size={24} color="inherit" /> : 'Сохранить'}
                             </Button>
+                            {dataLogicFormatRender(editingTask.startDate, editingTask.endDate)}
                         </Box>
                     ) : (
                         <Typography sx={{ mt: 2 }}>Загрузка данных...</Typography>

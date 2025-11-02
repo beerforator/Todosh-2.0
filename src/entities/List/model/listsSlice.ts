@@ -9,6 +9,7 @@ import { deleteList } from '@/features/DeleteList/api/deleteList';
 // createEntityAdapter - это мощная утилита от Redux Toolkit для нормализации данных.
 // Она автоматически создает для нас структуру { ids: [], entities: {} } и редьюсеры.
 export const ALL_TASKS_LIST_ID = 'all';
+export const TODAY_TASKS_LIST_ID = 'today';
 
 const listsAdapter = createEntityAdapter<List>({
     // Указываем, по какому полю будет идти нормализация

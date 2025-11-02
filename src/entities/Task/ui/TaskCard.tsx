@@ -2,10 +2,9 @@
 import React, { useState } from 'react';
 import { Task } from '@/shared/types/entities';
 import { Card, CardContent, Typography, IconButton } from '@mui/material';
-import StarBorder from '@mui/icons-material/StarBorder';
-import Star from '@mui/icons-material/Star';
 import { DraggableAttributes } from '@dnd-kit/core';
 import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
+import { dataLogicFormatRender } from '../model/formatDateRender';
 
 // Описываем, какие пропсы принимает наш компонент
 interface TaskCardProps {
@@ -22,12 +21,7 @@ interface TaskCardProps {
 export const TaskCard = ({ task, featureSlot, actionsSlot, hoverActionsSlot, dndAttributes, dndListeners }: TaskCardProps) => {
     const [isHovered, setIsHovered] = useState(false);
 
-    const formatDate = (date: Date | undefined) => {
-        if (!date) return null;
-        // new Date(date) - на случай, если дата пришла как строка
-        // .toLocaleDateString() - превратит дату в "16.10.2025" с учетом твоего часового пояса
-        return new Date(date).toLocaleDateString();
-    };
+    
 
     const cardStyles: React.CSSProperties = {
         marginBottom: '10px',
@@ -41,6 +35,8 @@ export const TaskCard = ({ task, featureSlot, actionsSlot, hoverActionsSlot, dnd
     const contentStyles: React.CSSProperties = {
         flexGrow: 1, // Занимает все доступное пространство
     };
+
+    
 
     return (
         <Card
@@ -65,12 +61,7 @@ export const TaskCard = ({ task, featureSlot, actionsSlot, hoverActionsSlot, dnd
                     {task.title}
                 </Typography>
                 {/* all tasks data */}
-                {(task.startDate || task.endDate) && (
-                    <Typography variant="body2" color="text.secondary">
-                        {formatDate(task.startDate)}
-                        {task.endDate && ` - ${formatDate(task.endDate)}`}
-                    </Typography>
-                )}
+                {dataLogicFormatRender(task.startDate, task.endDate)}
             </CardContent>
 
             {isHovered && hoverActionsSlot}

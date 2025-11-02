@@ -1,18 +1,22 @@
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid'; // Плагин для вида "сетка"
-import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'; // Плагин для интерактивности
+import interactionPlugin, { DateClickArg, EventResizeDoneArg } from '@fullcalendar/interaction'; // Плагин для интерактивности
 import { AppDispatch, RootState } from '@/app/providers/store/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { tasksSelectors } from '@/entities/Task/model/tasksSlice';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { fetchTasks } from '@/entities/Task/model/fetchTasks';
-import { EventClickArg, EventDropArg } from '@fullcalendar/core'; // 3. Импортируем тип для аргумента обработчика
+import { DateSelectArg, EventChangeArg, EventClickArg, EventContentArg, EventDropArg } from '@fullcalendar/core'; // 3. Импортируем тип для аргумента обработчика
 import { updateTaskApi } from '@/features/EditTask/api/updateTaskApi';
 import { createTask } from '@/features/TaskModal/api/useCreateTask';
 import { CalendarCreateModal } from '@/features/TaskModal/CalendarCreateModal';
 import { Task } from '@/shared/types/entities';
 import { startEditingTask } from '@/widgets/UISlice/UISlice';
-import { ALL_TASKS_LIST_ID, listsSelectors } from '@/entities/List/model/listsSlice';
+import { ALL_TASKS_LIST_ID, listsSelectors, TODAY_TASKS_LIST_ID } from '@/entities/List/model/listsSlice';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import { Box, Typography } from '@mui/material';
+import { ToggleTaskCalendar } from '@/features/ToggleTaskCalendar/ToggleTaskCalendar';
+import { ToggleFavouritCalendar } from '@/features/ToggleFavouriteCalendar/ToggleFavouriteCalendar';
 
 export const CalendarPage = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -21,8 +25,24 @@ export const CalendarPage = () => {
     const tasksLoadingStatus = useSelector((state: RootState) => state.tasks.loading)
     const selectedListId = useSelector((state: RootState) => state.lists.selectedListId);
 
+    const calendarRef = useRef<FullCalendar>(null);
 
     // Управление календарем
+
+    useEffect(() => {
+        const calendarApi = calendarRef.current?.getApi();
+        if (!calendarApi) return;
+
+        if (selectedListId === TODAY_TASKS_LIST_ID) {
+            calendarApi.gotoDate(new Date());
+
+            // if (calendarApi.view.type !== 'timeGridDay') {
+            //     calendarApi.changeView('timeGridDay');
+            // }
+        } else {
+            calendarApi.changeView('dayGridMonth')
+        }
+    }, [selectedListId]);
 
     useEffect(() => {
         if (tasksLoadingStatus === 'idle') {
@@ -31,30 +51,34 @@ export const CalendarPage = () => {
     }, [dispatch, tasksLoadingStatus])
 
     const calendarEvenst = useMemo(() => {
-        const filteredTasks = selectedListId === ALL_TASKS_LIST_ID
+        const filteredTasks = selectedListId === ALL_TASKS_LIST_ID || selectedListId === TODAY_TASKS_LIST_ID
             ? allTasks
             : allTasks.filter(task => task.listOwnerId === selectedListId);
 
         return filteredTasks
             .filter(task => !!task.startDate)
-            .map(task => ({
-                id: task.id,
-                title: task.title,
-                start: task.startDate,
-                end: task.endDate,
-                backgroundColor: allTasks.find(t => t.id === task.id)?.listOwnerId
-                    ? allLists.find(l => l.id === task.listOwnerId)?.color
-                    : '#808080',
-                borderColor: allTasks.find(t => t.id === task.id)?.listOwnerId
-                    ? allLists.find(l => l.id === task.listOwnerId)?.color
-                    : '#808080',
-                // extendedProps - это "мешок" для любых наших данных.
-                // Мы сохраняем сюда всю оригинальную задачу, это понадобится нам в будущем.
-                extendsProps: {
-                    task
+            .map(task => {
+
+                return {
+                    id: task.id,
+                    title: task.title,
+                    start: task.startDate ?? undefined,
+                    end: task.endDate ?? undefined,
+                    backgroundColor: allTasks.find(t => t.id === task.id)?.listOwnerId
+                        ? allLists.find(l => l.id === task.listOwnerId)?.color
+                        : '#808080',
+                    borderColor: allTasks.find(t => t.id === task.id)?.listOwnerId
+                        ? allLists.find(l => l.id === task.listOwnerId)?.color
+                        : '#808080',
+                    // extendedProps - это "мешок" для любых наших данных.
+                    // Мы сохраняем сюда всю оригинальную задачу, это понадобится нам в будущем.
+                    extendedProps: {
+                        task
+                    },
+                    allDay: true
                 }
-            }))
-    }, [allTasks, selectedListId]) // Этот код будет выполняться только тогда, когда изменится allTasks
+            })
+    }, [allTasks, selectedListId, allLists]) // Этот код будет выполняться только тогда, когда изменится allTasks
 
     const handleEventDrop = async (dropInfo: EventDropArg) => {
         const { event } = dropInfo
@@ -98,7 +122,7 @@ export const CalendarPage = () => {
 
         setIsLoading(true);
         try {
-            let listOwnerId = selectedListId === 'all' ? '': selectedListId
+            let listOwnerId = selectedListId === 'all' ? '' : selectedListId
             await dispatch(createTask({
                 title: taskTitle,
                 listOwnerId: listOwnerId,
@@ -123,21 +147,86 @@ export const CalendarPage = () => {
         }))
     }
 
+    // Растягивание задачи
+
+    const handleEventResize = async (resizeInfo: EventResizeDoneArg) => {
+        const { event } = resizeInfo
+        const changes = {
+            startDate: event.start,
+            endDate: event.end
+        }
+
+        try {
+            await dispatch(updateTaskApi({
+                taskId: event.id,
+                changes,
+            })).unwrap();
+        } catch (error) {
+            console.error('Failed to update task end date:', error);
+            // Если произойдет ошибка, `FullCalendar` сам вернет событие к прежнему размеру.
+            // Это встроенная "пессимистичная" логика.
+            resizeInfo.revert();
+        }
+    }
+
+    // Рендер эвента
+
+    const renderEventContent = (eventInfo: EventContentArg) => {
+        // debugger
+        const task: Task = eventInfo.event.extendedProps.task
+
+        return (
+            <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', width: '100%' }}>
+                <ToggleTaskCalendar task={task} />
+                <Typography
+                    variant="body2"
+                    sx={{
+                        ml: 1,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        textDecoration: task.isCompleted ? 'line-through' : 'none',
+                        opacity: task.isCompleted ? 0.6 : 1,
+                        flexGrow: 1
+                    }}
+                >
+                    {eventInfo.event.title}
+                </Typography>
+                <ToggleFavouritCalendar task={task} />
+            </Box>
+        )
+    }
+
     return (
         <div>
             <h1>Calendar page</h1>
             <FullCalendar
-                plugins={[dayGridPlugin, interactionPlugin]}
+                // Визуал
+                headerToolbar={{
+                    start: "today prev next",
+                    end: "dayGridMonth dayGridWeek",
+                }}
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 initialView='dayGridMonth'
+                firstDay={1}
+                // eventDisplay="block"
+
+                // Флаги для управления
+                editable={true}
                 weekends={true}
                 events={calendarEvenst}
-                editable={true}
-                firstDay={1}
-                eventDisplay="block"
+                eventResizableFromStart={true}
+                // eventDurationEditable={true}
 
+                // Калбэки
                 eventDrop={handleEventDrop}
                 dateClick={handleDateClick}
                 eventClick={handleEditingTask}
+                eventResize={handleEventResize}
+
+                // Кастомный контент
+                ref={calendarRef}
+                eventContent={renderEventContent}
             />
             {isModalOpen && (
                 <CalendarCreateModal

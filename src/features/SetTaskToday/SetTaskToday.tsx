@@ -22,9 +22,8 @@ export const SetTaskToday = ({ task }: SetTaskTodayProps) => {
         setIsLoading(true);
 
         const today = new Date();
-        today.setHours(0, 0, 0, 0);
         const endDate = new Date(today);
-        endDate.setHours(23, 59, 59, 999);
+        endDate.setDate(endDate.getDate() + 1)
 
         try {
             await dispatch(updateTaskApi({

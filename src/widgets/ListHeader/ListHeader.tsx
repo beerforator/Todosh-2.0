@@ -124,6 +124,10 @@ export const ListHeader = () => {
         return <Typography variant="h4" gutterBottom>Inbox</Typography>;
     }
 
+    if (selectedListId === 'today') {
+        return <Typography variant="h4" gutterBottom>Today</Typography>;
+    }
+
     // Показываем "Загрузку", только если ID есть, а самого объекта листа еще нет
     if (!selectedList) {
         return <Typography variant="h4" gutterBottom>Загрузка...</Typography>;

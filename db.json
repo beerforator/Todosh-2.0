@@ -8,53 +8,44 @@
       "isCompleted": false,
       "isFavourite": true,
       "order": 7.125,
-      "startDate": null,
-      "endDate": null
-    },
-    {
-      "id": "4",
-      "title": "Записаться к врачу",
-      "startDate": null,
-      "endDate": null,
-      "userOwnerId": "user-1",
-      "listOwnerId": "list-inbox",
-      "isCompleted": true,
-      "isFavourite": true,
-      "stardDate": "2025-10-31T11:00:00.000Z",
-      "order": 4
+      "startDate": "2025-11-01T21:00:00.001Z",
+      "endDate": "2025-11-03T17:04:03.697Z"
     },
     {
       "id": "5",
-      "title": "Изучить документацию FullCalendar",
+      "title": "Изучить документацию FullCalendar - resize",
       "startDate": "2025-10-06T08:00:00.000Z",
-      "endDate": "2025-10-08T17:00:00.000Z",
+      "endDate": "2025-10-08T21:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "list-2",
       "isCompleted": false,
       "isFavourite": true,
-      "stardDate": "2025-10-26T08:00:00.000Z",
-      "order": 5
+      "order": 5,
+      "description": ""
     },
     {
       "id": "6",
       "title": "Оплатить счета за интернет",
       "userOwnerId": "user-1",
-      "listOwnerId": "list-inbox",
+      "listOwnerId": "list-1",
       "isCompleted": false,
       "isFavourite": true,
-      "order": 6
+      "order": 6,
+      "startDate": "2025-11-01T21:00:00.001Z",
+      "endDate": "2025-11-03T17:12:40.013Z",
+      "description": ""
     },
     {
       "id": "7",
       "title": "Купить билеты в Малый театр",
-      "startDate": "2025-11-01T19:00:00.000Z",
-      "endDate": "2025-11-01T22:00:00.000Z",
+      "startDate": "2025-10-23T21:00:00.001Z",
+      "endDate": "2025-10-29T21:00:00.000Z",
       "userOwnerId": "user-1",
-      "listOwnerId": "list-inbox",
+      "listOwnerId": "list-1",
       "isCompleted": false,
       "isFavourite": true,
       "description": "Тут я распишу парочку интересных строк\nЧисто для опыта\n\nТут список:\n1. Суп\n2. Гречка\n3. Компотик\n\nСамый классный обед)",
-      "order": 7
+      "order": 27.125
     },
     {
       "id": "8",
@@ -71,8 +62,8 @@
       "id": "684c",
       "title": "БСБД ПР8, 9, 11 - сделать",
       "description": "",
-      "startDate": "2025-10-24T21:00:00.000Z",
-      "endDate": "2025-10-25T21:00:00.000Z",
+      "startDate": "2025-10-23T21:00:00.000Z",
+      "endDate": "2025-10-24T21:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "1e3a",
       "isCompleted": false,
@@ -83,8 +74,8 @@
       "id": "9932",
       "title": "ОТНСЗИ ПР4-7 - сделать",
       "description": "",
-      "startDate": "2025-10-24T21:00:00.000Z",
-      "endDate": "2025-10-25T21:00:00.000Z",
+      "startDate": "2025-10-23T21:00:00.000Z",
+      "endDate": "2025-10-24T21:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "1e3a",
       "isCompleted": false,
@@ -96,7 +87,7 @@
       "title": "Доделать приложение",
       "description": "1. Сделать выбор даты окончания задачи (растягивание задачи)\n2. Запоминать сортировку\n3. Добавление листов",
       "startDate": "2025-10-08T21:00:00.000Z",
-      "endDate": "2025-10-09T20:59:59.000Z",
+      "endDate": "2025-10-09T21:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "list-2",
       "isCompleted": false,
@@ -107,47 +98,13 @@
       "id": "e7ad",
       "title": "Курсач - написать план",
       "description": "",
-      "startDate": "2025-10-28T21:00:00.000Z",
-      "endDate": "2025-10-26T21:00:00.000Z",
+      "startDate": "2025-10-31T21:00:00.001Z",
+      "endDate": "2025-11-01T21:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "1e3a",
       "isCompleted": false,
       "isFavourite": true,
       "order": 22
-    },
-    {
-      "id": "6de4",
-      "title": "Покупка 1",
-      "description": "",
-      "startDate": null,
-      "endDate": null,
-      "userOwnerId": "user-1",
-      "listOwnerId": "list-1",
-      "isCompleted": false,
-      "isFavourite": true,
-      "order": 12.125
-    },
-    {
-      "id": "e4c4",
-      "title": "Покупка2",
-      "description": "",
-      "userOwnerId": "user-1",
-      "listOwnerId": "list-1",
-      "isCompleted": false,
-      "isFavourite": true,
-      "order": 17.125,
-      "startDate": null,
-      "endDate": null
-    },
-    {
-      "id": "5b2d",
-      "title": "Раб1",
-      "description": "",
-      "userOwnerId": "user-1",
-      "listOwnerId": "list-2",
-      "isCompleted": false,
-      "isFavourite": false,
-      "order": 1761555434862
     },
     {
       "id": "686e",
@@ -158,6 +115,16 @@
       "isCompleted": false,
       "isFavourite": false,
       "order": 1761561284691
+    },
+    {
+      "id": "23f2",
+      "title": "Ada",
+      "description": "",
+      "userOwnerId": "user-1",
+      "listOwnerId": "today",
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 1762100639026
     }
   ],
   "lists": [
@@ -171,7 +138,7 @@
       "id": "list-1",
       "name": "Покупочки",
       "userOwnerId": "user-1",
-      "color": "#2196F3"
+      "color": "#9C27B0"
     },
     {
       "id": "list-2",
@@ -182,6 +149,12 @@
     {
       "id": "1e3a",
       "name": "Учеба",
+      "color": "#2196F3",
+      "userOwnerId": "user-1"
+    },
+    {
+      "id": "8ae0",
+      "name": "ТЕСТ ДАТ - успех, но есть недостатки",
       "color": "#795548",
       "userOwnerId": "user-1"
     }

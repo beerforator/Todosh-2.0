@@ -17,7 +17,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { startEditingTask } from "@/widgets/UISlice/UISlice"
 import { InlineCreateTask } from "@/features/InlineCreateTask/InlineCreateTask"
 import AddIcon from '@mui/icons-material/Add';
-import { ALL_TASKS_LIST_ID, listsSelectors } from "@/entities/List/model/listsSlice"
+import { ALL_TASKS_LIST_ID, listsSelectors, TODAY_TASKS_LIST_ID } from "@/entities/List/model/listsSlice"
 import CircleIcon from '@mui/icons-material/Circle'; // Для иконок списков
 import { ToggleFavourite } from "@/features/ToggleFavourite/ToggleFavourite"
 import { SetTaskToday } from "@/features/SetTaskToday/SetTaskToday"
@@ -98,6 +98,15 @@ export const TasksPage = () => {
         }))
     }
 
+    const isToday = (someDate: Date | null | undefined): boolean => {
+        if (!someDate) return false;
+        const today = new Date();
+        const date = new Date(someDate);
+        return date.getDate() === today.getDate() &&
+            date.getMonth() === today.getMonth() &&
+            date.getFullYear() === today.getFullYear();
+    };
+
     if (tasksLoadingStatus === 'pending') {
         return (
             <h2>Loading ...</h2>
@@ -108,6 +117,8 @@ export const TasksPage = () => {
             <h2>Failed to get tasks</h2>
         )
     }
+
+    // Рендер
 
     const renderSortableTaskCard = (task: Task) => {
         return (
@@ -135,7 +146,7 @@ export const TasksPage = () => {
 
     const renderContent = () => {
         // Сценарий 1: Выбран конкретный список
-        if (selectedListId !== ALL_TASKS_LIST_ID) {
+        if (selectedListId !== ALL_TASKS_LIST_ID && selectedListId !== TODAY_TASKS_LIST_ID) {
             const filteredAndSortedTasks = allTasks
                 .filter(task => task.listOwnerId === selectedListId)
                 .slice()
@@ -156,42 +167,63 @@ export const TasksPage = () => {
                     </DndContext>
                 </>
             );
-        }
-
-        // Сценарий 2: Выбраны "Все задачи"
-        // Группируем задачи по их listOwnerId
-        const groupedTasks = allLists.reduce((acc, list) => {
+        } else if (selectedListId === TODAY_TASKS_LIST_ID) {
+            // НОВАЯ ЛОГИКА ДЛЯ "СЕГОДНЯ"
             // Находим и СОРТИРУЕМ задачи для каждого списка
-            const tasksInList = allTasks
-                .filter(task => task.listOwnerId === list.id)
+            const tasksToRender = allTasks
+                .filter(task => isToday(task.startDate))
                 .slice()
                 .sort((a, b) => a.order - b.order);
 
-            if (tasksInList.length > 0) {
-                acc[list.id] = {
-                    listName: list.name,
-                    tasks: tasksInList,
-                };
-            }
-            return acc;
-        }, {} as Record<string, { listName: string; tasks: Task[] }>);
-
-        return (
-            <>
-                <ListHeader />
-                {/* Отключаем D&D для режима "Все задачи", как ты и хотел! */}
-                {Object.values(groupedTasks).map(({ listName, tasks }) => (
-                    <Box key={listName} mb={4}>
-                        <Typography variant="h6">{listName}</Typography>
-                        {tasks.map(task => (
+            return (
+                <>
+                    <ListHeader />
+                    {/* Отключаем D&D для режима "Все задачи", как ты и хотел! */}
+                    <Box mb={4}>
+                        {tasksToRender.map(task => (
                             // Используем обычную TaskCard, т.к. сортировки нет
                             // <TaskCard key={task.id} task={task} /* ... пропсы для обычной карточки ... */ />
                             renderSortableTaskCard(task)
                         ))}
                     </Box>
-                ))}
-            </>
-        );
+                </>
+            );
+        } else if (selectedListId === ALL_TASKS_LIST_ID) {
+            // Сценарий 2: Выбраны "Все задачи"
+            // Группируем задачи по их listOwnerId
+            const groupedTasks = allLists.reduce((acc, list) => {
+                // Находим и СОРТИРУЕМ задачи для каждого списка
+                const tasksInList = allTasks
+                    .filter(task => task.listOwnerId === list.id)
+                    .slice()
+                    .sort((a, b) => a.order - b.order);
+
+                if (tasksInList.length > 0) {
+                    acc[list.id] = {
+                        listName: list.name,
+                        tasks: tasksInList,
+                    };
+                }
+                return acc;
+            }, {} as Record<string, { listName: string; tasks: Task[] }>);
+
+            return (
+                <>
+                    <ListHeader />
+                    {/* Отключаем D&D для режима "Все задачи", как ты и хотел! */}
+                    {Object.values(groupedTasks).map(({ listName, tasks }) => (
+                        <Box key={listName} mb={4}>
+                            <Typography variant="h6">{listName}</Typography>
+                            {tasks.map(task => (
+                                // Используем обычную TaskCard, т.к. сортировки нет
+                                // <TaskCard key={task.id} task={task} /* ... пропсы для обычной карточки ... */ />
+                                renderSortableTaskCard(task)
+                            ))}
+                        </Box>
+                    ))}
+                </>
+            );
+        }
     };
 
     return (

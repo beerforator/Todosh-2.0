@@ -4,7 +4,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 type CreateListArg = Omit<List, 'id' | 'userOwnerId'>
 
-export const createList = createAsyncThunk<List, CreateListArg>(
+export const createListApi = createAsyncThunk<List, CreateListArg>(
     'lists/createList',
     async ({name, color}, thunkApi) => {
         const newListData = {

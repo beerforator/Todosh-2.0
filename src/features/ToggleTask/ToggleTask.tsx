@@ -1,52 +1,33 @@
-// src/features/ToggleTask/ToggleTask.tsx
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/app/providers/store/types';
 import { Task } from '@/shared/types/entities';
 import { Checkbox, CircularProgress } from '@mui/material';
-import { useState } from 'react';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import { updateTaskApi } from '../EditTask/api/updateTaskApi';
+import { updateTaskApi } from '../../app/services/taskServices/updateTaskApi';
+import { useApiRequest } from '@/shared/hooks/useApiRequest';
 
 interface ToggleTaskProps {
-    task: Task;
+    task: Task,
+    size?: 'small' | 'medium'
 }
 
-export const ToggleTask = ({ task }: ToggleTaskProps) => {
-    const dispatch: AppDispatch = useDispatch();
-    const [isLoading, setLoading] = useState(false)
+export const ToggleTask = ({ task, size = 'medium' }: ToggleTaskProps) => {
+    const [letToggle, isLettingToggle] = useApiRequest(updateTaskApi, {})
 
-    const handleToggle = async () => {
+    const handleToggle = (e: React.ChangeEvent) => {
+        e.stopPropagation()
 
-        // Диспатчим экшен `updateTask`, который мы создали вчера!
-        // `createEntityAdapter` требует специальный формат:
-        // `id` - ID сущности для обновления
-        // `changes` - объект с полями, которые нужно изменить
-        console.log('Call toggle task')
-
-        if (isLoading)
-            return
-
-        setLoading(true)
-
-        const changes = { isCompleted: !task.isCompleted }
-
-        try {
-            await dispatch(updateTaskApi({
-                taskId: task.id,
-                changes: changes
-            })).unwrap()
-            // Здесь нам не нужно делать второй диспатч, т.к. extraReducer сам уберет задачу из стейта.
+        let payload = {
+            taskId: task.id,
+            changes: { isCompleted: !task.isCompleted }
         }
-        catch (error) {
-            console.error("Failed to update task", error)
-        } finally {
-            setLoading(false)
-        }
-    };
 
-    if (isLoading)
-        return <CircularProgress size={18} style={{ margin: '12px' }} />
+        letToggle(payload)
+    }
+
+    if (isLettingToggle) {
+        const spinnerSize = size === 'small' ? 8 : 24
+        return <CircularProgress size={spinnerSize} style={{ margin: '12px' }} />
+    }
 
     return (
         <Checkbox
@@ -54,7 +35,11 @@ export const ToggleTask = ({ task }: ToggleTaskProps) => {
             checkedIcon={<RadioButtonCheckedIcon />}
             checked={task.isCompleted}
             onChange={handleToggle}
-            disabled={isLoading}
+            onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            disabled={isLettingToggle}
+
+            sx={{ p: size === 'small' ? '4px' : '12px' }}
         />
     );
 };

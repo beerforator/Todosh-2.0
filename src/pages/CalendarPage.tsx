@@ -3,20 +3,20 @@ import dayGridPlugin from '@fullcalendar/daygrid'; // Плагин для вид
 import interactionPlugin, { DateClickArg, EventResizeDoneArg } from '@fullcalendar/interaction'; // Плагин для интерактивности
 import { AppDispatch, RootState } from '@/app/providers/store/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { tasksSelectors } from '@/entities/Task/model/tasksSlice';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { fetchTasks } from '@/entities/Task/model/fetchTasks';
-import { DateSelectArg, EventChangeArg, EventClickArg, EventContentArg, EventDropArg } from '@fullcalendar/core'; // 3. Импортируем тип для аргумента обработчика
-import { updateTaskApi } from '@/features/EditTask/api/updateTaskApi';
-import { createTask } from '@/features/TaskModal/api/useCreateTask';
-import { CalendarCreateModal } from '@/features/TaskModal/CalendarCreateModal';
+import { fetchTasksApi } from '@/app/services/taskServices/fetchTasksApi';
+import { EventClickArg, EventContentArg, EventDropArg } from '@fullcalendar/core'; // 3. Импортируем тип для аргумента обработчика
+import { updateTaskApi } from '@/app/services/taskServices/updateTaskApi';
+import { CalendarCreateModal } from '@/features/CreateTask/TaskModal/CalendarCreateModal';
 import { Task } from '@/shared/types/entities';
-import { startEditingTask } from '@/widgets/UISlice/UISlice';
-import { ALL_TASKS_LIST_ID, listsSelectors, TODAY_TASKS_LIST_ID } from '@/entities/List/model/listsSlice';
+import { startEditingTask } from '@/app/services/UISlice/UISlice';
+import { ALL_TASKS_LIST_ID, listsSelectors, TODAY_TASKS_LIST_ID } from '@/app/providers/store/slices/listsSlice';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { Box, Typography } from '@mui/material';
-import { ToggleTaskCalendar } from '@/features/ToggleTaskCalendar/ToggleTaskCalendar';
-import { ToggleFavouritCalendar } from '@/features/ToggleFavouriteCalendar/ToggleFavouriteCalendar';
+import { tasksSelectors } from '@/app/providers/store/slices/tasksSlice';
+import { ToggleFavourite } from '@/features/ToggleFavourite/ToggleFavourite';
+import { ToggleTask } from '@/features/ToggleTask/ToggleTask';
+import { useApiRequest } from '@/shared/hooks/useApiRequest';
 
 export const CalendarPage = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -27,6 +27,9 @@ export const CalendarPage = () => {
 
     const calendarRef = useRef<FullCalendar>(null);
 
+    const [setFetchTasks, isSettingFetchTasks] = useApiRequest(fetchTasksApi, {})
+    const [setUpdateDates, isSettingUpdateDates] = useApiRequest(updateTaskApi, {})
+
     // Управление календарем
 
     useEffect(() => {
@@ -35,10 +38,6 @@ export const CalendarPage = () => {
 
         if (selectedListId === TODAY_TASKS_LIST_ID) {
             calendarApi.gotoDate(new Date());
-
-            // if (calendarApi.view.type !== 'timeGridDay') {
-            //     calendarApi.changeView('timeGridDay');
-            // }
         } else {
             calendarApi.changeView('dayGridMonth')
         }
@@ -46,11 +45,11 @@ export const CalendarPage = () => {
 
     useEffect(() => {
         if (tasksLoadingStatus === 'idle') {
-            dispatch(fetchTasks())
+            setFetchTasks({})
         }
-    }, [dispatch, tasksLoadingStatus])
+    }, [setFetchTasks, tasksLoadingStatus])
 
-    const calendarEvenst = useMemo(() => {
+    const calendarEvents = useMemo(() => {
         const filteredTasks = selectedListId === ALL_TASKS_LIST_ID || selectedListId === TODAY_TASKS_LIST_ID
             ? allTasks
             : allTasks.filter(task => task.listOwnerId === selectedListId);
@@ -70,71 +69,41 @@ export const CalendarPage = () => {
                     borderColor: allTasks.find(t => t.id === task.id)?.listOwnerId
                         ? allLists.find(l => l.id === task.listOwnerId)?.color
                         : '#808080',
-                    // extendedProps - это "мешок" для любых наших данных.
-                    // Мы сохраняем сюда всю оригинальную задачу, это понадобится нам в будущем.
                     extendedProps: {
                         task
                     },
                     allDay: true
                 }
             })
-    }, [allTasks, selectedListId, allLists]) // Этот код будет выполняться только тогда, когда изменится allTasks
+    }, [allTasks, selectedListId, allLists])
 
-    const handleEventDrop = async (dropInfo: EventDropArg) => {
+    const handleEventDrop = (dropInfo: EventDropArg) => {
         const { event } = dropInfo
-        const changes = {
-            startDate: event.start ?? undefined,
-            endDate: event.end ?? undefined
+
+        const payload = {
+            taskId: event.id,
+            changes: {
+                startDate: event.start ?? undefined,
+                endDate: event.end ?? undefined
+            }
         }
 
-        try {
-            await dispatch(updateTaskApi({
-                taskId: event.id,
-                changes: changes
-            })).unwrap()
-        } catch (error) {
-            console.error('Failed to update task date:', error);
-        }
+        setUpdateDates(payload)
     }
 
     // Создание задач
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-    const [taskTitle, setTaskTitle] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
 
     const handleDateClick = (clickInfo: DateClickArg) => {
         setSelectedDate(clickInfo.date);
-        setTaskTitle(''); // Сбрасываем заголовок
-        setIsModalOpen(true); // Открываем
+        setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        // Сбрасываем все состояния при закрытии
         setSelectedDate(null);
-        setTaskTitle('');
-    };
-
-    const handleSubmit = async () => {
-        if (!taskTitle.trim() || !selectedDate) return;
-
-        setIsLoading(true);
-        try {
-            let listOwnerId = selectedListId === 'all' ? '' : selectedListId
-            await dispatch(createTask({
-                title: taskTitle,
-                listOwnerId: listOwnerId,
-                startDate: selectedDate,
-                endDate: selectedDate
-            })).unwrap();
-            handleCloseModal(); // Закрываем после успеха
-        } catch (error) {
-            console.error('Failed to create task:', error);
-        } finally {
-            setIsLoading(false);
-        }
     };
 
     // Изменение задач
@@ -149,35 +118,30 @@ export const CalendarPage = () => {
 
     // Растягивание задачи
 
-    const handleEventResize = async (resizeInfo: EventResizeDoneArg) => {
+    const handleEventResize = (resizeInfo: EventResizeDoneArg) => {
         const { event } = resizeInfo
-        const changes = {
-            startDate: event.start,
-            endDate: event.end
+
+        const payload = {
+            taskId: event.id,
+            changes: {
+                startDate: event.start,
+                endDate: event.end
+            }
         }
 
-        try {
-            await dispatch(updateTaskApi({
-                taskId: event.id,
-                changes,
-            })).unwrap();
-        } catch (error) {
-            console.error('Failed to update task end date:', error);
-            // Если произойдет ошибка, `FullCalendar` сам вернет событие к прежнему размеру.
-            // Это встроенная "пессимистичная" логика.
-            resizeInfo.revert();
-        }
+        setUpdateDates(payload)
     }
 
     // Рендер эвента
 
     const renderEventContent = (eventInfo: EventContentArg) => {
-        // debugger
         const task: Task = eventInfo.event.extendedProps.task
+
+        if (isSettingUpdateDates) return
 
         return (
             <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', width: '100%' }}>
-                <ToggleTaskCalendar task={task} />
+                <ToggleTask task={task} size={'small'} />
                 <Typography
                     variant="body2"
                     sx={{
@@ -192,7 +156,7 @@ export const CalendarPage = () => {
                 >
                     {eventInfo.event.title}
                 </Typography>
-                <ToggleFavouritCalendar task={task} />
+                <ToggleFavourite task={task} size={'small'} />
             </Box>
         )
     }
@@ -214,7 +178,7 @@ export const CalendarPage = () => {
                 // Флаги для управления
                 editable={true}
                 weekends={true}
-                events={calendarEvenst}
+                events={calendarEvents}
                 eventResizableFromStart={true}
                 // eventDurationEditable={true}
 
@@ -230,13 +194,8 @@ export const CalendarPage = () => {
             />
             {isModalOpen && (
                 <CalendarCreateModal
-                    isOpen={isModalOpen}
-                    // isEditMode больше не нужен
-                    title={taskTitle}
-                    onTitleChange={setTaskTitle}
-                    onSubmit={handleSubmit}
                     onClose={handleCloseModal}
-                    isLoading={isLoading}
+                    selectedDate={selectedDate}
                 />
             )}
         </div>

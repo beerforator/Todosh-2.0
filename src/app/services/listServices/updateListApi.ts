@@ -1,4 +1,3 @@
-// src/features/EditList/api/updateList.ts
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { List } from '@/shared/types/entities';
 import { baseApi } from '@/shared/api/base';

@@ -4,7 +4,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 type CreateTaskArg = Pick<Task, 'title'> & Partial<Pick<Task, 'startDate' | 'endDate' | 'listOwnerId'>>
 
-export const createTask = createAsyncThunk<Task, CreateTaskArg>(
+export const createTaskApi = createAsyncThunk<Task, CreateTaskArg>(
     'task/createTask',
     async ({ title, startDate, endDate, listOwnerId }, thunkApi) => {
         let normStartDate = startDate ? new Date(startDate) : undefined;
@@ -12,7 +12,6 @@ export const createTask = createAsyncThunk<Task, CreateTaskArg>(
         normEndDate?.setDate(normEndDate.getDate() + 1);
 
         if (normStartDate) normStartDate.setHours(0, 0, 0, 1);
-        // if (normEndDate) normEndDate.setHours(23, 59, 59, 999);
 
         const newTaskData: Omit<Task, 'id'> = {
             title: title,

@@ -1,8 +1,8 @@
 import { baseApi } from "@/shared/api/base";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const deleteTask = createAsyncThunk<string, string>(
-    'task/deleteTask',
+export const deleteTaskApi = createAsyncThunk<string, string>(
+    'task/deleteTaskApi',
     async (taskId, thunkApi) => {
         try {
             await baseApi.delete(`tasks/${taskId}`)

@@ -2,18 +2,19 @@ import { AppDispatch, RootState } from "@/app/providers/store/types"
 import { Box, Button, CircularProgress, Drawer, FormControl, IconButton, InputLabel, ListItemIcon, MenuItem, Select, TextField, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
 import CloseIcon from '@mui/icons-material/Close';
-import { tasksSelectors } from "@/entities/Task/model/tasksSlice";
 import { useEffect, useState } from "react";
-import { stopEditingTask } from "../UISlice/UISlice";
-import { updateTaskApi } from "@/features/EditTask/api/updateTaskApi";
-import { listsSelectors } from "@/entities/List/model/listsSlice";
+import { stopEditingTask } from "../../app/services/UISlice/UISlice";
+import { updateTaskApi } from "@/app/services/taskServices/updateTaskApi";
+import { listsSelectors } from "@/app/providers/store/slices/listsSlice";
 import CircleIcon from '@mui/icons-material/Circle'; // Для иконок списков
 import { ToggleFavourite } from "@/features/ToggleFavourite/ToggleFavourite";
 import { SetTaskToday } from "@/features/SetTaskToday/SetTaskToday";
 import { RemoveTaskDate } from "@/features/RemoveTaskDate/RemoveTaskDate";
 import { ToggleTask } from "@/features/ToggleTask/ToggleTask";
 import { DeleteTask } from "@/features/DeleteTask/DeleteTask";
-import { dataLogicFormatRender } from "@/entities/Task/model/formatDateRender";
+import { dataLogicFormatRender } from "@/shared/lib/formatDateRender";
+import { tasksSelectors } from "@/app/providers/store/slices/tasksSlice";
+import { useApiRequest } from "@/shared/hooks/useApiRequest";
 
 interface TaskDetailsPaneProps {
     width: number;
@@ -25,10 +26,13 @@ export const TaskDetailsPane = ({ width }: TaskDetailsPaneProps) => {
     const editingTask = useSelector((state: RootState) => editingTaskId ? tasksSelectors.selectById(state, editingTaskId) : undefined)
     const allLists = useSelector(listsSelectors.selectAll);
 
-    const [isSaving, setIsSaving] = useState(false)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [selectedListId, setSelectedListId] = useState('');
+
+    const [setSave, isSettingFetchTasks] = useApiRequest(updateTaskApi, {
+        onFinally: () => { handleClose()}
+    })
 
     useEffect(() => {
         if (editingTask) {
@@ -47,24 +51,16 @@ export const TaskDetailsPane = ({ width }: TaskDetailsPaneProps) => {
     const handleSave = async () => {
         if (!editingTaskId) return
 
-        setIsSaving(true)
-
-        try {
-            await dispatch(updateTaskApi({
-                taskId: editingTaskId,
-                changes: {
-                    title: title,
-                    description: description,
-                    listOwnerId: selectedListId
-                }
-            })).unwrap()
-
-            handleClose()
-        } catch (error) {
-            console.error('Failed to save task:', error);
-        } finally {
-            setIsSaving(false)
+        const payload = {
+            taskId: editingTaskId,
+            changes: {
+                title: title,
+                description: description,
+                listOwnerId: selectedListId
+            }
         }
+
+        setSave(payload)
     }
 
     return (
@@ -97,7 +93,7 @@ export const TaskDetailsPane = ({ width }: TaskDetailsPaneProps) => {
                                     value={selectedListId}
                                     label="Список"
                                     onChange={(e) => setSelectedListId(e.target.value)}
-                                    disabled={isSaving}
+                                    disabled={isSettingFetchTasks}
                                 >
                                     {allLists.map(list => (
                                         <MenuItem key={list.id} value={list.id}>
@@ -124,7 +120,7 @@ export const TaskDetailsPane = ({ width }: TaskDetailsPaneProps) => {
                                 rows={4}
                             />
                             <Button variant="contained" onClick={handleSave} sx={{ mt: 2 }}>
-                                {isSaving ? <CircularProgress size={24} color="inherit" /> : 'Сохранить'}
+                                {isSettingFetchTasks ? <CircularProgress size={24} color="inherit" /> : 'Сохранить'}
                             </Button>
                             {dataLogicFormatRender(editingTask.startDate, editingTask.endDate)}
                         </Box>

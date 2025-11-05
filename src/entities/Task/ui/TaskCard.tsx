@@ -4,7 +4,7 @@ import { Task } from '@/shared/types/entities';
 import { Card, CardContent, Typography, IconButton } from '@mui/material';
 import { DraggableAttributes } from '@dnd-kit/core';
 import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
-import { dataLogicFormatRender } from '../model/formatDateRender';
+import { dataLogicFormatRender } from '../../../shared/lib/formatDateRender';
 
 // Описываем, какие пропсы принимает наш компонент
 interface TaskCardProps {

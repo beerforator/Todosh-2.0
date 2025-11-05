@@ -1,9 +1,9 @@
 // src/app/providers/store.ts
 
 import { configureStore } from '@reduxjs/toolkit';
-import { tasksReducer } from '@/entities/Task/model/tasksSlice';
-import { listsReducer } from '@/entities/List/model/listsSlice';
-import { uiReducer } from '@/widgets/UISlice/UISlice';
+import { listsReducer } from '@/app/providers/store/slices/listsSlice';
+import { uiReducer } from '@/app/services/UISlice/UISlice';
+import { tasksReducer } from './slices/tasksSlice';
 
 export const store = configureStore({
     // `reducer` - это корневой редьюсер, который объединяет редьюсеры всех слайсов

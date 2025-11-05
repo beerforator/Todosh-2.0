@@ -2,14 +2,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '@/app/providers/store/types';
-import { ALL_TASKS_LIST_ID, listsSelectors, selectList } from '@/entities/List/model/listsSlice';
+import { ALL_TASKS_LIST_ID, listsSelectors, selectList } from '@/app/providers/store/slices/listsSlice';
 import { Box, Typography, IconButton, Menu, MenuItem, TextField, CircularProgress, Popover, ListItemIcon, ListItemText } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { deleteList } from '@/features/DeleteList/api/deleteList';
-import { updateListApi } from '@/features/EditList/api/updateList';
+import { updateListApi } from '@/app/services/listServices/updateListApi';
 import CircleIcon from '@mui/icons-material/Circle'; // Для иконок списков
 import { TAG_COLORS } from '@/shared/config/colors';
 import PaletteIcon from '@mui/icons-material/Palette'; // Иконка для цвета
+import { deleteListApi } from '@/app/services/listServices/deleteListApi';
+import { useApiRequest } from '@/shared/hooks/useApiRequest';
 
 export const ListHeader = () => {
     const dispatch: AppDispatch = useDispatch();
@@ -31,6 +32,7 @@ export const ListHeader = () => {
     const isMenuOpen = Boolean(anchorEl);
 
     const [isLoading, setIsLoading] = useState(false)
+    const [setUpdateList, isSettingUpdateList] = useApiRequest(updateListApi, {})
 
     useEffect(() => {
         if (selectedList) {
@@ -66,7 +68,7 @@ export const ListHeader = () => {
         if (window.confirm(`Вы уверены, что хотите удалить список "${selectedList.name}" и все задачи в нем?`)) {
             setIsLoading(true);
             try {
-                await dispatch(deleteList(selectedList.id)).unwrap();
+                await dispatch(deleteListApi(selectedList.id)).unwrap();
                 // После успешного удаления, переключаемся на "Все задачи" для лучшего UX
                 dispatch(selectList(ALL_TASKS_LIST_ID));
             } catch (error) {
@@ -81,23 +83,19 @@ export const ListHeader = () => {
     const handleNameBlur = async () => {
         if (!selectedList || selectedList?.name === listName.trim() || listName.trim() === "") {
             setIsEditing(false);
+            if (selectedList)
+                setListName(selectedList.name)
             return;
         }
 
-        setIsLoading(true);
-        try {
-            await dispatch(updateListApi({
-                id: selectedList.id,
-                changes: { name: listName.trim() }
-            })).unwrap()
+        const payload = {
+            id: selectedList.id,
+                changes: { name: listName.trim()}
         }
-        catch (error) {
-            console.error('Failed to update list:', error);
-        }
-        finally {
-            setIsLoading(false);
-            setIsEditing(false);
-        }
+        
+        setUpdateList(payload)
+
+        setIsEditing(false);
     };
 
     const handleOpenColorPicker = (event: React.MouseEvent<HTMLElement>) => {
@@ -109,8 +107,13 @@ export const ListHeader = () => {
     };
     const handleColorSelect = (color: string) => {
         if (!selectedList) return;
-        // Диспатчим наш универсальный Thunk
-        dispatch(updateListApi({ id: selectedList.id, changes: { color } }));
+
+        const payload = {
+            id: selectedList.id,
+            changes: { color }
+        }
+        setUpdateList(payload)
+
         handleCloseColorPicker();
         handleCloseMenu();
     };

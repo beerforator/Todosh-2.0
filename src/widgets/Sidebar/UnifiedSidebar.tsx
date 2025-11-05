@@ -6,9 +6,8 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 // import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { ALL_TASKS_LIST_ID, listsSelectors, selectList, TODAY_TASKS_LIST_ID } from '@/entities/List/model/listsSlice';
+import { ALL_TASKS_LIST_ID, listsSelectors, selectList, TODAY_TASKS_LIST_ID } from '@/app/providers/store/slices/listsSlice';
 import { AppDispatch, RootState } from '@/app/providers/store/types';
-import { fetchLists } from '@/entities/List/model/fetchLists';
 import CircleIcon from '@mui/icons-material/Circle'; // Для иконок списков
 import Button from '@mui/material/Button';
 import DashboardIcon from '@mui/icons-material/Dashboard'; // 2. Новые иконки
@@ -20,8 +19,9 @@ import FirstPageRoundedIcon from '@mui/icons-material/FirstPageRounded';
 import LastPageRoundedIcon from '@mui/icons-material/LastPageRounded';
 import { CreateListModal } from '@/features/CreateList/CreateListModal';
 import { TAG_COLORS } from '@/shared/config/colors';
-import { createList } from '@/features/CreateList/api/createList';
+import { createListApi } from '@/app/services/listServices/createListApi';
 import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
+import { fetchListsApi } from '@/app/services/listServices/fetchListsApi';
 
 export const UnifiedSidebar = () => {
     const dispatch: AppDispatch = useDispatch()
@@ -34,44 +34,24 @@ export const UnifiedSidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [newListName, setNewListName] = useState('');
-    const [newListColor, setNewListColor] = useState(TAG_COLORS[0]);
-    const [isCreating, setIsCreating] = useState(false);
 
     useEffect(() => {
-        dispatch(fetchLists())
+        dispatch(fetchListsApi())
     }, [dispatch])
 
     const handleListClick = (listId: string) => {
         if (listId === ALL_TASKS_LIST_ID)
-            console.log("ПРОАНАЛИЗИРУЙ ЛОГИКУ НОВОГО ОТОБРАЖЕНИЯ")
         if (!location.pathname.startsWith("/tasks") && !location.pathname.startsWith("/calendar"))
             navigate('/tasks')
         dispatch(selectList(listId))
     }
 
     const handleOpenModal = () => {
-        // Сбрасываем состояние при каждом открытии - это исправляет твой баг
-        setNewListColor(TAG_COLORS[0]);
         setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
-        setNewListName('');
         setIsModalOpen(false);
-    };
-
-    const handleSubmit = async () => {
-        if (!newListName.trim()) return;
-        setIsCreating(true);
-        try {
-            await dispatch(createList({ name: newListName, color: newListColor })).unwrap();
-            handleCloseModal(); // Закрываем после успеха
-        } catch (error) {
-            console.error('Failed to create list:', error);
-        } finally {
-            setIsCreating(false);
-        }
     };
 
     const sidebarWidth = isCollapsed ? '80px' : '250px'
@@ -90,7 +70,6 @@ export const UnifiedSidebar = () => {
         <Box sx={sidebarStyles}>
             <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
                 <MuiList component="nav">
-                    {/* <ListSubheader component="div">Nav</ListSubheader> */}
                     <ListItemButton component={NavLink} to="/profile">
                         <ListItemIcon> <Avatar sx={{ width: 32, height: 32 }}>U</Avatar> </ListItemIcon>
                         {!isCollapsed && <ListItemText primary={"Some User"} />}
@@ -108,7 +87,7 @@ export const UnifiedSidebar = () => {
                         {!isCollapsed && <ListItemText primary={"Tasks"} />}
                     </ListItemButton>
 
-                    <Divider sx={{ my: 2 }} /> {/* Разделитель */}
+                    <Divider sx={{ my: 2 }} />
 
                     <ListItemButton
                         selected={selectedListId === ALL_TASKS_LIST_ID}
@@ -126,7 +105,6 @@ export const UnifiedSidebar = () => {
                         <ListItemText primary="Сегодня" />
                     </ListItemButton>
 
-                    {/* <ListSubheader component="div">Task lists</ListSubheader> */}
                     {
                         allList.map(list => (
                             <>
@@ -159,16 +137,11 @@ export const UnifiedSidebar = () => {
                     {!isCollapsed && <ListItemText primary={"Log Out"} />}
                 </ListItemButton>
             </Box>
-            <CreateListModal
-                isOpen={isModalOpen}
-                onClose={handleCloseModal}
-                onSubmit={handleSubmit}
-                name={newListName}
-                onNameChange={setNewListName}
-                selectedColor={newListColor}
-                onColorChange={setNewListColor}
-                isLoading={isCreating}
-            />
+            {isModalOpen &&
+                <CreateListModal
+                    onClose={handleCloseModal}
+                />
+            }
         </Box>
     )
 }

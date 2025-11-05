@@ -1,41 +1,31 @@
-// src/features/SetTaskToday/SetTaskToday.tsx
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/app/providers/store/types';
+import React from 'react';
 import { Task } from '@/shared/types/entities';
-import { Button, IconButton } from '@mui/material';
+import { IconButton } from '@mui/material';
 import TodayIcon from '@mui/icons-material/Today';
-import { updateTaskApi } from '../EditTask/api/updateTaskApi';
+import { updateTaskApi } from '../../app/services/taskServices/updateTaskApi';
+import { useApiRequest } from '@/shared/hooks/useApiRequest';
 
 interface SetTaskTodayProps {
     task: Task;
 }
 
 export const SetTaskToday = ({ task }: SetTaskTodayProps) => {
-    const dispatch: AppDispatch = useDispatch();
-    const [isLoading, setIsLoading] = useState(false);
+    const [setTaskOnToday, isSettingTaskOnToday] = useApiRequest(updateTaskApi, {})
 
-    const handleSetToday = async (e: React.MouseEvent) => {
-        e.stopPropagation(); // Останавливаем всплытие для dnd-kit
-
-        if (isLoading) return;
-        setIsLoading(true);
+    const handleSetToday = (e: React.MouseEvent) => {
+        e.stopPropagation();
 
         const today = new Date();
         const endDate = new Date(today);
         endDate.setDate(endDate.getDate() + 1)
 
-        try {
-            await dispatch(updateTaskApi({
-                taskId: task.id,
-                changes: { startDate: today, endDate },
-            })).unwrap()
-        } catch (error) {
-            console.error('Failed to save task:', error);
-        } finally {
-            setIsLoading(false)
+        let payload = {
+            taskId: task.id,
+            changes: { startDate: today, endDate }
         }
-    };
+
+        setTaskOnToday(payload)
+    }
 
     return (
         <IconButton
@@ -45,8 +35,4 @@ export const SetTaskToday = ({ task }: SetTaskTodayProps) => {
             <TodayIcon color="primary" />
         </IconButton>
     );
-
-    // <IconButton onClick={handleToggle} disabled={isLoading}>
-    //     {task.isFavourite ? <Star color="primary" /> : <StarBorder />}
-    // </IconButton>
 };

@@ -1,33 +1,38 @@
-// src/features/CreateList/CreateListModal.tsx
-import React from 'react';
-import { Box, Button, Modal, TextField, Typography, IconButton } from '@mui/material';
+import React, { useCallback, useState } from 'react';
+import { Box, Button, Modal, Typography, IconButton } from '@mui/material';
 import { TAG_COLORS } from '@/shared/config/colors';
+import { createListApi } from '@/app/services/listServices/createListApi';
+import { useApiRequest } from '@/shared/hooks/useApiRequest';
+import { MemoizedTextField } from '@/shared/ui/MemoizedTextField';
 
-// 1. Полностью новый, "глупый" интерфейс
 interface CreateListModalProps {
-    isOpen: boolean;
     onClose: () => void;
-    onSubmit: () => void;
-    name: string;
-    onNameChange: (newName: string) => void;
-    selectedColor: string;
-    onColorChange: (newColor: string) => void;
-    isLoading: boolean;
 }
 
-export const CreateListModal = (props: CreateListModalProps) => {
-    const {
-        isOpen,
-        onClose,
-        onSubmit,
-        name,
-        onNameChange,
-        selectedColor,
-        onColorChange,
-        isLoading
-    } = props;
+export const CreateListModal = ({ onClose }: CreateListModalProps) => {
+    console.log('- createListModal')
+    const [letSubmit, isLettingSubmit] = useApiRequest(createListApi, {
+        onFinally: () => {
+            onClose()
+        }
+    })
+    const [newListName, setNewListName] = useState('');
+    const [newListColor, setNewListColor] = useState(TAG_COLORS[0]);
 
-    // 2. Убрана ВСЯ внутренняя логика и состояние (useState, useDispatch, handleSubmit)
+    const handleNewListName = useCallback((e: any) => {
+        setNewListName(e.target.value)
+    }, [setNewListName])
+
+    const handleSubmit = () => {
+        if (!newListName.trim()) return;
+
+        let payload = {
+            name: newListName,
+            color: newListColor
+        }
+
+        letSubmit(payload)
+    }
 
     const modalStyles = {
         position: 'absolute' as 'absolute',
@@ -42,33 +47,31 @@ export const CreateListModal = (props: CreateListModalProps) => {
     };
 
     return (
-        <Modal open={isOpen} onClose={onClose}>
+        <Modal open={true} onClose={onClose}>
             <Box sx={modalStyles}>
                 <Typography variant="h6">Новый список</Typography>
-                <TextField
-                    fullWidth
+                <MemoizedTextField
                     label="Название списка"
-                    value={name} // Используем пропс
-                    onChange={(e) => onNameChange(e.target.value)} // Вызываем родительскую функцию
-                    margin="normal"
-                    disabled={isLoading}
+                    value={newListName}
+                    onChange={handleNewListName}
+                    disabled={isLettingSubmit}
                 />
                 <Box sx={{ display: 'flex', gap: 1, my: 2 }}>
                     {TAG_COLORS.map(color => (
                         <IconButton
                             key={color}
-                            onClick={() => onColorChange(color)} // Вызываем родительскую функцию
+                            onClick={() => setNewListColor(color)}
                             sx={{
                                 width: 32,
                                 height: 32,
                                 backgroundColor: color,
-                                border: selectedColor === color ? '2px solid #000' : '2px solid transparent',
+                                border: newListColor === color ? '2px solid #000' : '2px solid transparent',
                             }}
                         />
                     ))}
                 </Box>
-                <Button onClick={onSubmit} variant="contained" disabled={isLoading}>
-                    {isLoading ? 'Создание...' : 'Создать'}
+                <Button onClick={handleSubmit} variant="contained" disabled={isLettingSubmit}>
+                    {isLettingSubmit ? 'Создание...' : 'Создать'}
                 </Button>
             </Box>
         </Modal>

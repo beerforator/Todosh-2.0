@@ -4,6 +4,7 @@ import { RootState } from '@/app/providers/store/types';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { createTaskApi } from '../../../app/services/taskServices/createTaskApi';
 import { useApiRequest } from '@/shared/hooks/useApiRequest';
+import { MemoizedTextField } from '@/shared/ui/MemoizedTextField';
 
 interface CalendarCreateModalProps {
     onClose: () => void,
@@ -53,12 +54,10 @@ export const CalendarCreateModal = ({ onClose, selectedDate }: CalendarCreateMod
                 <Typography variant="h6" component="h2">
                     Новая задача
                 </Typography>
-                <TextField
-                    fullWidth
+                <MemoizedTextField
                     label="Название задачи"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    margin="normal"
                     disabled={isLettingSubmit}
                 />
                 <Button onClick={handleSubmit} variant="contained" disabled={isLettingSubmit}>

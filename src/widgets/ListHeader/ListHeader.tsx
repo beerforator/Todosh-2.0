@@ -6,13 +6,17 @@ import { ALL_TASKS_LIST_ID, listsSelectors, selectList } from '@/app/providers/s
 import { Box, Typography, IconButton, Menu, MenuItem, TextField, CircularProgress, Popover, ListItemIcon, ListItemText } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { updateListApi } from '@/app/services/listServices/updateListApi';
-import CircleIcon from '@mui/icons-material/Circle'; // Для иконок списков
 import { TAG_COLORS } from '@/shared/config/colors';
 import PaletteIcon from '@mui/icons-material/Palette'; // Иконка для цвета
 import { deleteListApi } from '@/app/services/listServices/deleteListApi';
 import { useApiRequest } from '@/shared/hooks/useApiRequest';
 
-export const ListHeader = () => {
+import AllInboxIcon from '@mui/icons-material/AllInbox';
+import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
+import { ListCircleIcon } from '@/shared/ui/ListCircleIcon';
+
+export const ListHeader = React.memo(() => {
+    // console.log('ListHeader')
     const dispatch: AppDispatch = useDispatch();
 
     // Получаем ID текущего списка и сам объект списка
@@ -90,9 +94,9 @@ export const ListHeader = () => {
 
         const payload = {
             id: selectedList.id,
-                changes: { name: listName.trim()}
+            changes: { name: listName.trim() }
         }
-        
+
         setUpdateList(payload)
 
         setIsEditing(false);
@@ -120,7 +124,14 @@ export const ListHeader = () => {
 
     // ИСПРАВЛЕННАЯ ВЕРСИЯ:
     if (selectedListId === 'all') {
-        return <Typography variant="h4" gutterBottom>Все задачи</Typography>;
+        return (
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <ListItemIcon>
+                    <AllInboxIcon />
+                </ListItemIcon>
+                <Typography variant="h4" gutterBottom>Все задачи</Typography>
+            </ Box>
+        )
     }
 
     if (selectedListId === 'list-inbox') {
@@ -128,12 +139,18 @@ export const ListHeader = () => {
     }
 
     if (selectedListId === 'today') {
-        return <Typography variant="h4" gutterBottom>Today</Typography>;
+        return (
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <ListItemIcon>
+                    <WbSunnyOutlinedIcon />
+                </ListItemIcon><Typography variant="h4" gutterBottom>Today</Typography>
+            </ Box>
+        )
     }
 
     // Показываем "Загрузку", только если ID есть, а самого объекта листа еще нет
     if (!selectedList) {
-        return <Typography variant="h4" gutterBottom>Загрузка...</Typography>;
+        return <Typography variant="h4" gutterBottom>Загрузка...</Typography>
     }
 
     const modalStyles = {
@@ -151,7 +168,7 @@ export const ListHeader = () => {
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
             {isLoading && <CircularProgress size={32} sx={{ mr: 1 }} />}
-            <CircleIcon sx={{ color: selectedList.color, mr: 1.5 }} />
+            <ListCircleIcon color={selectedList.color} />
             {isEditing ? (
                 <TextField
                     value={listName}
@@ -217,4 +234,4 @@ export const ListHeader = () => {
             </Popover>
         </Box>
     );
-};
+})

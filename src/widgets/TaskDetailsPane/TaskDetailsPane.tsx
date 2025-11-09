@@ -1,29 +1,30 @@
 import { AppDispatch, RootState } from "@/app/providers/store/types"
-import { Box, Button, CircularProgress, Drawer, FormControl, IconButton, InputLabel, ListItemIcon, MenuItem, Select, TextField, Typography } from "@mui/material"
+import { Box, Drawer, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
-import CloseIcon from '@mui/icons-material/Close';
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { stopEditingTask } from "../../app/services/UISlice/UISlice";
 import { updateTaskApi } from "@/app/services/taskServices/updateTaskApi";
 import { listsSelectors } from "@/app/providers/store/slices/listsSlice";
-import CircleIcon from '@mui/icons-material/Circle'; // Для иконок списков
-import { ToggleFavourite } from "@/features/ToggleFavourite/ToggleFavourite";
-import { SetTaskToday } from "@/features/SetTaskToday/SetTaskToday";
-import { RemoveTaskDate } from "@/features/RemoveTaskDate/RemoveTaskDate";
-import { ToggleTask } from "@/features/ToggleTask/ToggleTask";
-import { DeleteTask } from "@/features/DeleteTask/DeleteTask";
-import { dataLogicFormatRender } from "@/shared/lib/formatDateRender";
+import { ToggleFavouriteContainer } from "@/features/ToggleFavourite/ToggleFavouriteContainer";
+import { SetTaskTodayContainer } from "@/features/SetTaskToday/SetTaskTodayContainer";
+import { RemoveTaskDateContainer } from "@/features/RemoveTaskDate/RemoveTaskDateContainer";
+import { ToggleTaskContainer } from "@/features/ToggleTask/ToggleTaskContainer";
+import { DeleteTaskContainer } from "@/features/DeleteTask/DeleteTaskContainer";
 import { tasksSelectors } from "@/app/providers/store/slices/tasksSlice";
 import { useApiRequest } from "@/shared/hooks/useApiRequest";
+import React from "react";
+import { MemoizedListSelect, PaneFooter, PaneHeader } from "./ui/TaskDetailPaneSections";
+import { MemoizedTextField } from "@/shared/ui/MemoizedTextField";
 
 interface TaskDetailsPaneProps {
+    taskId: string,
     width: number;
+    variant: "temporary" | "persistent" | "permanent" | undefined
 }
 
-export const TaskDetailsPane = ({ width }: TaskDetailsPaneProps) => {
+export const TaskDetailsPane = React.memo(({ taskId, width, variant }: TaskDetailsPaneProps) => {
     const dispatch: AppDispatch = useDispatch()
-    const { editingTaskId, detailsPaneMode } = useSelector((state: RootState) => state.uiReducer)
-    const editingTask = useSelector((state: RootState) => editingTaskId ? tasksSelectors.selectById(state, editingTaskId) : undefined)
+    const editingTask = useSelector((state: RootState) => taskId ? tasksSelectors.selectById(state, taskId) : undefined)
     const allLists = useSelector(listsSelectors.selectAll);
 
     const [title, setTitle] = useState('')
@@ -31,7 +32,7 @@ export const TaskDetailsPane = ({ width }: TaskDetailsPaneProps) => {
     const [selectedListId, setSelectedListId] = useState('');
 
     const [setSave, isSettingFetchTasks] = useApiRequest(updateTaskApi, {
-        onFinally: () => { handleClose()}
+        onFinally: () => { handleClose() }
     })
 
     useEffect(() => {
@@ -44,15 +45,15 @@ export const TaskDetailsPane = ({ width }: TaskDetailsPaneProps) => {
         }
     }, [editingTask])
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         dispatch(stopEditingTask())
-    }
+    }, [dispatch])
 
-    const handleSave = async () => {
-        if (!editingTaskId) return
+    const handleSave = useCallback(async () => {
+        if (!taskId) return
 
         const payload = {
-            taskId: editingTaskId,
+            taskId: taskId,
             changes: {
                 title: title,
                 description: description,
@@ -61,68 +62,66 @@ export const TaskDetailsPane = ({ width }: TaskDetailsPaneProps) => {
         }
 
         setSave(payload)
-    }
+    }, [taskId, title, description, selectedListId, setSave])
+
+    const handleListChange = useCallback((e: any) => {
+        setSelectedListId(e.target.value)
+    }, [])
+
+    const handleTitleChange = useCallback((e: any) => {
+        setTitle(e.target.value)
+    }, [])
+
+    const handleDescriptionChange = useCallback((e: any) => {
+        setDescription(e.target.value)
+    }, [])
+
+    const taskDates = useMemo(() => ({
+        start: editingTask?.startDate,
+        end: editingTask?.endDate,
+    }), [editingTask?.startDate, editingTask?.endDate]);
 
     return (
         <Drawer
             anchor="right"
-            open={!!editingTaskId}
+            open={!!taskId}
             onClose={handleClose}
-            variant={detailsPaneMode}
+            variant={variant}
         >
             <Box sx={{ width: width, p: 2 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography variant="h6">Taks details</Typography>
-                    <IconButton onClick={handleClose}>
-                        <CloseIcon />
-                    </IconButton>
-                </Box>
+                <PaneHeader handleClose={handleClose} />
 
                 {
                     editingTask ? (
                         <Box component="form" sx={{ mt: 2 }}>
-                            <ToggleTask task={editingTask} />
-                            <ToggleFavourite task={editingTask} />
-                            <SetTaskToday task={editingTask} />
-                            <RemoveTaskDate task={editingTask} />
-                            <DeleteTask taskId={editingTask.id} />
-                            <FormControl fullWidth margin="normal">
-                                <InputLabel id="list-select-label">Список</InputLabel>
-                                <Select
-                                    labelId="list-select-label"
-                                    value={selectedListId}
-                                    label="Список"
-                                    onChange={(e) => setSelectedListId(e.target.value)}
+                            <ToggleTaskContainer taskId={editingTask.id} />
+                            <ToggleFavouriteContainer taskId={editingTask.id} />
+                            <SetTaskTodayContainer taskId={editingTask.id} />
+                            <RemoveTaskDateContainer taskId={editingTask.id} />
+                            <DeleteTaskContainer taskId={editingTask.id} />
+                            <Box sx={{ display: 'flex', alignItems: 'center', border: `6px solid red` }}>
+                                <MemoizedTextField
+                                    label="Название"
+                                    value={title}
+                                    onChange={handleTitleChange}
                                     disabled={isSettingFetchTasks}
-                                >
-                                    {allLists.map(list => (
-                                        <MenuItem key={list.id} value={list.id}>
-                                            <ListItemIcon><CircleIcon fontSize="small" sx={{ color: list.color }} /></ListItemIcon>
-                                            {list.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <TextField
-                                fullWidth
-                                label="Title"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                margin="normal"
-                            />
-                            <TextField
-                                fullWidth
+                                />
+                                <MemoizedListSelect
+                                    value={selectedListId}
+                                    onChange={handleListChange}
+                                    disabled={isSettingFetchTasks}
+                                    lists={allLists}
+                                />
+                            </Box>
+                            <MemoizedTextField
                                 label="Описание"
                                 value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                margin="normal"
+                                onChange={handleDescriptionChange}
+                                disabled={isSettingFetchTasks}
                                 multiline
                                 rows={4}
                             />
-                            <Button variant="contained" onClick={handleSave} sx={{ mt: 2 }}>
-                                {isSettingFetchTasks ? <CircularProgress size={24} color="inherit" /> : 'Сохранить'}
-                            </Button>
-                            {dataLogicFormatRender(editingTask.startDate, editingTask.endDate)}
+                            <PaneFooter isSaving={isSettingFetchTasks} handleSave={handleSave} taskDates={taskDates} />
                         </Box>
                     ) : (
                         <Typography sx={{ mt: 2 }}>Загрузка данных...</Typography>
@@ -131,4 +130,4 @@ export const TaskDetailsPane = ({ width }: TaskDetailsPaneProps) => {
             </Box>
         </Drawer>
     )
-}
+})

@@ -1,8 +1,8 @@
 // src/entities/Task/ui/SortableTaskCard.tsx
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Task } from '@/shared/types/entities';
 import { useSortable } from '@dnd-kit/sortable';
-import { TaskCard } from './TaskCard';
+import { TaskCard } from './ui/TaskCard';
 
 // Описываем, какие пропсы принимает наш компонент
 interface SortableTaskCardProps {
@@ -14,7 +14,18 @@ interface SortableTaskCardProps {
     hoverActionsSlot?: React.ReactNode;
 }
 
-export const SortableTaskCard = ({ task, ...props }: SortableTaskCardProps) => {
+export const SortableTaskCard = React.memo(({ task, ...props }: SortableTaskCardProps) => {
+    console.log('- SortableTaskCard')
+    const [isHovered, setIsHovered] = useState(false);
+
+    const handleMouseEnter = useCallback(() => {
+        setIsHovered(true)
+    }, [])
+
+    const handleMouseLeave = useCallback(() => {
+        setIsHovered(false)
+    }, [])
+
     const {
         attributes,
         listeners,
@@ -30,8 +41,14 @@ export const SortableTaskCard = ({ task, ...props }: SortableTaskCardProps) => {
 
     return (
         // Мы "оборачиваем" нашу TaskCard в div, к которому применяем все магические атрибуты
-        <div ref={setNodeRef} style={style} {...attributes}>
-            <TaskCard task={task} {...props} dndAttributes={attributes} dndListeners={listeners}/>
+        <div
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
+            <TaskCard task={task} {...props} dndAttributes={attributes} dndListeners={listeners} isHovered={isHovered} />
         </div>
     );
-};
+})

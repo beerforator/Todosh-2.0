@@ -1,17 +1,18 @@
-// src/widgets/Layout/MainLayout.tsx
 import { Outlet } from 'react-router-dom';
-// import { Sidebar } from '@/widgets/Sidebar/DEPRECATED_Sidebar';
 import { UnifiedSidebar } from '../Sidebar/UnifiedSidebar';
-import { TaskDetailsPane } from '../TaskDetailsPane/TaskDetailsPane';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/app/providers/store/types';
+import { Header } from '../Header/Header';
+import { TaskDetailsPaneContainer } from '../TaskDetailsPane/TaskDetailsPane.container';
+import React from 'react';
 
 const PANE_WIDTH = 400;
 const MARGIN_RIGHT = PANE_WIDTH + 20
 
-export const MainLayout = () => {
-    const { editingTaskId, detailsPaneMode } = useSelector((state: RootState) => state.uiReducer)
-    const isPanePersistent = !!editingTaskId && detailsPaneMode === 'persistent';
+interface MainLayoutProps {
+    isPanePersistent: boolean;
+}
+
+export const MainLayout = React.memo(({ isPanePersistent }: MainLayoutProps) => {
+    console.log('MainLayout\n\n')
 
     const layoutStyles: React.CSSProperties = {
         display: 'flex',
@@ -30,11 +31,12 @@ export const MainLayout = () => {
         <div style={layoutStyles}>
             <UnifiedSidebar />
             <main style={contentStyles}>
-                {/* <Outlet /> - это специальный компонент от react-router-dom.
-            Именно сюда он будет "вставлять" наши страницы (/tasks, /calendar) */}
-                <Outlet />
+                <Header />
+                <div>
+                    <Outlet />
+                    <TaskDetailsPaneContainer />
+                </div>
             </main>
-            <TaskDetailsPane width={PANE_WIDTH}/>
         </div>
     );
-};
+})

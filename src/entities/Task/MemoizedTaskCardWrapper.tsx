@@ -1,0 +1,36 @@
+import { DeleteTaskContainer } from "@/features/DeleteTask/DeleteTaskContainer";
+import { ToggleEditPaneContainer } from "@/features/EditTask/ToggleEditPaneContainer";
+import { ToggleFavouriteContainer } from "@/features/ToggleFavourite/ToggleFavouriteContainer";
+import { ToggleTaskContainer } from "@/features/ToggleTask/ToggleTaskContainer";
+import { Task } from "@/shared/types/entities";
+import React from "react";
+import { useMemo } from "react";
+import { SetTaskTodayContainer } from "@/features/SetTaskToday/SetTaskTodayContainer";
+import { SortableTaskCard } from "./SortableTaskCard";
+
+interface MemoizedTaskCardWrapperProps {
+    task: Task;
+}
+
+export const MemoizedTaskCardWrapper = React.memo(({ task }: MemoizedTaskCardWrapperProps) => {    
+    const featureSlot = useMemo(() => <ToggleTaskContainer taskId={task.id} />, [task.id]);
+
+    const actionsSlot = useMemo(() => (
+        <>
+            <ToggleFavouriteContainer taskId={task.id} />
+            <ToggleEditPaneContainer taskId={task.id} mode='persistent'/>
+            <DeleteTaskContainer taskId={task.id} />
+        </>
+    ), [task.id]);
+
+    const hoverActionsSlot = useMemo(() => <SetTaskTodayContainer taskId={task.id} />, [task.id]);
+
+    return (
+        <SortableTaskCard
+            task={task}
+            featureSlot={featureSlot}
+            actionsSlot={actionsSlot}
+            hoverActionsSlot={hoverActionsSlot}
+        />
+    );
+});

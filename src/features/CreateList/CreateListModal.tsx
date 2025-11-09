@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import { Box, Button, Modal, TextField, Typography, IconButton } from '@mui/material';
+import React, { useCallback, useState } from 'react';
+import { Box, Button, Modal, Typography, IconButton } from '@mui/material';
 import { TAG_COLORS } from '@/shared/config/colors';
 import { createListApi } from '@/app/services/listServices/createListApi';
 import { useApiRequest } from '@/shared/hooks/useApiRequest';
+import { MemoizedTextField } from '@/shared/ui/MemoizedTextField';
 
 interface CreateListModalProps {
     onClose: () => void;
 }
 
 export const CreateListModal = ({ onClose }: CreateListModalProps) => {
+    console.log('- createListModal')
     const [letSubmit, isLettingSubmit] = useApiRequest(createListApi, {
         onFinally: () => {
             onClose()
@@ -16,6 +18,10 @@ export const CreateListModal = ({ onClose }: CreateListModalProps) => {
     })
     const [newListName, setNewListName] = useState('');
     const [newListColor, setNewListColor] = useState(TAG_COLORS[0]);
+
+    const handleNewListName = useCallback((e: any) => {
+        setNewListName(e.target.value)
+    }, [setNewListName])
 
     const handleSubmit = () => {
         if (!newListName.trim()) return;
@@ -44,12 +50,10 @@ export const CreateListModal = ({ onClose }: CreateListModalProps) => {
         <Modal open={true} onClose={onClose}>
             <Box sx={modalStyles}>
                 <Typography variant="h6">Новый список</Typography>
-                <TextField
-                    fullWidth
+                <MemoizedTextField
                     label="Название списка"
                     value={newListName}
-                    onChange={(e) => setNewListName(e.target.value)}
-                    margin="normal"
+                    onChange={handleNewListName}
                     disabled={isLettingSubmit}
                 />
                 <Box sx={{ display: 'flex', gap: 1, my: 2 }}>

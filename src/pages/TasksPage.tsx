@@ -1,29 +1,27 @@
 import { AppDispatch, RootState } from "@/app/providers/store/types"
 import { fetchTasksApi } from "@/app/services/taskServices/fetchTasksApi"
-import { DeleteTask } from "@/features/DeleteTask/DeleteTask"
-import { ToggleTask } from "@/features/ToggleTask/ToggleTask"
 import { List, Task } from "@/shared/types/entities"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
-import { SortableTaskCard } from '@/entities/Task/ui/SortableTaskCard';
-import { Box, Button, IconButton, Typography } from "@mui/material"
-import EditIcon from '@mui/icons-material/Edit';
-import { startEditingTask } from "@/app/services/UISlice/UISlice"
+import { Box, Button } from "@mui/material"
 import { InlineCreateTask } from "@/features/CreateTask/InlineCreateTask/InlineCreateTask"
 import AddIcon from '@mui/icons-material/Add';
 import { ALL_TASKS_LIST_ID, listsSelectors, TODAY_TASKS_LIST_ID } from "@/app/providers/store/slices/listsSlice"
-import { ToggleFavourite } from "@/features/ToggleFavourite/ToggleFavourite"
-import { SetTaskToday } from "@/features/SetTaskToday/SetTaskToday"
 import { updateTaskApi } from "@/app/services/taskServices/updateTaskApi"
 import { ListHeader } from "@/widgets/ListHeader/ListHeader"
 import { tasksSelectors } from "@/app/providers/store/slices/tasksSlice"
 import { useApiRequest } from "@/shared/hooks/useApiRequest"
+import React from "react"
+import { SectionTitle } from "@/shared/ui/SectionTitle"
+import { MemoizedTaskCardWrapper } from "@/entities/Task/MemoizedTaskCardWrapper"
 
 export const TasksPage = () => {
+    console.log('TasksPage')
+
     const dispatch: AppDispatch = useDispatch()
     // ЧТО БУДЕТ ЕСЛИ АЙДИ ВЫБРАННОГО ТЭГА НЕ УСЕЕТ ДОЙТИ ?!
     const selectedListId = useSelector((state: RootState) => state.lists.selectedListId)
@@ -41,7 +39,7 @@ export const TasksPage = () => {
         }
     }, [tasksLoadingStatus, setFetchTasks])
 
-    const handleDragEnd = (event: DragEndEvent) => {
+    const handleDragEnd = useCallback((event: DragEndEvent) => {
         const { active, over } = event
 
         const currentTasks = allTasks
@@ -76,14 +74,9 @@ export const TasksPage = () => {
                 changes: { order: newOrder },
             }));
         }
-    }
+    }, [allTasks, selectedListId, dispatch])
 
-    const handleEditingTask = (taskId: string) => {
-        dispatch(startEditingTask({
-            taskId: taskId,
-            mode: 'persistent'
-        }))
-    }
+
 
     const isToday = (someDate: Date | null | undefined): boolean => {
         if (!someDate) return false;
@@ -107,29 +100,14 @@ export const TasksPage = () => {
 
     // Рендер
 
-    const renderSortableTaskCard = (task: Task) => {
+    const renderSortableTaskCard = useCallback((task: Task) => {
         return (
-            <SortableTaskCard
+            <MemoizedTaskCardWrapper
                 key={task.id}
                 task={task}
-                featureSlot={<ToggleTask task={task} />}
-                actionsSlot={
-                    <>
-                        <ToggleFavourite task={task} />
-                        <DeleteTask taskId={task.id} />
-                    </>
-                }
-                hoverActionsSlot={
-                    <>
-                        <SetTaskToday task={task} />
-                        <IconButton onClick={() => handleEditingTask(task.id)}>
-                            <EditIcon />
-                        </IconButton>
-                    </>
-                }
             />
         )
-    }
+    }, [])
 
     const renderContent = () => {
         if (selectedListId !== ALL_TASKS_LIST_ID && selectedListId !== TODAY_TASKS_LIST_ID) {
@@ -187,7 +165,7 @@ export const TasksPage = () => {
                     <ListHeader />
                     {Object.values(groupedTasks).map(({ listName, tasks }) => (
                         <Box key={listName} mb={4}>
-                            <Typography variant="h6">{listName}</Typography>
+                            <SectionTitle>{listName}</SectionTitle>
                             {tasks.map(task => (
                                 renderSortableTaskCard(task)
                             ))}

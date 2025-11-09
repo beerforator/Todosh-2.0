@@ -14,11 +14,14 @@ import { ALL_TASKS_LIST_ID, listsSelectors, TODAY_TASKS_LIST_ID } from '@/app/pr
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { Box, Typography } from '@mui/material';
 import { tasksSelectors } from '@/app/providers/store/slices/tasksSlice';
-import { ToggleFavourite } from '@/features/ToggleFavourite/ToggleFavourite';
-import { ToggleTask } from '@/features/ToggleTask/ToggleTask';
+import { ToggleFavourite, ToggleFavouriteContainer } from '@/features/ToggleFavourite/ToggleFavouriteContainer';
+import { ToggleTask, ToggleTaskContainer } from '@/features/ToggleTask/ToggleTaskContainer';
 import { useApiRequest } from '@/shared/hooks/useApiRequest';
+import { TaskTitle } from '@/entities/Task/ui/TaskCard';
 
 export const CalendarPage = () => {
+    // console.log('CalendarPage')
+
     const dispatch: AppDispatch = useDispatch()
     const allLists = useSelector(listsSelectors.selectAll)
     const allTasks = useSelector(tasksSelectors.selectAll)
@@ -141,22 +144,13 @@ export const CalendarPage = () => {
 
         return (
             <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', width: '100%' }}>
-                <ToggleTask task={task} size={'small'} />
-                <Typography
+                <ToggleTaskContainer taskId={task.id} size={'small'} />
+                <TaskTitle 
+                    title={task.title}
+                    isCompleted={task.isCompleted}
                     variant="body2"
-                    sx={{
-                        ml: 1,
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        textDecoration: task.isCompleted ? 'line-through' : 'none',
-                        opacity: task.isCompleted ? 0.6 : 1,
-                        flexGrow: 1
-                    }}
-                >
-                    {eventInfo.event.title}
-                </Typography>
-                <ToggleFavourite task={task} size={'small'} />
+                />
+                <ToggleFavouriteContainer taskId={task.id} size={'small'} />
             </Box>
         )
     }

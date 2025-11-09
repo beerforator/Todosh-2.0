@@ -1,15 +1,13 @@
-// src/features/DeleteTask/DeleteTask.tsx
 import React from 'react';
-import { IconButton, CircularProgress } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { deleteTaskApi } from '@/app/services/taskServices/deleteTaskApi';
 import { useApiRequest } from '@/shared/hooks/useApiRequest';
+import { DeleteTask } from '@/shared/ui/TaskManipulationIcons/DeleteTask';
 
-interface DeleteTaskProps {
+interface DeleteTaskContainerProps {
     taskId: string;
 }
 
-export const DeleteTask = ({ taskId }: DeleteTaskProps) => {
+export const DeleteTaskContainer = React.memo(({ taskId }: DeleteTaskContainerProps) => {
     const [letDelete, isLettingDelete] = useApiRequest(deleteTaskApi, {})
 
     const handleDelete = () => {
@@ -22,13 +20,10 @@ export const DeleteTask = ({ taskId }: DeleteTaskProps) => {
         letDelete(payload)
     }
 
-    if (isLettingDelete) {
-        return <CircularProgress size={24} />;
-    }
-
     return (
-        <IconButton onClick={handleDelete} disabled={isLettingDelete}>
-            <DeleteIcon />
-        </IconButton>
+        <DeleteTask
+            handleDelete={handleDelete}
+            isLettingDelete={isLettingDelete}
+        />
     );
-};
+})

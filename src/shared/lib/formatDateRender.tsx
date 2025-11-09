@@ -1,15 +1,17 @@
-import { Card, CardContent, Typography, IconButton } from '@mui/material';
+import { Typography } from '@mui/material';
+import React from 'react';
 
 const formatDate = (date: Date | undefined) => {
     if (!date) return null;
-    // new Date(date) - на случай, если дата пришла как строка
-    // .toLocaleDateString() - превратит дату в "16.10.2025" с учетом твоего часового пояса
     return new Date(date).toLocaleDateString();
 };
 
-type dataLogicFormatRenderArg = Date | null | undefined
+interface dataLogicFormatRenderArg {
+    startDate: Date | null | undefined,
+    endDate: Date | null | undefined
+}
 
-export const dataLogicFormatRender = (startDate: dataLogicFormatRenderArg, endDate: dataLogicFormatRenderArg) => {
+export const DataLogicFormatRender = React.memo(({ startDate, endDate }: dataLogicFormatRenderArg) => {
     if (!startDate || !endDate) return
 
     let d1 = new Date(startDate)
@@ -21,10 +23,9 @@ export const dataLogicFormatRender = (startDate: dataLogicFormatRenderArg, endDa
     let ddd2 = d2.toString().slice(0, 15)
 
     return (
-        <Typography variant="body2" color="text.secondary" >
+        <Typography variant="body2" color="text.secondary" > {/* sx={{ mt: 2 } } */}
             {formatDate(d1)}
             {ddd1 !== ddd2 && ` - ${formatDate(d2)}`}
         </Typography>
     )
-
-}
+})

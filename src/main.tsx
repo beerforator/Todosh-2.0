@@ -15,11 +15,11 @@ import App from './app/App.tsx'
 // 2. Импортируем стили для ПЛАГИНА СЕТКИ МЕСЯЦА, который мы используем
 // import '@fullcalendar/daygrid/main.css';
 createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
+    // <React.StrictMode>
         <BrowserRouter>
             <Provider store={store}>
                 <App />
             </Provider>
         </BrowserRouter>
-    </React.StrictMode>,
+    // </React.StrictMode>,
 )

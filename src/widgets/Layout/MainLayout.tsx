@@ -20,23 +20,31 @@ export const MainLayout = React.memo(({ isPanePersistent }: MainLayoutProps) => 
 
     const contentStyles: React.CSSProperties = {
         flexGrow: 1,
-        padding: '20px',
+        padding: '0 20px 20px',
         height: '100vh',
         overflow: 'auto',
         transition: 'margin-right 0.1s ease-in-out',
-        marginRight: isPanePersistent ? `${MARGIN_RIGHT}px` : '0px'
+        // marginRight: isPanePersistent ? `${MARGIN_RIGHT}px` : '0px'
+    };
+
+    const mainContentStyles: React.CSSProperties = {
+        flexGrow: 1,
+        padding: '20px',
+        transition: 'margin-right 0.3s ease',
+        marginRight: isPanePersistent ? `${PANE_WIDTH}px` : '0px',
     };
 
     return (
         <div style={layoutStyles}>
             <UnifiedSidebar />
-            <main style={contentStyles}>
+            <div style={contentStyles}>
                 <Header />
-                <div>
+                <main style={mainContentStyles}>
                     <Outlet />
                     <TaskDetailsPaneContainer />
-                </div>
-            </main>
+                </main>
+            </div>
+
         </div>
     );
 })

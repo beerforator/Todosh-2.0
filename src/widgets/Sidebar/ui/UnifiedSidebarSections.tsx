@@ -19,9 +19,9 @@ import { List } from "@/shared/types/entities";
 export const MemoizedNavLinks = React.memo(({ isCollapsed }: any) => {
     return (
         <>
-            <ListItemButton component={NavLink} to="/profile">
-                <ListItemIcon> <Avatar sx={{ width: 32, height: 32 }}>U</Avatar> </ListItemIcon>
-                {!isCollapsed && <ListItemText primary={"Some User"} />}
+            <ListItemButton component={NavLink} to="/">
+                <ListItemIcon> T </ListItemIcon>
+                {!isCollapsed && <ListItemText primary={"Todosh"} />}
             </ListItemButton>
             <ListItemButton component={NavLink} to="/dashboard">
                 <ListItemIcon> <DashboardIcon /> </ListItemIcon>

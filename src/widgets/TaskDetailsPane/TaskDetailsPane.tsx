@@ -87,8 +87,15 @@ export const TaskDetailsPane = React.memo(({ taskId, width, variant }: TaskDetai
             open={!!taskId}
             onClose={handleClose}
             variant={variant}
+            sx={{
+                '& .MuiDrawer-paper': {
+                    height: `calc(100% - 200)`, // Высота минус хедер
+                    top: 200, // Отступ сверху, равный высоте хедера
+                    width: 400,
+                },
+            }}
         >
-            <Box sx={{ width: width, p: 2 }}>
+            <Box sx={{ p: 2, height: '100%', overflow: 'auto' }}>
                 <PaneHeader handleClose={handleClose} />
 
                 {

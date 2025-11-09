@@ -10,6 +10,7 @@ import { AppDispatch, RootState } from '@/app/providers/store/types';
 import { CreateListModal } from '@/features/CreateList/CreateListModal';
 import { fetchListsApi } from '@/app/services/listServices/fetchListsApi';
 import { MemoizedFilterList, MemoizedNavLinks, MemoizedSidebarFooter } from './ui/UnifiedSidebarSections';
+import { Transform } from 'stream';
 
 export const UnifiedSidebar = React.memo(() => {
     const dispatch: AppDispatch = useDispatch()
@@ -55,7 +56,7 @@ export const UnifiedSidebar = React.memo(() => {
         height: '100vh',
         backgroundColor: '#f7f7f7',
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
     };
 
     return (
@@ -76,7 +77,7 @@ export const UnifiedSidebar = React.memo(() => {
 
                 </MuiList>
             </Box >
-            <MemoizedSidebarFooter
+            <MemoizedSidebarFooter style={{position: "absolute", transform: 'translate(-20, 30px)'}}
                 isCollapsed={isCollapsed}
                 onToggle={handleToggleCollapse}
             />

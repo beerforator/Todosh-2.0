@@ -1,0 +1,38 @@
+/* === Цвета === */
+$color-text: #050711;
+$color-icons: #050711;
+
+$color-paper-block: #F1FAFF;
+$color-innerPaper-block: #E0E8EF;
+
+$color-active-primary: #161B37;
+$color-active-secondary: #C3CBD5;
+
+$color-border: #D1D9E6;
+
+
+
+/* === Gradient === */
+$gradient-appBackground: linear-gradient(270deg, #DEE9EF 0%, #DEE6ED 100%);
+
+
+
+/* === Тени === */
+$shadow-paper-block: -2px 0px 13.199999809265137px rgba(0, 0, 0, 0.25);
+
+
+
+/* === Размеры и Отступы === */
+$border-radius-paper-block: 10px;
+$border-radius-innerPaper-block: 10px;
+$sidebar-width: 200px; //186 200
+$sidebar-width-collapsed: 44px; //42 46
+$detailPane-width: 416px; 
+
+$font-size-paper-block: 12px;
+$font-size-innerPaper-block: 14px;
+$font-size-listHeader: 24px;
+
+$spacing1: 4px;
+$spacing2: 8px;
+$spacing4: 16px;

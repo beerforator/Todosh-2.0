@@ -1,5 +1,6 @@
-import { Avatar, Box, Breadcrumbs, InputAdornment, Link, ListItemButton, ListItemIcon, ListItemText, TextField, Typography } from "@mui/material";
+import { Avatar, Breadcrumbs, InputAdornment, Link, ListItemButton, ListItemIcon, ListItemText, TextField, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import { List as MuiList, Box } from '@mui/material';
 
 const breadcrumbs = [
     <Link underline="hover" key="1" color="inherit" href="/">Test User</Link>,
@@ -7,54 +8,98 @@ const breadcrumbs = [
     <Typography key="3" color="text.primary">Today</Typography>,
 ];
 
-import SearchIcon from '@mui/icons-material/Search';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import SettingsIcon from '@mui/icons-material/Settings';
 // import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
+import styleH from '@/app/styles/Header.module.scss'
+import style from '@/app/styles/IconStyles.module.scss'
+import { BellIcon, InfoIcon, SearchIcon, SettingsIcon, ThemeIcon, UserIcon } from "@/shared/ui/Icons/HeaderIcons";
+import { MemoizedTextField } from "@/shared/ui/MemoizedTextField";
+import { useCallback, useState } from "react";
+
 export const Header = () => {
-    const headerStyles: React.CSSProperties = {
-        padding: '12px 24px',
-        backgroundColor: '#F7F8FA', // Примерный цвет фона
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderBottom: '1px solid #E0E0E0',
-    };
+    const [searchValue, setSearchValue] = useState('')
+
+    const handleSearchChange = useCallback((e: any) => {
+        setSearchValue(e.target.value)
+    }, [])
+
+    const clearSearchValue = useCallback(() => {
+        setSearchValue('')
+    }, [])
 
     return (
-        <Box component="header" sx={headerStyles}>
-            <Breadcrumbs separator="›" aria-label="breadcrumb">
-                {breadcrumbs}
-            </Breadcrumbs>
+        <header className={styleH.header_inner}>
+            <div className={styleH.breadcrumbs_container}>
+                <Breadcrumbs separator="›" aria-label="breadcrumb">
+                    {breadcrumbs}
+                </Breadcrumbs>
+            </div>
+            <Box className={'paperBlock ' + styleH.headerPaperBlock}>
+                <MuiList component="nav" className={styleH.nav}>
+                    {/* <TextField
+                        size="small"
+                        placeholder="Search..."
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end"><SearchIcon /></InputAdornment>,
+                        }}
+                    /> */}
 
-            <Box sx={headerStyles}>
-                <TextField
-                    size="small"
-                    placeholder="Search..."
-                    InputProps={{
-                        endAdornment: <InputAdornment position="end"><SearchIcon /></InputAdornment>,
-                    }}
-                />
-                <ListItemButton component={NavLink} to="/dashboard">
-                    <ListItemIcon><SettingsIcon /></ListItemIcon>
-                </ListItemButton>
-                <ListItemButton component={NavLink} to="/dashboard">
-                    <ListItemIcon><NotificationsNoneIcon /></ListItemIcon>
-                </ListItemButton>
-                <ListItemButton component={NavLink} to="/dashboard">
-                    <ListItemIcon><Brightness4Icon /></ListItemIcon>
-                </ListItemButton>
-                <ListItemButton component={NavLink} to="/dashboard">
-                    <ListItemIcon><SettingsIcon /></ListItemIcon>
-                </ListItemButton>
-                <ListItemButton component={NavLink} to="/profile">
-                    <ListItemIcon> <Avatar sx={{ width: 32, height: 32 }}>U</Avatar> </ListItemIcon>
-                    {/* <ListItemText primary={"Some User"} /> */}
-                </ListItemButton>
-
+                    <Box component="form">
+                        <TextField
+                            size="small"
+                            placeholder="Search..."
+                            value={searchValue}
+                            onChange={handleSearchChange}
+                            onBlur={clearSearchValue}
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end"><SearchIcon /></InputAdornment>,
+                            }}
+                        />
+                    </Box>
+                    <NavLink
+                        to="/dashboard"
+                        className={styleH.navLink}
+                    >
+                        <div className={style.iconContainer}>
+                            <InfoIcon className={style.navIconStyle + ' ' + style.allIconStyle} />
+                        </div>
+                    </NavLink>
+                    <NavLink
+                        to="/dashboard"
+                        className={styleH.navLink}
+                    >
+                        <div className={style.iconContainer}>
+                            <BellIcon className={style.navIconStyle + ' ' + style.allIconStyle} />
+                        </div>
+                    </NavLink>
+                    <NavLink
+                        to="/dashboard"
+                        className={styleH.navLink}
+                    >
+                        <div className={style.iconContainer}>
+                            <ThemeIcon className={style.navIconStyle + ' ' + style.allIconStyle} />
+                        </div>
+                    </NavLink>
+                    <NavLink
+                        to="/dashboard"
+                        className={styleH.navLink}
+                    >
+                        <div className={style.iconContainer}>
+                            <SettingsIcon className={style.navIconStyle + ' ' + style.allIconStyle} />
+                        </div>
+                    </NavLink>
+                    <NavLink
+                        to="/profile"
+                        className={styleH.navLink + ' ' + styleH.navLinkUser}
+                    >
+                        <div className={style.iconContainer}>
+                            <UserIcon className={style.userIconStyle + ' ' + style.allIconStyle} />
+                        </div>
+                    </NavLink>
+                </MuiList>
             </Box>
-        </Box>
+        </header>
     );
 };

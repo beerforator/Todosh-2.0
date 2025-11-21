@@ -1,40 +1,61 @@
 import { ALL_TASKS_LIST_ID, TODAY_TASKS_LIST_ID } from "@/app/providers/store/slices/listsSlice";
 import { ListCircleIcon } from "@/shared/ui/ListCircleIcon";
-import { Avatar, Box, Button, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { ListItemIcon, ListItemText } from "@mui/material";
 import React from "react";
 import { NavLink } from "react-router-dom";
-import DashboardIcon from '@mui/icons-material/Dashboard'; // 2. Новые иконки
-import LogoutIcon from '@mui/icons-material/Logout';
-
-import AllInboxIcon from '@mui/icons-material/AllInbox';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import FirstPageRoundedIcon from '@mui/icons-material/FirstPageRounded';
-import LastPageRoundedIcon from '@mui/icons-material/LastPageRounded';
-import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
-
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { List } from "@/shared/types/entities";
+
+import style from '@/app/styles/IconStyles.module.scss'
+import styleS from '@/app/styles/UnifiedSidebar.module.scss'
+
+import {
+    LogoIcon, DashboardPageIcon, CalendarPageIcon, TasksPageIcon,
+    AllTasksIcon, TodayIcon, InboxIcon, AddPlusIcon, ChevronLIcon
+} from '@/shared/ui/Icons/SidebarIcons';
 
 export const MemoizedNavLinks = React.memo(({ isCollapsed }: any) => {
     return (
         <>
-            <ListItemButton component={NavLink} to="/">
-                <ListItemIcon> T </ListItemIcon>
-                {!isCollapsed && <ListItemText primary={"Todosh"} />}
-            </ListItemButton>
-            <ListItemButton component={NavLink} to="/dashboard">
-                <ListItemIcon> <DashboardIcon /> </ListItemIcon>
-                {!isCollapsed && <ListItemText primary={"Dashboard"} />}
-            </ListItemButton>
-            <ListItemButton component={NavLink} to="/calendar">
-                <ListItemIcon> <CalendarMonthIcon /> </ListItemIcon>
-                {!isCollapsed && <ListItemText primary={"Calendar"} />}
-            </ListItemButton>
-            <ListItemButton component={NavLink} to="/tasks">
-                <ListItemIcon> <InboxIcon /> </ListItemIcon>
-                {!isCollapsed && <ListItemText primary={"Tasks"} />}
-            </ListItemButton>
+            <NavLink
+                to="/"
+                className={styleS.navLink + ' ' + styleS.navLinkLogo}
+            >
+                <div className={style.iconContainer}>
+                    <LogoIcon className={style.logoIconStyle + ' ' + style.allIconStyle} />
+                </div>
+                {!isCollapsed && <ListItemText className={styleS.navItemText} primary={"Todosh"}
+                    primaryTypographyProps={{
+                        style: { fontWeight: '600' }
+                    }}
+                />}
+            </NavLink>
+            <NavLink
+                to="/dashboard"
+                className={styleS.navLink}
+            >
+                <div className={style.iconContainer}>
+                    <DashboardPageIcon className={style.navIconStyle + ' ' + style.allIconStyle} />
+                </div>
+                {!isCollapsed && <ListItemText className={styleS.navItemText} primary={"Dashboard"} />}
+            </NavLink>
+            <NavLink
+                to="/calendar"
+                className={styleS.navLink}
+            >
+                <div className={style.iconContainer}>
+                    <CalendarPageIcon className={style.navIconStyle + ' ' + style.allIconStyle} />
+                </div>
+                {!isCollapsed && <ListItemText className={styleS.navItemText} primary={"Calendar"} />}
+            </NavLink>
+            <NavLink
+                to="/tasks"
+                className={styleS.navLink}
+            >
+                <div className={style.iconContainer}>
+                    <TasksPageIcon className={style.navIconStyle + ' ' + style.allIconStyle} />
+                </div>
+                {!isCollapsed && <ListItemText className={styleS.navItemText} primary={"Tasks"} />}
+            </NavLink>
         </>
     );
 });
@@ -44,42 +65,65 @@ export const MemoizedFilterList = React.memo(({ allList, selectedListId, isColla
     return (
         <>
             <FilterItem
-                label="Все задачи"
+                label="All Tasks"
                 listId={ALL_TASKS_LIST_ID}
-                ItemIcon={<AllInboxIcon />}
+                ItemIcon={<AllTasksIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />}
                 isSelected={selectedListId === ALL_TASKS_LIST_ID}
                 isCollapsed={isCollapsed}
                 onClick={handleListClick}
             />
 
             <FilterItem
-                label="Сегодня"
+                label="Today"
                 listId={TODAY_TASKS_LIST_ID}
-                ItemIcon={<WbSunnyOutlinedIcon />}
+                ItemIcon={<TodayIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />}
                 isSelected={selectedListId === TODAY_TASKS_LIST_ID}
                 isCollapsed={isCollapsed}
                 onClick={handleListClick}
             />
 
+            <FilterItem
+                label="Inbox"
+                listId={"list-inbox"}
+                ItemIcon={<InboxIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />}
+                isSelected={selectedListId === "list-inbox"}
+                isCollapsed={isCollapsed}
+                onClick={handleListClick}
+            />
+
+            <div
+                className={
+                    isCollapsed
+                        ? styleS.divider_collapsed + ' ' + styleS.divider
+                        : styleS.divider
+                }
+            ></div>
+
             {
                 allList.map((list: List) => (
-                    <FilterItem
-                        key={list.id}
-                        listId={list.id}
-                        isSelected={list.id === selectedListId}
-                        isCollapsed={isCollapsed}
-                        onClick={handleListClick}
-                        ItemIcon={<ListCircleIcon color={list.color}/>}
-                        label={list.name}
-                    />
+                    list.id === "list-inbox"
+                        ? <></>
+                        : <FilterItem
+                            key={list.id}
+                            listId={list.id}
+                            isSelected={list.id === selectedListId}
+                            isCollapsed={isCollapsed}
+                            onClick={handleListClick}
+                            ItemIcon={<ListCircleIcon color={list.color} />}
+                            label={list.name}
+                        />
                 ))
             }
-            <ListItemButton onClick={() => handleOpenModal()}>
+            <div
+                onClick={() => handleOpenModal()}
+                className={styleS.filterItemButton}
+                style={{ opacity: .8 }}
+            >
                 <ListItemIcon>
-                    <AddCircleOutlineIcon />
+                    <AddPlusIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />
                 </ListItemIcon>
-                <ListItemText primary={"Add List"} />
-            </ListItemButton>
+                {!isCollapsed && <ListItemText className={styleS.navItemText} primary={"Add List"} />}
+            </div>
         </>
     );
 });
@@ -96,30 +140,39 @@ const FilterItem = React.memo((props: {
     const { listId, isSelected, isCollapsed, onClick, ItemIcon, label } = props;
 
     return (
-        <ListItemButton
+        <div
             key={listId}
-            selected={isSelected}
             onClick={() => onClick(listId)}
+            className={isSelected
+                ? (styleS.filterItemButton + ' ' + styleS.activeFilter)
+                : styleS.filterItemButton
+            }
         >
             <ListItemIcon>
                 {ItemIcon}
             </ListItemIcon>
-            {!isCollapsed && <ListItemText primary={label} />}
-        </ListItemButton>
+            {!isCollapsed && <ListItemText
+                primaryTypographyProps={{
+                    className: styleS.navItemText
+                }}
+                primary={label}
+            />}
+        </div >
     );
 });
 
 
 export const MemoizedSidebarFooter = React.memo(({ isCollapsed, onToggle }: any) => {
     return (
-        <Box>
-            <Button onClick={onToggle}>
-                {isCollapsed ? <LastPageRoundedIcon /> : <FirstPageRoundedIcon />}
-            </Button>
-            {/* <ListItemButton onClick={() => { console.log('Loged Out') }}>
-                <ListItemIcon> <LogoutIcon /> </ListItemIcon>
-                {!isCollapsed && <ListItemText primary={"Log Out"} />}
-            </ListItemButton> */}
-        </Box>
+        <button
+            onClick={onToggle}
+            className={isCollapsed
+                ? (styleS.buttonToCollapse + ' ' + styleS.buttonToCollapse_collapsed)
+                : styleS.buttonToCollapse}
+        >
+            <div className={style.chevron_container}>
+                <ChevronLIcon className={style.chevronStyle} />
+            </div>
+        </button>
     );
 });

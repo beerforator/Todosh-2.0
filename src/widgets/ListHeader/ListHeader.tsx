@@ -135,7 +135,10 @@ export const ListHeader = React.memo(() => {
     }
 
     if (selectedListId === 'list-inbox') {
-        return <Typography variant="h4" gutterBottom>Inbox</Typography>;
+        return (
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Typography variant="h4" gutterBottom>Inbox</Typography>
+            </Box>);
     }
 
     if (selectedListId === 'today') {

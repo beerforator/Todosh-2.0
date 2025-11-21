@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { List as MuiList, Box, Divider } from '@mui/material';
+import { List as MuiList, Box } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 
@@ -10,7 +10,8 @@ import { AppDispatch, RootState } from '@/app/providers/store/types';
 import { CreateListModal } from '@/features/CreateList/CreateListModal';
 import { fetchListsApi } from '@/app/services/listServices/fetchListsApi';
 import { MemoizedFilterList, MemoizedNavLinks, MemoizedSidebarFooter } from './ui/UnifiedSidebarSections';
-import { Transform } from 'stream';
+
+import style from '@/app/styles/UnifiedSidebar.module.scss'
 
 export const UnifiedSidebar = React.memo(() => {
     const dispatch: AppDispatch = useDispatch()
@@ -21,8 +22,9 @@ export const UnifiedSidebar = React.memo(() => {
     const selectedListId = useSelector((state: RootState) => state.lists.selectedListId)
 
     const [isCollapsed, setIsCollapsed] = useState(false);
-
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isHover, setIsHover] = useState(false)
+
 
     useEffect(() => {
         dispatch(fetchListsApi())
@@ -47,40 +49,53 @@ export const UnifiedSidebar = React.memo(() => {
         setIsCollapsed(prev => !prev)
     }, []);
 
-    const sidebarWidth = isCollapsed ? '80px' : '250px'
+    const handleHover = useCallback(() => {
+        setIsHover(true)
+    }, [])
 
-    const sidebarStyles: React.CSSProperties = {
-        width: sidebarWidth,
-        borderRight: '1px solid #ccc',
-        padding: '20px',
-        height: '100vh',
-        backgroundColor: '#f7f7f7',
-        display: 'flex',
-        flexDirection: 'row',
-    };
+    const handleUnHover = useCallback(() => {
+        setIsHover(false)
+    }, [])
 
     return (
-        <Box sx={sidebarStyles}>
-            <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
-                <MuiList component="nav">
+        <Box
+            onMouseEnter={handleHover}
+            onMouseLeave={handleUnHover}
+            className={
+                isCollapsed
+                    ? style.sidebarPaperBlock_collapsed + ' paperBlock ' + style.sidebarPaperBlock
+                    : (style.sidebarPaperBlock + ' paperBlock')
+            }
+        >
+
+            <Box className={style.sidebar_inner}>
+                <MuiList component="nav" className={style.nav}>
                     <MemoizedNavLinks isCollapsed={isCollapsed} />
 
-                    <Divider sx={{ my: 2 }} />
+                    {/* <Divider sx={{ my: 2 }} /> */}
 
-                    <MemoizedFilterList
-                        allList={allList}
-                        selectedListId={selectedListId}
-                        isCollapsed={isCollapsed}
-                        handleListClick={handleListClick}
-                        handleOpenModal={handleOpenModal}
-                    />
+                    <div className={style.filter_container}>
+                        <MemoizedFilterList
+                            allList={allList}
+                            selectedListId={selectedListId}
+                            isCollapsed={isCollapsed}
+                            handleListClick={handleListClick}
+                            handleOpenModal={handleOpenModal}
+                        />
+                    </div>
 
                 </MuiList>
             </Box >
-            <MemoizedSidebarFooter style={{position: "absolute", transform: 'translate(-20, 30px)'}}
-                isCollapsed={isCollapsed}
-                onToggle={handleToggleCollapse}
-            />
+            {isHover &&
+                <div className={style.sidebar_wrapper}>
+                    <div className={style.sidebarToCollapse}>
+                        <MemoizedSidebarFooter
+                            isCollapsed={isCollapsed}
+                            onToggle={handleToggleCollapse}
+                        />
+                    </div>
+                </div>
+            }
             {isModalOpen &&
                 <CreateListModal
                     onClose={handleCloseModal}

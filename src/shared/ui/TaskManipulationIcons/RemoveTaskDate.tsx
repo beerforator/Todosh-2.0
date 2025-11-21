@@ -1,6 +1,7 @@
 import React from "react";
 import { CircularProgress, IconButton } from '@mui/material';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
+import { DelDateIcon } from "../Icons/TaskIcon";
 
 interface RemoveTaskDateProps {
     handleRemoveDate: () => void;
@@ -20,7 +21,7 @@ export const RemoveTaskDate = React.memo((props: RemoveTaskDateProps) => {
             onClick={handleRemoveDate}
             disabled={false}
         >
-            <EventBusyIcon color="secondary" />
+            <DelDateIcon/>
         </IconButton>
     )
 })

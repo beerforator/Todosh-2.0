@@ -1,0 +1,50 @@
+.tasksPage_container {
+    margin-top: 4*$spacing2;
+}
+
+.gropedView {}
+
+.tagView {
+    display: flex;
+    flex-direction: column;
+
+    gap: $spacing4;
+}
+
+// Task Card
+
+.taskCard_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    padding: $spacing4 !important;
+    gap: $spacing4;
+
+    box-shadow: none !important;
+
+    opacity: 1;
+}
+
+.taskCard_container button {
+    margin: 0 !important;
+}
+
+
+.taskCard_isCompleted {
+    opacity: 0.5;
+}
+
+
+.taskCard_content {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
+
+    // width: 100% - 50px;
+
+}
+
+
+// ПОРАБОТАТЬ НАД ГРУППАМИ ТЭГОВ, ДОБАВИТЬ ЦВЕТ К ЗАДАЧАМ И РАЗОБРАТЬСЯ С ХОВЕР ИКОНКАМИ

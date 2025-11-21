@@ -10,4 +10,12 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // Автоматически импортируем наш файл с переменными в каждый SCSS-файл
+        additionalData: `@import "@/app/styles/_theme.scss";`
+      }
+    }
+  }
 })

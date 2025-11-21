@@ -1,0 +1,34 @@
+.layoutStyles {
+    display: flex;
+    flex-direction: row;
+
+    padding: $spacing2;
+    height: 100vh;
+}
+
+.contentStyles {
+    position: relative;
+    flex-grow: 1;
+    padding: 0;
+    // height: 100%;
+    // height: 100vh;
+    overflow: visible;
+    // transition: margin-right 0.1s ease-in-out;
+}
+
+.mainContentStyles {
+    flex-grow: 1;
+    // padding: 20px; //!
+    transition: margin-right 0.1s ease-in-out;
+    margin-right: 0;
+
+    height: 90vh;
+    
+    overflow-y: auto;
+    overflow-x: visible;
+}
+
+.mainContentStylesWPane {
+    margin-right: $detailPane-width + $spacing4;
+    // margin-right: 416px;
+}

@@ -19,6 +19,8 @@ import React from "react"
 import { SectionTitle } from "@/shared/ui/SectionTitle"
 import { MemoizedTaskCardWrapper } from "@/entities/Task/MemoizedTaskCardWrapper"
 
+import styleT from '@/app/styles/TasksPage.module.scss'
+
 export const TasksPage = () => {
     console.log('TasksPage')
 
@@ -117,16 +119,18 @@ export const TasksPage = () => {
                 .sort((a, b) => a.order - b.order);
 
             return (
-                <>
+                <div className={styleT.tasksPage_container}>
                     <ListHeader />
-                    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                        <SortableContext items={filteredAndSortedTasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
-                            {filteredAndSortedTasks.map(task => (
-                                renderSortableTaskCard(task)
-                            ))}
-                        </SortableContext>
-                    </DndContext>
-                </>
+                    <div className={styleT.tagView}>
+                        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                            <SortableContext items={filteredAndSortedTasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
+                                {filteredAndSortedTasks.map(task => (
+                                    renderSortableTaskCard(task)
+                                ))}
+                            </SortableContext>
+                        </DndContext>
+                    </div>
+                </div>
             );
         } else if (selectedListId === TODAY_TASKS_LIST_ID) {
             const tasksToRender = allTasks
@@ -135,14 +139,14 @@ export const TasksPage = () => {
                 .sort((a, b) => a.order - b.order);
 
             return (
-                <>
+                <div className={styleT.tasksPage_container}>
                     <ListHeader />
                     <Box mb={4}>
                         {tasksToRender.map(task => (
                             renderSortableTaskCard(task)
                         ))}
                     </Box>
-                </>
+                </div>
             );
         } else if (selectedListId === ALL_TASKS_LIST_ID) {
             const groupedTasks = allLists.reduce((acc, list) => {
@@ -161,7 +165,7 @@ export const TasksPage = () => {
             }, {} as Record<string, { listName: string; tasks: Task[] }>);
 
             return (
-                <>
+                <div className={styleT.tasksPage_container}>
                     <ListHeader />
                     {Object.values(groupedTasks).map(({ listName, tasks }) => (
                         <Box key={listName} mb={4}>
@@ -171,7 +175,7 @@ export const TasksPage = () => {
                             ))}
                         </Box>
                     ))}
-                </>
+                </div>
             );
         }
     };

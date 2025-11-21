@@ -5,6 +5,8 @@ import { DraggableAttributes } from '@dnd-kit/core';
 import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import { DataLogicFormatRender } from '../../../shared/lib/formatDateRender';
 
+import styleT from '@/app/styles/TasksPage.module.scss'
+
 interface TaskCardProps {
     task: Task,
     featureSlot?: React.ReactNode,
@@ -31,14 +33,16 @@ export const TaskCard = React.memo(({ task, featureSlot, actionsSlot, hoverActio
 
 
     return (
-        <Card
-            style={cardStyles}
-
+        <div
+            className={task.isCompleted 
+                ? ('paperBlock ' + styleT.taskCard_isCompleted + ' ' + styleT.taskCard_container) 
+                : ('paperBlock ' + styleT.taskCard_container)}
         >
             {featureSlot}
 
-            <CardContent
-                style={contentStyles}
+            <div
+                // style={contentStyles}
+                className={styleT.taskCard_content}
                 {...dndAttributes}
                 {...dndListeners}
             >
@@ -50,12 +54,12 @@ export const TaskCard = React.memo(({ task, featureSlot, actionsSlot, hoverActio
 
                 <DataLogicFormatRender startDate={task.startDate} endDate={task.endDate} />
 
-            </CardContent>
+            </div>
 
             {isHovered && hoverActionsSlot}
             {actionsSlot}
 
-        </Card>
+        </div>
     );
 })
 

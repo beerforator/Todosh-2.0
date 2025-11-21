@@ -1,0 +1,159 @@
+.sidebarPaperBlock {
+    width: $sidebar-width;
+    display: flex;
+    flex-direction: row;
+    position: static;
+
+    margin-right: 4*$spacing2;
+}
+
+.sidebarPaperBlock_collapsed {
+    width: $sidebar-width-collapsed;
+}
+
+.sidebar_wrapper {
+    position: relative;
+    z-index: 10;
+}
+
+.sidebar_inner {
+    position: relative;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.sidebarToCollapse {
+    width: fit-content;
+    position: absolute;
+    z-index: 999;
+
+    right: -15px;
+    top: 31px;
+}
+
+.buttonToCollapse {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: $color-paper-block;
+    border: 1.5px $color-border solid;
+    cursor: pointer;
+
+    padding: 3px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.buttonToCollapse_collapsed {
+    transform: rotate(180deg);
+}
+
+// Navigation
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing2;
+}
+
+.navLink {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 22px;
+
+    text-decoration: none;
+    color: $color-text;
+    padding: 8px;
+    align-items: center;
+    cursor: pointer;
+    flex-grow: 1;
+
+    border-radius: $spacing2;
+
+    :global(.MuiListItemIcon-root) {
+        color: $color-icons;
+        transition: color 0.2s ease-in-out;
+    }
+
+    // transition: background-color 0.2s ease-in-out;
+}
+
+.navLinkLogo {
+    padding: 0;
+    gap: 10px;
+    margin-bottom: $spacing2;
+
+    transform: translateX(-1px);
+}
+
+// .activePage {
+//     :global(.MuiListItemIcon-root) {
+//         color: $color-paper-block;
+//     }
+
+//     background-color: $color-active-primary;
+//     color: $color-paper-block;
+//     border-radius: $spacing2;
+// }
+
+// Filtration
+
+.filter_container {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing4;
+    border-radius: 10px;
+    padding: $spacing1; // 9
+    // padding-bottom: 8px;
+
+    background-color: $color-innerPaper-block;
+
+    align-items: center;
+}
+
+.filterItemButton {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 22px;
+
+    text-decoration: none;
+    color: $color-text;
+    padding: 5px;
+    align-items: center;
+    cursor: pointer;
+    flex-grow: 1;
+
+    border-radius: $spacing2;
+
+    :global(.MuiListItemIcon-root) {
+        color: $color-icons;
+    }
+
+    // transition: background-color 0.1s ease-in-out;
+}
+
+.activeFilter {
+    background-color: $color-active-secondary;
+}
+
+.divider {
+    width: $sidebar-width - 3*$spacing4;
+    height: 1px;
+    background-color: $color-paper-block;
+    margin: 0 0 auto;
+
+    border-radius: 2px;
+}
+
+.divider_collapsed {
+    width: $sidebar-width-collapsed - 3*$spacing2;
+}
+
+.navItemText {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -1,13 +1,12 @@
 import { AppDispatch, RootState } from "@/app/providers/store/types"
-import { Box, Drawer, Typography } from "@mui/material"
+import { Box, Drawer, ListItemText, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { stopEditingTask } from "../../app/services/UISlice/UISlice";
 import { updateTaskApi } from "@/app/services/taskServices/updateTaskApi";
 import { listsSelectors } from "@/app/providers/store/slices/listsSlice";
 import { ToggleFavouriteContainer } from "@/features/ToggleFavourite/ToggleFavouriteContainer";
-import { SetTaskTodayContainer } from "@/features/SetTaskToday/SetTaskTodayContainer";
-import { RemoveTaskDateContainer } from "@/features/RemoveTaskDate/RemoveTaskDateContainer";
+import { RemoveTaskDatePaneContainer } from "@/features/RemoveTaskDate/RemoveTaskDatePaneContainer";
 import { ToggleTaskContainer } from "@/features/ToggleTask/ToggleTaskContainer";
 import { DeleteTaskContainer } from "@/features/DeleteTask/DeleteTaskContainer";
 import { tasksSelectors } from "@/app/providers/store/slices/tasksSlice";
@@ -15,6 +14,9 @@ import { useApiRequest } from "@/shared/hooks/useApiRequest";
 import React from "react";
 import { MemoizedListSelect, PaneFooter, PaneHeader } from "./ui/TaskDetailPaneSections";
 import { MemoizedTextField } from "@/shared/ui/MemoizedTextField";
+
+import styleP from '@/app/styles/TaskDetailsPane.module.scss'
+import { SetTaskTodayPaneContainer } from "@/features/SetTaskToday/SetTaskTodayPaneContainer";
 
 interface TaskDetailsPaneProps {
     taskId: string,
@@ -87,54 +89,61 @@ export const TaskDetailsPane = React.memo(({ taskId, width, variant }: TaskDetai
             open={!!taskId}
             onClose={handleClose}
             variant={variant}
-            sx={{
-                '& .MuiDrawer-paper': {
-                    height: `calc(100% - 200)`, // Высота минус хедер
-                    top: 200, // Отступ сверху, равный высоте хедера
-                    width: 400,
-                },
-            }}
+            className={styleP.drawerStyle}
         >
-            <Box sx={{ p: 2, height: '100%', overflow: 'auto' }}>
+            <div className={styleP.paneContainer}>
                 <PaneHeader handleClose={handleClose} />
 
                 {
                     editingTask ? (
-                        <Box component="form" sx={{ mt: 2 }}>
-                            <ToggleTaskContainer taskId={editingTask.id} />
-                            <ToggleFavouriteContainer taskId={editingTask.id} />
-                            <SetTaskTodayContainer taskId={editingTask.id} />
-                            <RemoveTaskDateContainer taskId={editingTask.id} />
-                            <DeleteTaskContainer taskId={editingTask.id} />
-                            <Box sx={{ display: 'flex', alignItems: 'center', border: `6px solid red` }}>
+                        <Box component="form" className={styleP.paneContainer}>
+                            <div className={styleP.paneBase}>
+                                <ToggleTaskContainer taskId={editingTask.id} />
+                                <div className={styleP.paneBase_field}>
+                                    <MemoizedTextField
+                                        value={title}
+                                        onChange={handleTitleChange}
+                                        disabled={isSettingFetchTasks}
+                                        rows={1}
+                                    />
+                                    {/* <MemoizedListSelect
+                                        value={selectedListId}
+                                        onChange={handleListChange}
+                                        disabled={isSettingFetchTasks}
+                                        lists={allLists}
+                                    /> */}
+                                </div>
+                                <ToggleFavouriteContainer taskId={editingTask.id} />
+                            </div>
+                            <div className={styleP.paneDate}>
+                                <SetTaskTodayPaneContainer taskId={editingTask.id} />
+                                <div className={styleP.dateDivider}></div>
+                                <RemoveTaskDatePaneContainer taskId={editingTask.id} />
+                            </div>
+                            <div className={styleP.paneDescription}>
+                                <ListItemText className={styleP.paneText} primary={"Task description"} />
                                 <MemoizedTextField
-                                    label="Название"
-                                    value={title}
-                                    onChange={handleTitleChange}
+                                    value={description}
+                                    onChange={handleDescriptionChange}
                                     disabled={isSettingFetchTasks}
+                                    multiline
+                                // rows={4}
                                 />
-                                <MemoizedListSelect
-                                    value={selectedListId}
-                                    onChange={handleListChange}
-                                    disabled={isSettingFetchTasks}
-                                    lists={allLists}
-                                />
-                            </Box>
-                            <MemoizedTextField
-                                label="Описание"
-                                value={description}
-                                onChange={handleDescriptionChange}
-                                disabled={isSettingFetchTasks}
-                                multiline
-                                rows={4}
+                            </div>
+
+                            <PaneFooter
+                                taskId={editingTask.id}
+                                isSaving={isSettingFetchTasks}
+                                handleSave={handleSave}
+                                taskDates={taskDates}
+                                // className={styleP.paneFooter}
                             />
-                            <PaneFooter isSaving={isSettingFetchTasks} handleSave={handleSave} taskDates={taskDates} />
                         </Box>
                     ) : (
                         <Typography sx={{ mt: 2 }}>Загрузка данных...</Typography>
                     )
                 }
-            </Box>
+            </div>
         </Drawer>
     )
 })

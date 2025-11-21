@@ -1,0 +1,51 @@
+*,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    // border: 1px solid black;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: $font-size-paper-block;
+    // line-height: $font-size-paper-block;
+}
+
+body {
+    font-size: $font-size-paper-block;
+    background: $gradient-appBackground;
+    // height: 100vh;
+}
+
+
+// Active Nav Link
+
+nav a.active {
+    :global(.MuiListItemIcon-root) {
+        color: $color-paper-block;
+    }
+
+    background-color: $color-active-primary;
+    color: $color-paper-block;
+
+}
+
+// Paper Block
+
+.paperBlock {
+    border-radius: 10px;
+    padding: $spacing1;
+    background-color: $color-paper-block;
+    box-shadow: $shadow-paper-block;
+    transition: width 0.2s ease-in-out;
+}

@@ -17,7 +17,7 @@ import { tasksSelectors } from '@/app/providers/store/slices/tasksSlice';
 import { ToggleFavourite, ToggleFavouriteContainer } from '@/features/ToggleFavourite/ToggleFavouriteContainer';
 import { ToggleTask, ToggleTaskContainer } from '@/features/ToggleTask/ToggleTaskContainer';
 import { useApiRequest } from '@/shared/hooks/useApiRequest';
-import { TaskTitle } from '@/entities/Task/ui/TaskCard';
+import { TaskText } from '@/entities/Task/ui/TaskCard';
 
 export const CalendarPage = () => {
     // console.log('CalendarPage')
@@ -145,10 +145,11 @@ export const CalendarPage = () => {
         return (
             <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', width: '100%' }}>
                 <ToggleTaskContainer taskId={task.id} size={'small'} />
-                <TaskTitle 
-                    title={task.title}
+                <TaskText
+                    text={task.title}
                     isCompleted={task.isCompleted}
-                    variant="body2"
+                    // variant="body2"
+                    type='title'
                 />
                 <ToggleFavouriteContainer taskId={task.id} size={'small'} />
             </Box>

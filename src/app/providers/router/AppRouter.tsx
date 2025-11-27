@@ -4,6 +4,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthPage, CalendarPage, DashBoardPage, ProfilePage, TasksPage } from '@/pages';
 import { MainLayout } from '@/widgets/Layout/MainLayout';
 import { MainLayoutContainer } from '@/widgets/Layout/MainLayoutContainer';
+import { TasksPageContainer } from '@/pages/TasksPageContainer';
 
 export const AppRouter = () => {
     // Это временная "заглушка". 
@@ -19,7 +20,7 @@ export const AppRouter = () => {
               Они будут рендериться на месте <Outlet /> */}
                     {/* ПОТОМ СДЕЛАМ ДАШБОРД ГЛАВНОЙ */}
                     <Route index element={<Navigate to="/tasks" replace />} /> {/* Главная по умолчанию */}
-                    <Route path="/tasks" element={<TasksPage />} />
+                    <Route path="/tasks" element={<TasksPageContainer />} />
                     <Route path="/calendar" element={<CalendarPage />} />
                     <Route path="/dashboard" element={<DashBoardPage />}/>
                     <Route path="/profile" element={<ProfilePage />}/>

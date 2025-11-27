@@ -22,7 +22,7 @@ interface ListsState {
 const initialState = listsAdapter.getInitialState<ListsState>({
     loading: 'idle',
     error: null,
-    selectedListId: 'list-inbox' //ALL_TASKS_LIST_ID
+    selectedListId: 'list-1' //ALL_TASKS_LIST_ID
 });
 
 export const listsSlice = createSlice({

@@ -16,11 +16,14 @@ export const MainLayout = React.memo(({ isPanePersistent }: MainLayoutProps) => 
             <UnifiedSidebar />
             <div className={style.contentStyles}>
                 <Header />
-                <main className={
-                    isPanePersistent
-                        ? style.mainContentStylesWPane + ' ' + style.mainContentStyles
-                        : style.mainContentStyles
-                }>
+                <main
+                    // className={
+                    //     isPanePersistent
+                    //         ? style.mainContentStylesWPane + ' ' + style.mainContentStyles
+                    //         : style.mainContentStyles
+                    // }
+                    className={style.mainContentStyles}
+                >
                     <Outlet />
                     <TaskDetailsPaneContainer />
                 </main>

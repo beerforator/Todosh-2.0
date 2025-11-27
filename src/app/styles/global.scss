@@ -43,9 +43,22 @@ nav a.active {
 // Paper Block
 
 .paperBlock {
-    border-radius: 10px;
+    border-radius: 10px !important;
     padding: $spacing1;
-    background-color: $color-paper-block;
+    background-color: $color-paper-block !important;
     box-shadow: $shadow-paper-block;
     transition: width 0.2s ease-in-out;
+}
+
+::-webkit-scrollbar {
+    width: $spacing4;
+}
+
+::-webkit-scrollbar-thumb {
+    // background-color: #dddddd;
+    background-color: $color-paper-block;
+    background-clip: content-box;
+    border-radius: 10px;
+
+    border: 5px solid transparent;
 }

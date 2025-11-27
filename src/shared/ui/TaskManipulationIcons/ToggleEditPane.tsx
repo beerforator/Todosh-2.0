@@ -1,6 +1,7 @@
 import React from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import { IconButton } from '@mui/material';
+import { EditPancilIcon } from "../Icons/TaskIcon";
 
 interface ToggleEditPaneProps {
     handleEditingTask: () => void;
@@ -12,7 +13,7 @@ export const ToggleEditPane = React.memo((props: ToggleEditPaneProps) => {
 
     return (
         <IconButton onClick={handleEditingTask}>
-            <EditIcon />
+            <EditPancilIcon/>
         </IconButton>
     )
 })

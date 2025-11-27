@@ -72,8 +72,6 @@ export const UnifiedSidebar = React.memo(() => {
                 <MuiList component="nav" className={style.nav}>
                     <MemoizedNavLinks isCollapsed={isCollapsed} />
 
-                    {/* <Divider sx={{ my: 2 }} /> */}
-
                     <div className={style.filter_container}>
                         <MemoizedFilterList
                             allList={allList}

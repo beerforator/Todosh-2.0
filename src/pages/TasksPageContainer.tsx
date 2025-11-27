@@ -1,13 +1,13 @@
 import { AppDispatch, RootState } from "@/app/providers/store/types"
 import { fetchTasksApi } from "@/app/services/taskServices/fetchTasksApi"
 import { List, Task } from "@/shared/types/entities"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
-import { Box, Button } from "@mui/material"
+import { Box, Button, ListItemIcon, Typography } from "@mui/material"
 import { InlineCreateTask } from "@/features/CreateTask/InlineCreateTask/InlineCreateTask"
 import AddIcon from '@mui/icons-material/Add';
 import { ALL_TASKS_LIST_ID, listsSelectors, TODAY_TASKS_LIST_ID } from "@/app/providers/store/slices/listsSlice"
@@ -19,10 +19,20 @@ import React from "react"
 import { SectionTitle } from "@/shared/ui/SectionTitle"
 import { MemoizedTaskCardWrapper } from "@/entities/Task/MemoizedTaskCardWrapper"
 
+import style from '@/app/styles/IconStyles.module.scss'
 import styleT from '@/app/styles/TasksPage.module.scss'
+import { TaskText } from "@/entities/Task/ui/TaskCard"
+import { AddPlusIcon } from "@/shared/ui/Icons/SidebarIcons"
+import { useEmptyRows } from "@/shared/hooks/useEmptyRows"
+import { EmptyTaskRow } from "@/shared/ui/EmptyRows/EmptyRow"
+import { ScrollableView } from "./ScrollableView"
 
-export const TasksPage = () => {
-    console.log('TasksPage')
+const Count = (a: number) => {
+
+}
+
+export const TasksPageContainer = () => {
+    console.log('\n\nTasksPageContainer')
 
     const dispatch: AppDispatch = useDispatch()
     // ЧТО БУДЕТ ЕСЛИ АЙДИ ВЫБРАННОГО ТЭГА НЕ УСЕЕТ ДОЙТИ ?!
@@ -30,8 +40,16 @@ export const TasksPage = () => {
     const tasksLoadingStatus = useSelector((state: RootState) => state.tasks.loading)
     const [isFormVisible, setIsFormVisible] = useState(false);
 
+    const { editingTaskId, detailsPaneMode } = useSelector((state: RootState) => state.uiReducer);
+    const isPanePersistent = !!editingTaskId && detailsPaneMode === 'persistent';
+
     const allTasks: Task[] = useSelector(tasksSelectors.selectAll)
     const allLists: List[] = useSelector(listsSelectors.selectAll);
+
+    let tasksInList = 0
+
+    const tasksContainerRef = useRef<HTMLDivElement>(null);
+    const emptyRows = useEmptyRows(tasksContainerRef, tasksInList); //filteredAndSortedTasks.length
 
     const [setFetchTasks, isSettingFetchTasks] = useApiRequest(fetchTasksApi, {})
 
@@ -107,30 +125,33 @@ export const TasksPage = () => {
             <MemoizedTaskCardWrapper
                 key={task.id}
                 task={task}
+                color={selectedListId}
             />
         )
     }, [])
 
     const renderContent = () => {
+        console.log(tasksContainerRef)
+        if (!tasksContainerRef.current) return <></>
+
         if (selectedListId !== ALL_TASKS_LIST_ID && selectedListId !== TODAY_TASKS_LIST_ID) {
             const filteredAndSortedTasks = allTasks
                 .filter(task => task.listOwnerId === selectedListId)
                 .slice()
                 .sort((a, b) => a.order - b.order);
 
+            tasksInList = filteredAndSortedTasks.length
+
             return (
-                <div className={styleT.tasksPage_container}>
-                    <ListHeader />
-                    <div className={styleT.tagView}>
-                        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                            <SortableContext items={filteredAndSortedTasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
-                                {filteredAndSortedTasks.map(task => (
-                                    renderSortableTaskCard(task)
-                                ))}
-                            </SortableContext>
-                        </DndContext>
-                    </div>
-                </div>
+                <ScrollableView
+                    tasksContainerRef={tasksContainerRef}
+                    tasksArray={filteredAndSortedTasks}
+                    // groupedTasks?: any[]
+                    isDndEnabled={true}
+                    handleDragEnd={handleDragEnd}
+                    selectedListId={selectedListId}
+                    isPanePersistent={isPanePersistent}
+                />
             );
         } else if (selectedListId === TODAY_TASKS_LIST_ID) {
             const tasksToRender = allTasks
@@ -138,15 +159,20 @@ export const TasksPage = () => {
                 .slice()
                 .sort((a, b) => a.order - b.order);
 
+            tasksInList = tasksToRender.length
+
             return (
-                <div className={styleT.tasksPage_container}>
-                    <ListHeader />
-                    <Box mb={4}>
-                        {tasksToRender.map(task => (
-                            renderSortableTaskCard(task)
-                        ))}
-                    </Box>
-                </div>
+                <>
+                    <ScrollableView
+                        tasksContainerRef={tasksContainerRef}
+                        tasksArray={tasksToRender}
+                        // groupedTasks?: any[]
+                        isDndEnabled={false}
+                        // handleDragEnd={handleDragEnd}
+                        selectedListId={selectedListId}
+                        isPanePersistent={isPanePersistent}
+                    />
+                </>
             );
         } else if (selectedListId === ALL_TASKS_LIST_ID) {
             const groupedTasks = allLists.reduce((acc, list) => {
@@ -164,38 +190,47 @@ export const TasksPage = () => {
                 return acc;
             }, {} as Record<string, { listName: string; tasks: Task[] }>);
 
+            tasksInList = 0
+
+            console.log(groupedTasks)
+
             return (
-                <div className={styleT.tasksPage_container}>
-                    <ListHeader />
-                    {Object.values(groupedTasks).map(({ listName, tasks }) => (
-                        <Box key={listName} mb={4}>
-                            <SectionTitle>{listName}</SectionTitle>
-                            {tasks.map(task => (
-                                renderSortableTaskCard(task)
-                            ))}
-                        </Box>
-                    ))}
-                </div>
+                <>
+                    <ScrollableView
+                        tasksContainerRef={tasksContainerRef}
+                        tasksArray={[]}
+                        groupedTasks={groupedTasks}
+                        isDndEnabled={false}
+                        // handleDragEnd={handleDragEnd}
+                        selectedListId={selectedListId}
+                        isPanePersistent={isPanePersistent}
+                    />
+                </>
             );
         }
     };
 
     return (
-        <div>
-            {renderContent()}
-            {isFormVisible ? (
+        <div className={styleT.tasksPage_container}>
+            <ListHeader />
+            <div ref={tasksContainerRef} className={styleT.scrollableView}>
+                {renderContent()}
+                {/* {Array.from({ length: emptyRows }).map((_, index) => (
+                    <EmptyTaskRow key={`empty-${index}`} />
+                ))} */}
+            </div>
+            <div
+                className={!isPanePersistent
+                    ? (styleT.create_container)
+                    : (styleT.create_container + ' ' + styleT.collapsed)}
+            > {/* + ' ' + styleT.glass */}
                 <InlineCreateTask
                     listId={selectedListId}
                     onClose={() => setIsFormVisible(false)}
-                />
-            ) : (
-                <Button
-                    startIcon={<AddIcon />}
                     onClick={() => setIsFormVisible(true)}
-                >
-                    Добавить задачу
-                </Button>
-            )}
-        </div >
+                    isFormVisible={isFormVisible}
+                />
+            </div>
+        </div>
     );
 }

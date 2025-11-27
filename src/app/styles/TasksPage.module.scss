@@ -1,50 +1,277 @@
 .tasksPage_container {
-    margin-top: 4*$spacing2;
+    // margin-top: 4*$spacing2;
+    // padding-top: 4*$spacing2;
+
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    position: relative;
+    // &:nth-last-child {
+    //     margin: auto 0 0;
+    // }
+}
+
+.scrollableView {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    height: 100%;
+
+    overflow-y: auto;
+    overflow-x: visible;
+    padding-left: 4*$spacing2;
 }
 
 .gropedView {}
 
 .tagView {
+    width: 100%;
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
 
     gap: $spacing4;
+
+    margin-bottom: $spacing4;
+
+    // padding: 70px 0 70px 4*$spacing2;
+
+    padding-top: $spacing2;
 }
+
+.collapsed {
+    padding-right: $detailPane-width + $spacing4;
+}
+
+.gropedView .tagView {}
 
 // Task Card
 
+.taskCard_color_container {
+    position: relative;
+    z-index: 2;
+
+    border-radius: 11px;
+    border-bottom-right-radius: 12px;
+    border-top-right-radius: 12px;
+    // border: 1px solid $color-border;
+
+    padding-left: 3*$spacing1;
+    // margin-right: $spacing4;
+}
+
+.draggableTask {
+    position: relative;
+    z-index: 10 !important;
+
+    box-shadow: $shadow-paper-block;
+}
+
 .taskCard_container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
     padding: $spacing4 !important;
-    gap: $spacing4;
-
     box-shadow: none !important;
-
-    opacity: 1;
 }
 
 .taskCard_container button {
     margin: 0 !important;
 }
 
+.taskCard_stuff {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 
-.taskCard_isCompleted {
-    opacity: 0.5;
+    gap: $spacing4;
+
+    opacity: 1;
+
+    :global(.MuiListItemIcon-root) {
+        color: $color-icons;
+    }
 }
 
+.taskCard_isCompleted {
+    opacity: 0.6;
+}
 
-.taskCard_content {
+.actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+
+    gap: $spacing4;
+
+    width: 130px;
+
+    :global(.MuiIconButton-root) {
+        color: $color-icons;
+    }
+
+    opacity: 1;
+
+    transition: opacity 0.2s ease-in-out;
+}
+
+.unhovered_actions {
+    opacity: 0;
+}
+
+// Text
+
+.taskCard_textContent {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
     align-items: center;
 
-    // width: 100% - 50px;
+    gap: 30px;
 
+    // width: 600px;
+
+}
+
+.cardItemText {
+    width: 100%;
+    // max-width: 100%;
+
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cardTextDivider {
+    width: 1px;
+    height: 20px;
+    flex-shrink: 0;
+
+    background-color: #828282;
+    border-radius: 2px;
+}
+
+.cardDate {
+    width: 100%;
+    max-width: 120px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+// Empty line
+
+.emptyLineEffect {
+    height: 1px;
+    width: 97%;
+    margin-top: 48px; //52px
+    margin-bottom: 16px;
+    // margin: 0 0 16px auto;
+
+    display: flex;
+    align-items: center;
+    
+    background-color: $color-warm-grey;
+    border-radius: 5px;
+}
+
+// Inline Create
+
+.create_container {
+    width: 100%;
+    // height: 100px;
+
+    // position: fixed;
+    z-index: 3;
+    // bottom: 8px;
+    // left: 4*$spacing2;
+
+    display: flex;
+    align-items: center;
+    padding-left: 4*$spacing2 !important;
+    margin: auto 0 0 !important;
+
+    overflow: visible;
+}
+
+.glass {
+    /* Эффект размытия */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    box-shadow:
+        /* Нижний и правый эффект глубины */
+        inset -0.75px -0.5px rgba(255, 255, 255, 0.1),
+        /* Верхний и левый эффект глубины */
+        inset +0.75px +0.5px rgba(255, 255, 255, 0.025),
+        /* Эффект тени */
+        3px 2px 10px rgba(0, 0, 0, 0.25),
+        /* Короткий подповерхностный эффект */
+        inset 110px 110px 110px 511px rgba(255, 255, 255, 0.025),
+        /* Длинный подповерхностный эффект */
+        inset 110px 110px 410px 511px rgba(255, 255, 255, 0.025);
+
+    /* Позволяем дочерним элементам заполнять родительский */
+    // position: relative;
+}
+
+
+.cardButton {
+    color: $color-text !important;
+    text-transform: none !important;
+    display: flex;
+    justify-content: start !important;
+
+    // padding-left: 7*$spacing1 !important;
+    width: 100%;
+
+    // margin: auto 0 0 !important;
+    // margin-top: 200px !important;
+    box-shadow: -2px 0px 13.199999809265137px rgba(0, 0, 0, 0.25) !important;
+}
+
+.createInput input {
+    height: 8px !important;
 }
 
 
 // ПОРАБОТАТЬ НАД ГРУППАМИ ТЭГОВ, ДОБАВИТЬ ЦВЕТ К ЗАДАЧАМ И РАЗОБРАТЬСЯ С ХОВЕР ИКОНКАМИ
+
+// List Header
+
+.listHeader {
+    width: 100%;
+    // height: 60px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $spacing4;
+
+
+    // margin-bottom: 20px;
+
+    // position: fixed;
+    z-index: 3;
+
+    // padding-left: 4*$spacing2;
+    padding: 3*$spacing2 0 2*$spacing2 4*$spacing2;
+
+    :global(.MuiListItemIcon-root) {
+        color: $color-icons;
+        transition: color 0.2s ease-in-out;
+    }
+
+    :global(.MuiIconButton-root) {
+        color: $color-icons;
+        transition: color 0.2s ease-in-out;
+    }
+}
+
+.listHeader input {
+    height: 22px !important;
+}

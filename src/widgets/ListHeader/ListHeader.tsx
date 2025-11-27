@@ -15,6 +15,11 @@ import AllInboxIcon from '@mui/icons-material/AllInbox';
 import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
 import { ListCircleIcon } from '@/shared/ui/ListCircleIcon';
 
+import style from '@/app/styles/IconStyles.module.scss'
+import styleT from '@/app/styles/TasksPage.module.scss'
+import { AllTasksIcon, InboxIcon, TodayIcon } from '@/shared/ui/Icons/SidebarIcons';
+import { MoreIcon } from '@/shared/ui/Icons/HeaderIcons';
+
 export const ListHeader = React.memo(() => {
     // console.log('ListHeader')
     const dispatch: AppDispatch = useDispatch();
@@ -125,29 +130,33 @@ export const ListHeader = React.memo(() => {
     // ИСПРАВЛЕННАЯ ВЕРСИЯ:
     if (selectedListId === 'all') {
         return (
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <div className={styleT.listHeader}>
                 <ListItemIcon>
-                    <AllInboxIcon />
+                    <AllTasksIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />
                 </ListItemIcon>
                 <Typography variant="h4" gutterBottom>Все задачи</Typography>
-            </ Box>
+            </ div>
         )
     }
 
     if (selectedListId === 'list-inbox') {
         return (
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <div className={styleT.listHeader}>
+                <ListItemIcon>
+                    <InboxIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />
+                </ListItemIcon>
                 <Typography variant="h4" gutterBottom>Inbox</Typography>
-            </Box>);
+            </div>);
     }
 
     if (selectedListId === 'today') {
         return (
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <div className={styleT.listHeader}>
                 <ListItemIcon>
-                    <WbSunnyOutlinedIcon />
-                </ListItemIcon><Typography variant="h4" gutterBottom>Today</Typography>
-            </ Box>
+                    <TodayIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />
+                </ListItemIcon>
+                <Typography variant="h4" gutterBottom>Today</Typography>
+            </ div>
         )
     }
 
@@ -168,8 +177,10 @@ export const ListHeader = React.memo(() => {
         p: 4,
     };
 
+    // + ' ' + styleT.glass
+
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+        <div className={styleT.listHeader}>
             {isLoading && <CircularProgress size={32} sx={{ mr: 1 }} />}
             <ListCircleIcon color={selectedList.color} />
             {isEditing ? (
@@ -190,7 +201,7 @@ export const ListHeader = React.memo(() => {
             )}
 
             <IconButton onClick={handleOpenMenu} disabled={isLoading}>
-                <MoreVertIcon />
+                <MoreIcon />
             </IconButton>
 
             <Menu
@@ -235,6 +246,6 @@ export const ListHeader = React.memo(() => {
                     ))}
                 </Box>
             </Popover>
-        </Box>
+        </div>
     );
 })

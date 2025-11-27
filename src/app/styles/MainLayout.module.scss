@@ -22,10 +22,15 @@
     transition: margin-right 0.1s ease-in-out;
     margin-right: 0;
 
-    height: 90vh;
+    // height: 90vh;
+    height: 93.5vh;
     
-    overflow-y: auto;
-    overflow-x: visible;
+    // overflow-y: auto;
+    // overflow-x: visible;
+
+    // overflow: hidden;
+
+    overflow: visible;
 }
 
 .mainContentStylesWPane {

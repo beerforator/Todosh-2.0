@@ -9,21 +9,27 @@ import { SetTaskTodayContainer } from "@/features/SetTaskToday/SetTaskTodayConta
 import { SortableTaskCard } from "./SortableTaskCard";
 
 interface MemoizedTaskCardWrapperProps {
-    task: Task;
+    task: Task,
+    color?: string,
+    isPanePersistent: boolean
 }
 
-export const MemoizedTaskCardWrapper = React.memo(({ task }: MemoizedTaskCardWrapperProps) => {    
+export const MemoizedTaskCardWrapper = React.memo(({ task, color, isPanePersistent}: MemoizedTaskCardWrapperProps) => {
     const featureSlot = useMemo(() => <ToggleTaskContainer taskId={task.id} />, [task.id]);
 
     const actionsSlot = useMemo(() => (
         <>
             <ToggleFavouriteContainer taskId={task.id} />
-            <ToggleEditPaneContainer taskId={task.id} mode='persistent'/>
             <DeleteTaskContainer taskId={task.id} />
         </>
     ), [task.id]);
 
-    const hoverActionsSlot = useMemo(() => <SetTaskTodayContainer taskId={task.id} />, [task.id]);
+    const hoverActionsSlot = useMemo(() => (
+        <>
+            <ToggleEditPaneContainer taskId={task.id} mode='persistent' />
+            <SetTaskTodayContainer taskId={task.id} />
+        </>
+    ), [task.id]);
 
     return (
         <SortableTaskCard
@@ -31,6 +37,8 @@ export const MemoizedTaskCardWrapper = React.memo(({ task }: MemoizedTaskCardWra
             featureSlot={featureSlot}
             actionsSlot={actionsSlot}
             hoverActionsSlot={hoverActionsSlot}
+            color={color}
+            isPanePersistent={isPanePersistent}
         />
     );
 });

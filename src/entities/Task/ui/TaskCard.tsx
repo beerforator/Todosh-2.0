@@ -9,83 +9,109 @@ import styleT from '@/app/styles/TasksPage.module.scss'
 
 interface TaskCardProps {
     task: Task,
+    color?: string,
     featureSlot?: React.ReactNode,
     actionsSlot?: React.ReactNode,
+    isDragging: boolean,
     hoverActionsSlot?: React.ReactNode,
-    dndAttributes: DraggableAttributes,
-    dndListeners: SyntheticListenerMap | undefined,
-    isHovered: boolean
+    dndAttributes?: DraggableAttributes,
+    dndListeners?: SyntheticListenerMap | undefined,
+    isHovered: boolean,
+    isPanePersistent: boolean
 }
 
-export const TaskCard = React.memo(({ task, featureSlot, actionsSlot, hoverActionsSlot, dndAttributes, dndListeners, isHovered }: TaskCardProps) => {
-    const cardStyles: React.CSSProperties = {
-        marginBottom: '10px',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0 10px',
-        opacity: task.isCompleted ? 0.5 : 1,
-    };
-
-    const contentStyles: React.CSSProperties = {
-        flexGrow: 1,
-    };
-
-
-
+export const TaskCard = React.memo(({ task, color, featureSlot, actionsSlot, isDragging, hoverActionsSlot, dndAttributes, dndListeners, isHovered, isPanePersistent }: TaskCardProps) => {
     return (
-        <div
-            className={task.isCompleted 
-                ? ('paperBlock ' + styleT.taskCard_isCompleted + ' ' + styleT.taskCard_container) 
-                : ('paperBlock ' + styleT.taskCard_container)}
+        <div className={isDragging
+            ? (styleT.draggableTask + ' ' + styleT.taskCard_color_container)
+            : (styleT.taskCard_color_container)
+        }
+            style={color === '#808080'
+                ? { backgroundColor: '#F1FAFF' }
+                : { backgroundColor: color }}
         >
-            {featureSlot}
-
             <div
-                // style={contentStyles}
-                className={styleT.taskCard_content}
-                {...dndAttributes}
-                {...dndListeners}
+                className={'paperBlock ' + styleT.taskCard_container}
             >
-                <TaskTitle
-                    title={task.title}
-                    isCompleted={task.isCompleted}
-                    variant="body1"
-                />
+                <div
+                    className={task.isCompleted
+                        ? (styleT.taskCard_isCompleted + ' ' + styleT.taskCard_stuff)
+                        : (styleT.taskCard_stuff)}
+                >
+                    {featureSlot}
 
-                <DataLogicFormatRender startDate={task.startDate} endDate={task.endDate} />
+                    <div
+                        // style={contentStyles}
+                        className={styleT.taskCard_textContent}
+                        {...dndAttributes}
+                        {...dndListeners}
+                    >
+                        <TaskText
+                            text={task.title}
+                            isCompleted={task.isCompleted}
+                            type='title'
+                        />
 
+                        <div className={styleT.cardTextDivider}></div>
+
+                        {!isPanePersistent &&
+                            <TaskText
+                                text={task.description}
+                                isCompleted={task.isCompleted}
+                                type='description'
+                            />
+                        }
+
+                        {!isPanePersistent &&
+                            <div className={styleT.cardTextDivider}></div>
+                        }
+
+                        <DataLogicFormatRender startDate={task.startDate} endDate={task.endDate} />
+
+                    </div>
+                    <div
+                        // className={isHovered
+                        //     ? styleT.actions
+                        //     : (styleT.actions + ' ' + styleT.unhovered_actions)
+                        // }
+                        className={styleT.actions}
+                    >
+                        {isHovered && hoverActionsSlot}
+                        {/* {hoverActionsSlot} */}
+                        {actionsSlot}
+                    </div>
+                </div>
             </div>
-
-            {isHovered && hoverActionsSlot}
-            {actionsSlot}
-
         </div>
     );
 })
 
 interface TaskTitleProps {
-    title: string,
+    text?: string,
     isCompleted: boolean,
-    variant?: "body1" | "body2"
+    type?: 'description' | 'title'
+    // variant?: "body1" | "body2"
 }
 
-export const TaskTitle = (props: TaskTitleProps) => {
-    const { title, isCompleted, variant } = props
+export const TaskText = (props: TaskTitleProps) => {
+    const { text, isCompleted, variant, type } = props
 
     return (
         <Typography
-            variant={variant}
-            sx={{
-                ml: 1,
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                textDecoration: isCompleted ? 'line-through' : 'none',
-                opacity: isCompleted ? 0.6 : 1,
-                flexGrow: 1
-            }}
+            // variant={variant}
+            // sx={{
+            //     ml: 1,
+            //     whiteSpace: 'nowrap',
+            //     overflow: 'hidden',
+            //     textOverflow: 'ellipsis',
+            //     textDecoration: isCompleted ? 'line-through' : 'none',
+            //     opacity: isCompleted ? 0.6 : 1,
+            //     flexGrow: 1
+            // }}
+            className={styleT.cardItemText}
+            style={type === 'title' ? { maxWidth: '250px' } : { maxWidth: '330px', fontSize: '10px' }}
         >
-            {title}
+            {text ? text : ''}
         </Typography>
     )
 }

@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import React from 'react';
 
-import styleT from '@/app/styles/TasksPage.module.scss'
+import styleT from '@/app/styles/MainContentStyles/TasksPage.module.scss'
 
 const formatDate = (date: Date | undefined) => {
     if (!date) return null;
@@ -14,7 +14,11 @@ interface dataLogicFormatRenderArg {
 }
 
 export const DataLogicFormatRender = React.memo(({ startDate, endDate }: dataLogicFormatRenderArg) => {
-    if (!startDate || !endDate) return
+    if (!startDate || !endDate) return (
+        <Typography variant="body2" color="text.secondary" className={styleT.cardDate}> {/* sx={{ mt: 2 } } */}
+            -
+        </Typography>
+    )
 
     let d1 = new Date(startDate)
     let d2 = new Date(endDate)

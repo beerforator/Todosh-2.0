@@ -5,7 +5,7 @@ import { DraggableAttributes } from '@dnd-kit/core';
 import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import { DataLogicFormatRender } from '../../../shared/lib/formatDateRender';
 
-import styleT from '@/app/styles/TasksPage.module.scss'
+import styleT from '@/app/styles/MainContentStyles/TasksPage.module.scss'
 
 interface TaskCardProps {
     task: Task,

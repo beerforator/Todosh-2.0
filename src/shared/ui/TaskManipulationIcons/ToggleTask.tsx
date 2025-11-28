@@ -35,7 +35,7 @@ export const ToggleTask = React.memo((props: ToggleTaskProps) => {
             className={isLettingToggle
                 ? (style.taskIconStyle + ' ' + style.iconDisabled)
                 : style.taskIconStyle}
-        // sx={{ p: size === 'small' ? '4px' : '12px' }}
+            sx={{ p: size === 'small' ? '2px' : '0px' }}
         />
     )
 })

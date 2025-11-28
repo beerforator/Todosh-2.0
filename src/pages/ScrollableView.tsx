@@ -22,7 +22,8 @@ import { MemoizedTaskCardWrapper } from "@/entities/Task/MemoizedTaskCardWrapper
 
 
 import style from '@/app/styles/IconStyles.module.scss'
-import styleT from '@/app/styles/TasksPage.module.scss'
+import styleT from '@/app/styles/MainContentStyles/TasksPage.module.scss'
+
 import { TaskText } from "@/entities/Task/ui/TaskCard"
 import { AddPlusIcon } from "@/shared/ui/Icons/SidebarIcons"
 import { useEmptyRows } from "@/shared/hooks/useEmptyRows"
@@ -30,28 +31,35 @@ import { EmptyTaskRow } from "@/shared/ui/EmptyRows/EmptyRow"
 import { SortableListContainer } from "./SortableListContainer"
 
 interface ScrollableViewProps {
+    viewType: string;
     tasksContainerRef: RefObject<HTMLElement | null>,
-    tasksArray: Task[],
+
+    tasksArray?: Task[],
     groupedTasks?: Record<string, { listName: string; tasks: Task[]; }>,
+
     isDndEnabled: boolean,
     handleDragEnd?: (event: DragEndEvent) => void,
     selectedListId: string,
     isPanePersistent: boolean
 }
 
-export const ScrollableView = ({ tasksContainerRef, tasksArray, groupedTasks, isDndEnabled, handleDragEnd, selectedListId, isPanePersistent }: ScrollableViewProps) => {
-    console.log('ScrollableView')
+export const ScrollableView = React.memo(({ viewType, tasksContainerRef, tasksArray, groupedTasks, isDndEnabled, handleDragEnd, selectedListId, isPanePersistent }: ScrollableViewProps) => {
+    let tasksInList = 1000
 
-    let tasksInList = !!groupedTasks ? 1000 : tasksArray.length
+    if (viewType === "list" && !!tasksArray) {
+        tasksInList = tasksArray.length
+    }
+    else if (viewType === "grouped" && !!groupedTasks) {
+        tasksInList = 1000
+    }
 
-    // const tasksContainerRef = useRef<HTMLDivElement>(null);
-    const emptyRows = useEmptyRows(tasksContainerRef, tasksInList); //filteredAndSortedTasks.length
+    const emptyRows = useEmptyRows(tasksContainerRef, tasksInList);
 
     console.log(emptyRows)
 
     return (
         <>
-            {!groupedTasks &&
+            {(viewType === "list" && !!tasksArray) &&
                 <div
                     className={!isPanePersistent
                         ? (styleT.tagView)
@@ -63,7 +71,6 @@ export const ScrollableView = ({ tasksContainerRef, tasksArray, groupedTasks, is
                         disabled={!isDndEnabled}
                     >
                         {tasksArray.map(task => (
-                            // renderSortableTaskCard(task)
                             <MemoizedTaskCardWrapper
                                 key={task.id}
                                 task={task}
@@ -75,7 +82,7 @@ export const ScrollableView = ({ tasksContainerRef, tasksArray, groupedTasks, is
                 </div>
             }
 
-            {!!groupedTasks &&
+            {(viewType === "grouped" && !!groupedTasks) &&
                 <>
                     {Object.values(groupedTasks).map(({ listName, tasks }) => (
                         <div
@@ -103,35 +110,4 @@ export const ScrollableView = ({ tasksContainerRef, tasksArray, groupedTasks, is
             ))}
         </>
     );
-}
-
-{/* <>
-    <div className={styleT.tagView}>
-        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={filteredAndSortedTasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
-                {filteredAndSortedTasks.map(task => (
-                    renderSortableTaskCard(task)
-                ))}
-            </SortableContext>
-        </DndContext>
-    </div>
-</> */}
-
-{/* <>
-    <div className={styleT.tagView}>
-        {tasksToRender.map(task => (
-            renderSortableTaskCard(task)
-        ))}
-    </div>
-</> */}
-
-{/* <>
-    {Object.values(groupedTasks).map(({ listName, tasks }) => (
-        <div key={listName} className={styleT.tagView}>
-            <Typography variant="h5" gutterBottom>{listName}</Typography>
-            {tasks.map(task => (
-                renderSortableTaskCard(task)
-            ))}
-        </div>
-    ))}
-</> */}
+})

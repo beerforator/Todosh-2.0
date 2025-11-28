@@ -3,8 +3,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthPage, CalendarPage, DashBoardPage, ProfilePage, TasksPage } from '@/pages';
 import { MainLayout } from '@/widgets/Layout/MainLayout';
-import { MainLayoutContainer } from '@/widgets/Layout/MainLayoutContainer';
-import { TasksPageContainer } from '@/pages/TasksPageContainer';
+// import { MainLayout } from '@/widgets/Layout/MainLayout';
+// import { TasksPage } from '@/pages/TasksPage';
 
 export const AppRouter = () => {
     // Это временная "заглушка". 
@@ -15,12 +15,12 @@ export const AppRouter = () => {
     if (isAuth) {
         return (
             <Routes>
-                <Route path="/" element={<MainLayoutContainer />}>
+                <Route path="/" element={<MainLayout />}>
                     {/* 3. Все страницы теперь являются дочерними для этого маршрута.
               Они будут рендериться на месте <Outlet /> */}
                     {/* ПОТОМ СДЕЛАМ ДАШБОРД ГЛАВНОЙ */}
                     <Route index element={<Navigate to="/tasks" replace />} /> {/* Главная по умолчанию */}
-                    <Route path="/tasks" element={<TasksPageContainer />} />
+                    <Route path="/tasks" element={<TasksPage />} />
                     <Route path="/calendar" element={<CalendarPage />} />
                     <Route path="/dashboard" element={<DashBoardPage />}/>
                     <Route path="/profile" element={<ProfilePage />}/>

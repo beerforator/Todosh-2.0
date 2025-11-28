@@ -12,12 +12,19 @@ import { Task } from '@/shared/types/entities';
 import { startEditingTask } from '@/app/services/UISlice/UISlice';
 import { ALL_TASKS_LIST_ID, listsSelectors, TODAY_TASKS_LIST_ID } from '@/app/providers/store/slices/listsSlice';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { Box, Typography } from '@mui/material';
+import { Box, ListItemIcon, Typography } from '@mui/material';
 import { tasksSelectors } from '@/app/providers/store/slices/tasksSlice';
 import { ToggleFavourite, ToggleFavouriteContainer } from '@/features/ToggleFavourite/ToggleFavouriteContainer';
 import { ToggleTask, ToggleTaskContainer } from '@/features/ToggleTask/ToggleTaskContainer';
 import { useApiRequest } from '@/shared/hooks/useApiRequest';
 import { TaskText } from '@/entities/Task/ui/TaskCard';
+
+import style from '@/app/styles/IconStyles.module.scss'
+import styleT from '@/app/styles/MainContentStyles/TasksPage.module.scss'
+import styleC from '@/app/styles/MainContentStyles/CalendarPage.module.scss'
+import styleMC from '@/app/styles/MainContentStyles/MainContent.module.scss'
+
+import { AllTasksIcon } from '@/shared/ui/Icons/SidebarIcons';
 
 export const CalendarPage = () => {
     // console.log('CalendarPage')
@@ -66,12 +73,12 @@ export const CalendarPage = () => {
                     title: task.title,
                     start: task.startDate ?? undefined,
                     end: task.endDate ?? undefined,
-                    backgroundColor: allTasks.find(t => t.id === task.id)?.listOwnerId
-                        ? allLists.find(l => l.id === task.listOwnerId)?.color
-                        : '#808080',
-                    borderColor: allTasks.find(t => t.id === task.id)?.listOwnerId
-                        ? allLists.find(l => l.id === task.listOwnerId)?.color
-                        : '#808080',
+                    // backgroundColor: allTasks.find(t => t.id === task.id)?.listOwnerId
+                    //     ? allLists.find(l => l.id === task.listOwnerId)?.color
+                    //     : '#808080',
+                    // borderColor: allTasks.find(t => t.id === task.id)?.listOwnerId
+                    //     ? allLists.find(l => l.id === task.listOwnerId)?.color
+                    //     : '#000000',
                     extendedProps: {
                         task
                     },
@@ -143,7 +150,19 @@ export const CalendarPage = () => {
         if (isSettingUpdateDates) return
 
         return (
-            <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'hidden', width: '100%' }}>
+            <div className={styleC.calendarEvent}>
+                {/* <Box
+                    component="span"
+                    sx={{
+                        width: '10px',
+                        height: '10px',
+                        borderRadius: '50%',
+                        backgroundColor: taskcolor,
+                        mr: 1, // Отступ справа
+                        flexShrink: 0, // Запрещаем сжиматься
+                    }}
+                /> */}
+
                 <ToggleTaskContainer taskId={task.id} size={'small'} />
                 <TaskText
                     text={task.title}
@@ -151,48 +170,70 @@ export const CalendarPage = () => {
                     // variant="body2"
                     type='title'
                 />
-                <ToggleFavouriteContainer taskId={task.id} size={'small'} />
-            </Box>
+            </div>
         )
     }
 
+    // alert()
+
+    /* 
+    
+    Сделаны общие стили - вынес что-то в AppRouter, что-то в родительские компоненты. 
+    
+    Приведены в порядок перерисовки и спагетти на уровне больших компонент - делигировал прерисовку ScrollableView (убал хук из TasksPage.).
+
+    Обернул календарь в общий контейнер и остановился на добавлении глобальных переменных стилей в MainContent.module - нужно сделать 
+    внешний вид календаря поприятнее, переопределить сильнее его базовые стили.
+    
+    ВАЖНО! Календарь не растягивается при сворачивании сайдбара
+
+    */
+
     return (
-        <div>
-            <h1>Calendar page</h1>
-            <FullCalendar
-                // Визуал
-                headerToolbar={{
-                    start: "today prev next",
-                    end: "dayGridMonth dayGridWeek",
-                }}
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                initialView='dayGridMonth'
-                firstDay={1}
-                // eventDisplay="block"
+        <>
+            <div className={styleMC.listHeader}>
+                <ListItemIcon>
+                    <AllTasksIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />
+                </ListItemIcon>
+                <Typography variant="h4" gutterBottom>Calendar page</Typography>
+            </ div>
+            <div className={styleMC.scrollableView + ' ' + styleMC.scrollableView_calendar}>
+                <FullCalendar
+                    // Визуал
+                    headerToolbar={{
+                        start: "today prev next",
+                        end: "dayGridMonth dayGridWeek",
+                    }}
+                    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                    initialView='dayGridMonth'
+                    firstDay={1}
+                    height="85vh"
+                    // eventDisplay="block"
 
-                // Флаги для управления
-                editable={true}
-                weekends={true}
-                events={calendarEvents}
-                eventResizableFromStart={true}
-                // eventDurationEditable={true}
+                    // Флаги для управления
+                    editable={true}
+                    weekends={true}
+                    events={calendarEvents}
+                    eventResizableFromStart={true}
+                    // eventDurationEditable={true}
 
-                // Калбэки
-                eventDrop={handleEventDrop}
-                dateClick={handleDateClick}
-                eventClick={handleEditingTask}
-                eventResize={handleEventResize}
+                    // Калбэки
+                    eventDrop={handleEventDrop}
+                    dateClick={handleDateClick}
+                    eventClick={handleEditingTask}
+                    eventResize={handleEventResize}
 
-                // Кастомный контент
-                ref={calendarRef}
-                eventContent={renderEventContent}
-            />
-            {isModalOpen && (
-                <CalendarCreateModal
-                    onClose={handleCloseModal}
-                    selectedDate={selectedDate}
+                    // Кастомный контент
+                    ref={calendarRef}
+                    eventContent={renderEventContent}
                 />
-            )}
-        </div>
+                {isModalOpen && (
+                    <CalendarCreateModal
+                        onClose={handleCloseModal}
+                        selectedDate={selectedDate}
+                    />
+                )}
+            </div>
+        </>
     )
 }

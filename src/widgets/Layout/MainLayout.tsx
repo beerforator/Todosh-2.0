@@ -4,27 +4,18 @@ import { Header } from '../Header/Header';
 import { TaskDetailsPaneContainer } from '../TaskDetailsPane/TaskDetailsPane.container';
 import React from 'react';
 
-import style from '@/app/styles/MainLayout.module.scss'  // '/app/styles/MainLayot.module.scss'
+import styleM from '@/app/styles/MainLayout.module.scss'  // '/app/styles/MainLayot.module.scss'
 
-interface MainLayoutProps {
-    isPanePersistent: boolean;
-}
-
-export const MainLayout = React.memo(({ isPanePersistent }: MainLayoutProps) => {
+export const MainLayout = React.memo(() => {
     return (
-        <div className={style.layoutStyles}>
+        <div className={styleM.window}>
             <UnifiedSidebar />
-            <div className={style.contentStyles}>
+            <div className={styleM.appWidgetsLevel_container}>
                 <Header />
-                <main
-                    // className={
-                    //     isPanePersistent
-                    //         ? style.mainContentStylesWPane + ' ' + style.mainContentStyles
-                    //         : style.mainContentStyles
-                    // }
-                    className={style.mainContentStyles}
-                >
-                    <Outlet />
+                <main className={styleM.collapsing_container}>
+                    <div className={styleM.mainContent_container}>
+                        <Outlet />
+                    </div>
                     <TaskDetailsPaneContainer />
                 </main>
             </div>

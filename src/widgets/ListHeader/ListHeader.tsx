@@ -17,6 +17,8 @@ import { ListCircleIcon } from '@/shared/ui/ListCircleIcon';
 
 import style from '@/app/styles/IconStyles.module.scss'
 import styleT from '@/app/styles/TasksPage.module.scss'
+import styleMC from '@/app/styles/MainContentStyles/MainContent.module.scss'
+
 import { AllTasksIcon, InboxIcon, TodayIcon } from '@/shared/ui/Icons/SidebarIcons';
 import { MoreIcon } from '@/shared/ui/Icons/HeaderIcons';
 
@@ -130,33 +132,34 @@ export const ListHeader = React.memo(() => {
     // ИСПРАВЛЕННАЯ ВЕРСИЯ:
     if (selectedListId === 'all') {
         return (
-            <div className={styleT.listHeader}>
+            <>
                 <ListItemIcon>
                     <AllTasksIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />
                 </ListItemIcon>
                 <Typography variant="h4" gutterBottom>Все задачи</Typography>
-            </ div>
+            </>
         )
     }
 
     if (selectedListId === 'list-inbox') {
         return (
-            <div className={styleT.listHeader}>
+            <>
                 <ListItemIcon>
                     <InboxIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />
                 </ListItemIcon>
                 <Typography variant="h4" gutterBottom>Inbox</Typography>
-            </div>);
+            </>
+        );
     }
 
     if (selectedListId === 'today') {
         return (
-            <div className={styleT.listHeader}>
+            <>
                 <ListItemIcon>
                     <TodayIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />
                 </ListItemIcon>
                 <Typography variant="h4" gutterBottom>Today</Typography>
-            </ div>
+            </>
         )
     }
 
@@ -180,7 +183,7 @@ export const ListHeader = React.memo(() => {
     // + ' ' + styleT.glass
 
     return (
-        <div className={styleT.listHeader}>
+        <>
             {isLoading && <CircularProgress size={32} sx={{ mr: 1 }} />}
             <ListCircleIcon color={selectedList.color} />
             {isEditing ? (
@@ -246,6 +249,6 @@ export const ListHeader = React.memo(() => {
                     ))}
                 </Box>
             </Popover>
-        </div>
+        </>
     );
 })

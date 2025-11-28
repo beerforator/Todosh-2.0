@@ -1,31 +1,3 @@
-.tasksPage_container {
-    // margin-top: 4*$spacing2;
-    // padding-top: 4*$spacing2;
-
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-
-    position: relative;
-    // &:nth-last-child {
-    //     margin: auto 0 0;
-    // }
-}
-
-.scrollableView {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    height: 100%;
-
-    overflow-y: auto;
-    overflow-x: visible;
-    padding-left: 4*$spacing2;
-}
-
-.gropedView {}
-
 .tagView {
     width: 100%;
     position: relative;
@@ -45,8 +17,6 @@
 .collapsed {
     padding-right: $detailPane-width + $spacing4;
 }
-
-.gropedView .tagView {}
 
 // Task Card
 
@@ -121,13 +91,14 @@
     opacity: 0;
 }
 
-// Text
+// Task Card Text
 
 .taskCard_textContent {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
     align-items: center;
+    justify-content: space-between;
 
     gap: 30px;
 
@@ -137,6 +108,7 @@
 
 .cardItemText {
     width: 100%;
+    // min-width: 300px;
     // max-width: 100%;
 
     margin: 0;
@@ -156,14 +128,25 @@
 
 .cardDate {
     width: 100%;
+    min-width: 120px;
     max-width: 120px;
+    // width: 300px;
 
     display: flex;
     flex-direction: row;
     justify-content: center;
+
+    // margin: 0 0 0 auto !important;
+    margin-right: $spacing4 !important;
 }
 
 // Empty line
+
+.emptyLineContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 
 .emptyLineEffect {
     height: 1px;
@@ -236,42 +219,4 @@
 
 .createInput input {
     height: 8px !important;
-}
-
-
-// ПОРАБОТАТЬ НАД ГРУППАМИ ТЭГОВ, ДОБАВИТЬ ЦВЕТ К ЗАДАЧАМ И РАЗОБРАТЬСЯ С ХОВЕР ИКОНКАМИ
-
-// List Header
-
-.listHeader {
-    width: 100%;
-    // height: 60px;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: $spacing4;
-
-
-    // margin-bottom: 20px;
-
-    // position: fixed;
-    z-index: 3;
-
-    // padding-left: 4*$spacing2;
-    padding: 3*$spacing2 0 2*$spacing2 4*$spacing2;
-
-    :global(.MuiListItemIcon-root) {
-        color: $color-icons;
-        transition: color 0.2s ease-in-out;
-    }
-
-    :global(.MuiIconButton-root) {
-        color: $color-icons;
-        transition: color 0.2s ease-in-out;
-    }
-}
-
-.listHeader input {
-    height: 22px !important;
 }

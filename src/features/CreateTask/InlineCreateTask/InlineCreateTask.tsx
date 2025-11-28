@@ -4,7 +4,7 @@ import { createTaskApi } from "@/app/services/taskServices/createTaskApi";
 import { useApiRequest } from "@/shared/hooks/useApiRequest";
 
 import style from '@/app/styles/IconStyles.module.scss'
-import styleT from '@/app/styles/TasksPage.module.scss'
+import styleT from '@/app/styles/MainContentStyles/TasksPage.module.scss'
 import { AddPlusIcon } from "@/shared/ui/Icons/SidebarIcons";
 import { TaskText } from "@/entities/Task/ui/TaskCard";
 

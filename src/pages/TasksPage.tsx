@@ -1,7 +1,7 @@
 import { AppDispatch, RootState } from "@/app/providers/store/types"
 import { fetchTasksApi } from "@/app/services/taskServices/fetchTasksApi"
 import { List, Task } from "@/shared/types/entities"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
 import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
@@ -20,44 +20,92 @@ import { SectionTitle } from "@/shared/ui/SectionTitle"
 import { MemoizedTaskCardWrapper } from "@/entities/Task/MemoizedTaskCardWrapper"
 
 import style from '@/app/styles/IconStyles.module.scss'
-import styleT from '@/app/styles/TasksPage.module.scss'
+import styleT from '@/app/styles/MainContentStyles/TasksPage.module.scss'
+import styleMC from '@/app/styles/MainContentStyles/MainContent.module.scss'
+
 import { TaskText } from "@/entities/Task/ui/TaskCard"
 import { AddPlusIcon } from "@/shared/ui/Icons/SidebarIcons"
 import { useEmptyRows } from "@/shared/hooks/useEmptyRows"
 import { EmptyTaskRow } from "@/shared/ui/EmptyRows/EmptyRow"
 import { ScrollableView } from "./ScrollableView"
 
-const Count = (a: number) => {
+type ListView = {
+    type: 'list';
+    content: Task[];
+    isDndEnabled: boolean;
+};
 
-}
+type GroupedView = {
+    type: 'grouped';
+    content: Record<string, { listName: string; tasks: Task[] }>;
+    isDndEnabled: boolean;
+};
 
-export const TasksPageContainer = () => {
-    console.log('\n\nTasksPageContainer')
+type ViewContent = ListView | GroupedView;
 
+export const TasksPage = () => {
     const dispatch: AppDispatch = useDispatch()
-    // ЧТО БУДЕТ ЕСЛИ АЙДИ ВЫБРАННОГО ТЭГА НЕ УСЕЕТ ДОЙТИ ?!
+
     const selectedListId = useSelector((state: RootState) => state.lists.selectedListId)
     const tasksLoadingStatus = useSelector((state: RootState) => state.tasks.loading)
-    const [isFormVisible, setIsFormVisible] = useState(false);
-
     const { editingTaskId, detailsPaneMode } = useSelector((state: RootState) => state.uiReducer);
-    const isPanePersistent = !!editingTaskId && detailsPaneMode === 'persistent';
-
     const allTasks: Task[] = useSelector(tasksSelectors.selectAll)
     const allLists: List[] = useSelector(listsSelectors.selectAll);
 
-    let tasksInList = 0
+    const [isFormVisible, setIsFormVisible] = useState(false);
 
     const tasksContainerRef = useRef<HTMLDivElement>(null);
-    const emptyRows = useEmptyRows(tasksContainerRef, tasksInList); //filteredAndSortedTasks.length
 
     const [setFetchTasks, isSettingFetchTasks] = useApiRequest(fetchTasksApi, {})
+
+    const isPanePersistent = !!editingTaskId && detailsPaneMode === 'persistent';
 
     useEffect(() => {
         if (tasksLoadingStatus === 'idle') {
             setFetchTasks({})
         }
     }, [tasksLoadingStatus, setFetchTasks])
+
+    // Рендер
+
+    const formattedTasks = useMemo((): ViewContent => {
+        const isToday = (someDate: Date | null | undefined): boolean => {
+            if (!someDate) return false;
+            const today = new Date();
+            const date = new Date(someDate);
+            return date.getDate() === today.getDate() &&
+                date.getMonth() === today.getMonth() &&
+                date.getFullYear() === today.getFullYear();
+        };
+
+        if (selectedListId === ALL_TASKS_LIST_ID) {
+            const groupedTasks = allLists.reduce((acc, list) => {
+                const tasksInList = allTasks
+                    .filter(task => task.listOwnerId === list.id)
+                    .slice()
+                    .sort((a, b) => a.order - b.order);
+
+                if (tasksInList.length > 0) {
+                    acc[list.id] = {
+                        listName: list.name,
+                        tasks: tasksInList,
+                    };
+                }
+                return acc;
+            }, {} as Record<string, { listName: string; tasks: Task[] }>);
+
+            return { type: 'grouped', content: groupedTasks, isDndEnabled: false };
+        }
+
+        if (selectedListId === TODAY_TASKS_LIST_ID) {
+            const tasks = allTasks.filter(task => isToday(task.startDate)).slice().sort((a, b) => a.order - b.order);
+            return { type: 'list', content: tasks, isDndEnabled: false };
+        }
+
+        const tasks = allTasks.filter(task => task.listOwnerId === selectedListId).slice().sort((a, b) => a.order - b.order);
+        return { type: 'list', content: tasks, isDndEnabled: true };
+
+    }, [allTasks, allLists, selectedListId]);
 
     const handleDragEnd = useCallback((event: DragEndEvent) => {
         const { active, over } = event
@@ -96,17 +144,6 @@ export const TasksPageContainer = () => {
         }
     }, [allTasks, selectedListId, dispatch])
 
-
-
-    const isToday = (someDate: Date | null | undefined): boolean => {
-        if (!someDate) return false;
-        const today = new Date();
-        const date = new Date(someDate);
-        return date.getDate() === today.getDate() &&
-            date.getMonth() === today.getMonth() &&
-            date.getFullYear() === today.getFullYear();
-    };
-
     if (tasksLoadingStatus === 'pending') {
         return (
             <h2>Loading ...</h2>
@@ -118,112 +155,31 @@ export const TasksPageContainer = () => {
         )
     }
 
-    // Рендер
-
-    const renderSortableTaskCard = useCallback((task: Task) => {
-        return (
-            <MemoizedTaskCardWrapper
-                key={task.id}
-                task={task}
-                color={selectedListId}
-            />
-        )
-    }, [])
-
-    const renderContent = () => {
-        console.log(tasksContainerRef)
-        if (!tasksContainerRef.current) return <></>
-
-        if (selectedListId !== ALL_TASKS_LIST_ID && selectedListId !== TODAY_TASKS_LIST_ID) {
-            const filteredAndSortedTasks = allTasks
-                .filter(task => task.listOwnerId === selectedListId)
-                .slice()
-                .sort((a, b) => a.order - b.order);
-
-            tasksInList = filteredAndSortedTasks.length
-
-            return (
+    return (
+        <>
+            <div className={styleMC.listHeader}>
+                <ListHeader />
+            </div>
+            <div ref={tasksContainerRef} className={styleMC.scrollableView}>
                 <ScrollableView
+                    viewType={formattedTasks.type}
                     tasksContainerRef={tasksContainerRef}
-                    tasksArray={filteredAndSortedTasks}
-                    // groupedTasks?: any[]
-                    isDndEnabled={true}
+
+                    tasksArray={formattedTasks.type === "list" ? formattedTasks.content : undefined}
+                    groupedTasks={formattedTasks.type === "grouped" ? formattedTasks.content : undefined}
+
+                    isDndEnabled={formattedTasks.isDndEnabled}
                     handleDragEnd={handleDragEnd}
+
                     selectedListId={selectedListId}
                     isPanePersistent={isPanePersistent}
                 />
-            );
-        } else if (selectedListId === TODAY_TASKS_LIST_ID) {
-            const tasksToRender = allTasks
-                .filter(task => isToday(task.startDate))
-                .slice()
-                .sort((a, b) => a.order - b.order);
-
-            tasksInList = tasksToRender.length
-
-            return (
-                <>
-                    <ScrollableView
-                        tasksContainerRef={tasksContainerRef}
-                        tasksArray={tasksToRender}
-                        // groupedTasks?: any[]
-                        isDndEnabled={false}
-                        // handleDragEnd={handleDragEnd}
-                        selectedListId={selectedListId}
-                        isPanePersistent={isPanePersistent}
-                    />
-                </>
-            );
-        } else if (selectedListId === ALL_TASKS_LIST_ID) {
-            const groupedTasks = allLists.reduce((acc, list) => {
-                const tasksInList = allTasks
-                    .filter(task => task.listOwnerId === list.id)
-                    .slice()
-                    .sort((a, b) => a.order - b.order);
-
-                if (tasksInList.length > 0) {
-                    acc[list.id] = {
-                        listName: list.name,
-                        tasks: tasksInList,
-                    };
-                }
-                return acc;
-            }, {} as Record<string, { listName: string; tasks: Task[] }>);
-
-            tasksInList = 0
-
-            console.log(groupedTasks)
-
-            return (
-                <>
-                    <ScrollableView
-                        tasksContainerRef={tasksContainerRef}
-                        tasksArray={[]}
-                        groupedTasks={groupedTasks}
-                        isDndEnabled={false}
-                        // handleDragEnd={handleDragEnd}
-                        selectedListId={selectedListId}
-                        isPanePersistent={isPanePersistent}
-                    />
-                </>
-            );
-        }
-    };
-
-    return (
-        <div className={styleT.tasksPage_container}>
-            <ListHeader />
-            <div ref={tasksContainerRef} className={styleT.scrollableView}>
-                {renderContent()}
-                {/* {Array.from({ length: emptyRows }).map((_, index) => (
-                    <EmptyTaskRow key={`empty-${index}`} />
-                ))} */}
             </div>
             <div
                 className={!isPanePersistent
                     ? (styleT.create_container)
                     : (styleT.create_container + ' ' + styleT.collapsed)}
-            > {/* + ' ' + styleT.glass */}
+            >
                 <InlineCreateTask
                     listId={selectedListId}
                     onClose={() => setIsFormVisible(false)}
@@ -231,6 +187,6 @@ export const TasksPageContainer = () => {
                     isFormVisible={isFormVisible}
                 />
             </div>
-        </div>
+        </>
     );
 }

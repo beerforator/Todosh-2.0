@@ -1,0 +1,45 @@
+.calendarContainer {
+    // display: flex;
+    // flex-direction: column;
+    align-items: center;
+
+    // height: 90vh;
+    height: 100%;
+
+    overflow-y: auto;
+    overflow-x: visible;
+    padding-left: 4*$spacing2;
+
+    :global {
+        /* === Цвета === */
+        --fc-border-color: #e0e0e0;
+        --fc-today-bg-color: rgba(255, 224, 130, 0.5); // Цвет для "сегодня"
+
+        /* === Кнопки в шапке === */
+        --fc-button-bg-color: #f0f2f5;
+        --fc-button-border-color: #e0e0e0;
+        --fc-button-text-color: #555;
+        --fc-button-active-bg-color: #2962FF;
+        --fc-button-active-border-color: #2962FF;
+
+        /* === Шрифты === */
+        --fc-event-font-size: 14px;
+    }
+}
+
+.calendarEvent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    overflow: hidden;
+    width: 100%;
+
+    padding: $spacing2;
+    gap: $spacing2;
+    // margin-left: 20px;
+
+    color: $color-text;
+    background-color: $color-paper-block;
+    // border: 2px solid;
+    border-radius: 6px !important;
+}

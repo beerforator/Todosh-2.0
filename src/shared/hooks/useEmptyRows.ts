@@ -7,12 +7,9 @@ export const useEmptyRows = (
     containerRef: RefObject<HTMLElement | null>,
     itemCount: number
 ) => {
-    // console.log('AAAAGAAAINNN')
-
     const [emptyRowCount, setEmptyRowCount] = useState(0);
 
     useLayoutEffect(() => {
-        // console.log('again')
         if (!containerRef.current) return;
 
         const containerHeight = containerRef.current.offsetHeight;

@@ -1,0 +1,107 @@
+// Main Content Header
+
+.listHeader {
+    width: 100%;
+    // height: 60px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: $spacing4;
+
+
+    // margin-bottom: 20px;
+
+    // position: fixed;
+    z-index: 3;
+
+    // padding-left: 4*$spacing2;
+    padding: 3*$spacing2 0 2*$spacing2 4*$spacing2;
+
+    :global(.MuiListItemIcon-root) {
+        color: $color-icons;
+        transition: color 0.2s ease-in-out;
+    }
+
+    :global(.MuiIconButton-root) {
+        color: $color-icons;
+        transition: color 0.2s ease-in-out;
+    }
+}
+
+.listHeader input {
+    height: 22px !important;
+}
+
+// Scrollable View Port
+
+.scrollableView {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+
+    overflow-y: auto;
+    overflow-x: visible;
+    padding-left: 4*$spacing2;
+}
+
+.scrollableView_calendar {
+    display: block;
+
+    :global {
+        /* === Цвета === */
+        --fc-border-color: #050711;
+        --fc-today-bg-color: rgba(5, 7, 17, 0.2); // Цвет для "сегодня"
+
+        /* === Кнопки в шапке === */
+        --fc-button-bg-color: #f0f2f5;
+        --fc-button-border-color: #e0e0e0;
+        --fc-button-text-color: #555;
+        --fc-button-active-bg-color: #2962FF;
+        --fc-button-active-border-color: #2962FF;
+
+        /* === Шрифты === */
+        // --fc-event-font-size: 14px;
+    }
+
+    :global(.fc) {
+        // border-radius: $border-radius-paper-block; // ...быть скругленным
+        // overflow: hidden; // ...и прятать все, что выходит за рамки
+    }
+
+    :global(.fc-scrollgrid) {
+        // border-collapse: separate; // Разрешаем отступы между ячейками
+        // border-spacing: 5px; // Задаем сами отступы
+    }
+
+    :global(.fc-scrollgrid),
+    :global(.fc-scrollgrid tr),
+    :global(.fc-daygrid-day) {
+        // border: none;
+    }
+
+    :global(.fc-event) {
+        // 1. Убираем дефолтные стили FullCalendar
+        background-color: transparent !important;
+        border: none !important;
+        cursor: pointer;
+    }
+
+    :global(.fc-event-main) {
+        // 2. Применяем НАШИ стили
+        border-radius: 10px; // Пример скругления
+        padding: 4px;
+
+        // 3. Используем CSS-переменную, которую FullCalendar сам создает из пропа `color`!
+        //    Это самый чистый и правильный способ раскраски.
+        background-color: var(--fc-event-bg-color);
+        color: white; // Делаем текст белым для контраста
+    }
+
+    :global(.fc-event-dragging) {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+}

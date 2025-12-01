@@ -7,7 +7,7 @@
       "listOwnerId": "list-1",
       "isCompleted": false,
       "isFavourite": true,
-      "order": 1764187285541,
+      "order": 1764187285526,
       "startDate": "2025-10-28T21:00:00.001Z",
       "endDate": "2025-11-02T21:00:00.000Z",
       "description": ""
@@ -16,12 +16,12 @@
       "id": "8",
       "title": "Заказать корм для кота1",
       "userOwnerId": "user-1",
-      "startDate": "2025-11-29T21:00:00.001Z",
+      "startDate": "2025-11-30T21:00:00.001Z",
       "listOwnerId": "list-1",
       "isCompleted": false,
-      "isFavourite": false,
+      "isFavourite": true,
       "order": 1764187285536,
-      "endDate": "2025-12-01T21:00:00.000Z",
+      "endDate": "2025-12-02T08:46:33.576Z",
       "description": "ЕСЛИ БУДУТ ПРОБЛЕМЫ С НИЖНИМ ОТСТУПОМ КАК У САЙДБАРА\n\nТО ПЕРЕПИШЕМ ПАНЕЛЬ ПОД RELATIVE\n\n\n\n\n\n"
     },
     {
@@ -295,8 +295,8 @@
       "userOwnerId": "user-1",
       "listOwnerId": "list-1",
       "isCompleted": true,
-      "isFavourite": false,
-      "order": 1616111039515.8628
+      "isFavourite": true,
+      "order": 1764187285538.5
     },
     {
       "id": "16f4",
@@ -306,7 +306,7 @@
       "endDate": "2025-12-01T21:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "list-1",
-      "isCompleted": false,
+      "isCompleted": true,
       "isFavourite": true,
       "order": 1764532121819
     }

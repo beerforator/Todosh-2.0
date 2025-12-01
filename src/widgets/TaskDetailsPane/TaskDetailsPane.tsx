@@ -17,75 +17,46 @@ import { MemoizedTextField } from "@/shared/ui/MemoizedTextField";
 
 import styleP from '@/app/styles/TaskDetailsPane.module.scss'
 import { SetTaskTodayPaneContainer } from "@/features/SetTaskToday/SetTaskTodayPaneContainer";
+import { List, Task } from "@/shared/types/entities";
+
 
 interface TaskDetailsPaneProps {
-    taskId: string,
-    variant: "temporary" | "persistent" | "permanent" | undefined
+    task: Task,
+    allLists: List[],
+    selectedListId: string,
+    variant: "temporary" | "persistent" | "permanent" | undefined,
+
+    handleClose: () => void,
+    handleSave: () => void,
+    handleListChange: (e: any) => void,
+    handleTitleChange: (e: any) => void,
+    handleDescriptionChange: (e: any) => void,
+    // taskDates: () => { start: Date | null | undefined; end: Date | null | undefined; }
+
+    isSettingFetchTasks: boolean
 }
 
-export const TaskDetailsPane = React.memo(({ taskId, variant }: TaskDetailsPaneProps) => {
-    const dispatch: AppDispatch = useDispatch()
-    const editingTask = useSelector((state: RootState) => taskId ? tasksSelectors.selectById(state, taskId) : undefined)
-    const allLists = useSelector(listsSelectors.selectAll);
-
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
-    const [selectedListId, setSelectedListId] = useState('');
-
-    const [setSave, isSettingFetchTasks] = useApiRequest(updateTaskApi, {
-        onFinally: () => { handleClose() }
-    })
-
-    useEffect(() => {
-        if (editingTask) {
-            setTitle(editingTask.title)
-            setDescription(editingTask.description || '')
-            setSelectedListId(editingTask.listOwnerId);
-        } else {
-            handleClose()
-        }
-    }, [editingTask])
-
-    const handleClose = useCallback(() => {
-        dispatch(stopEditingTask())
-    }, [dispatch])
-
-    const handleSave = useCallback(async () => {
-        if (!taskId) return
-
-        const payload = {
-            taskId: taskId,
-            changes: {
-                title: title,
-                description: description,
-                listOwnerId: selectedListId
-            }
-        }
-
-        setSave(payload)
-    }, [taskId, title, description, selectedListId, setSave])
-
-    const handleListChange = useCallback((e: any) => {
-        setSelectedListId(e.target.value)
-    }, [])
-
-    const handleTitleChange = useCallback((e: any) => {
-        setTitle(e.target.value)
-    }, [])
-
-    const handleDescriptionChange = useCallback((e: any) => {
-        setDescription(e.target.value)
-    }, [])
-
+export const TaskDetailsPane = React.memo(({
+    task,
+    allLists,
+    selectedListId,
+    variant,
+    handleClose,
+    handleSave,
+    handleListChange,
+    handleTitleChange,
+    handleDescriptionChange,
+    isSettingFetchTasks
+}: TaskDetailsPaneProps) => {
     const taskDates = useMemo(() => ({
-        start: editingTask?.startDate,
-        end: editingTask?.endDate,
-    }), [editingTask?.startDate, editingTask?.endDate]);
+        start: task.startDate,
+        end: task.endDate,
+    }), [task.startDate, task.endDate]);
 
     return (
         <Drawer
             anchor="right"
-            open={!!taskId}
+            open={!!task.id}
             onClose={handleClose}
             variant={variant}
             className={styleP.drawerStyle}
@@ -94,19 +65,19 @@ export const TaskDetailsPane = React.memo(({ taskId, variant }: TaskDetailsPaneP
                 <PaneHeader handleClose={handleClose} />
 
                 {
-                    editingTask ? (
+                    task ? (
                         <Box component="form" className={styleP.paneContainer}>
                             <div className={styleP.paneBase}>
-                                <ToggleTaskContainer taskId={editingTask.id} />
+                                <ToggleTaskContainer taskId={task.id} />
                                 <div className={styleP.paneBase_field}>
                                     <MemoizedTextField
-                                        value={title}
+                                        value={task.title}
                                         onChange={handleTitleChange}
                                         disabled={isSettingFetchTasks}
                                         rows={1}
                                     />
                                 </div>
-                                <ToggleFavouriteContainer taskId={editingTask.id} />
+                                <ToggleFavouriteContainer taskId={task.id} />
                             </div>
                             <div>
                                 <MemoizedListSelect
@@ -117,14 +88,14 @@ export const TaskDetailsPane = React.memo(({ taskId, variant }: TaskDetailsPaneP
                                 />
                             </div>
                             <div className={styleP.paneDate}>
-                                <SetTaskTodayPaneContainer taskId={editingTask.id} />
+                                <SetTaskTodayPaneContainer taskId={task.id} />
                                 <div className={styleP.dateDivider}></div>
-                                <RemoveTaskDatePaneContainer taskId={editingTask.id} />
+                                <RemoveTaskDatePaneContainer taskId={task.id} />
                             </div>
                             <div className={styleP.paneDescription}>
                                 <ListItemText className={styleP.paneText} primary={"Task description"} />
                                 <MemoizedTextField
-                                    value={description}
+                                    value={task.description}
                                     onChange={handleDescriptionChange}
                                     disabled={isSettingFetchTasks}
                                     multiline
@@ -133,7 +104,7 @@ export const TaskDetailsPane = React.memo(({ taskId, variant }: TaskDetailsPaneP
                             </div>
 
                             <PaneFooter
-                                taskId={editingTask.id}
+                                taskId={task.id}
                                 isSaving={isSettingFetchTasks}
                                 handleSave={handleSave}
                                 taskDates={taskDates}

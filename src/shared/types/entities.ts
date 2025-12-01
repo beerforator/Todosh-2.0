@@ -19,7 +19,7 @@ export interface List {
 export interface Task {
     id: string;
     title: string;
-    description?: string; // Описание может быть, а может и не быть (необязательное поле)
+    description: string; // Описание может быть, а может и не быть (необязательное поле)
 
     startDate?: Date | null;
     endDate?: Date | null;

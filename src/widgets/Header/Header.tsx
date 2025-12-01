@@ -1,6 +1,13 @@
-import { Avatar, Breadcrumbs, InputAdornment, Link, ListItemButton, ListItemIcon, ListItemText, TextField, Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import React from "react";
+import { useCallback, useState } from "react";
+
+import { Breadcrumbs, InputAdornment, Link, TextField, Typography } from "@mui/material";
 import { List as MuiList, Box } from '@mui/material';
+import { BellIcon, InfoIcon, SearchIcon, SettingsIcon, ThemeIcon, UserIcon } from "@/shared/ui/Icons/HeaderIcons";
+
+import styleH from '@/app/styles/Header.module.scss'
+import style from '@/app/styles/IconStyles.module.scss'
+import { HeaderNavLink } from "@/shared/ui/HeaderNavLink";
 
 const breadcrumbs = [
     <Link underline="hover" key="1" color="inherit" href="/">Test User</Link>,
@@ -8,17 +15,7 @@ const breadcrumbs = [
     <Typography key="3" color="text.primary">Today</Typography>,
 ];
 
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-// import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
-import styleH from '@/app/styles/Header.module.scss'
-import style from '@/app/styles/IconStyles.module.scss'
-import { BellIcon, InfoIcon, SearchIcon, SettingsIcon, ThemeIcon, UserIcon } from "@/shared/ui/Icons/HeaderIcons";
-import { MemoizedTextField } from "@/shared/ui/MemoizedTextField";
-import { useCallback, useState } from "react";
-
-export const Header = () => {
+export const Header = React.memo(() => {
     const [searchValue, setSearchValue] = useState('')
 
     const handleSearchChange = useCallback((e: any) => {
@@ -38,13 +35,6 @@ export const Header = () => {
             </div>
             <Box className={'paperBlock ' + styleH.headerPaperBlock}>
                 <MuiList component="nav" className={styleH.nav}>
-                    {/* <TextField
-                        size="small"
-                        placeholder="Search..."
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end"><SearchIcon /></InputAdornment>,
-                        }}
-                    /> */}
 
                     <Box component="form">
                         <TextField
@@ -58,48 +48,34 @@ export const Header = () => {
                             }}
                         />
                     </Box>
-                    <NavLink
-                        to="/dashboard"
-                        className={styleH.navLink}
-                    >
-                        <div className={style.iconContainer}>
-                            <InfoIcon className={style.navIconStyle + ' ' + style.allIconStyle} />
-                        </div>
-                    </NavLink>
-                    <NavLink
-                        to="/dashboard"
-                        className={styleH.navLink}
-                    >
-                        <div className={style.iconContainer}>
-                            <BellIcon className={style.navIconStyle + ' ' + style.allIconStyle} />
-                        </div>
-                    </NavLink>
-                    <NavLink
-                        to="/dashboard"
-                        className={styleH.navLink}
-                    >
-                        <div className={style.iconContainer}>
-                            <ThemeIcon className={style.navIconStyle + ' ' + style.allIconStyle} />
-                        </div>
-                    </NavLink>
-                    <NavLink
-                        to="/dashboard"
-                        className={styleH.navLink}
-                    >
-                        <div className={style.iconContainer}>
-                            <SettingsIcon className={style.navIconStyle + ' ' + style.allIconStyle} />
-                        </div>
-                    </NavLink>
-                    <NavLink
-                        to="/profile"
-                        className={styleH.navLink + ' ' + styleH.navLinkUser}
-                    >
-                        <div className={style.iconContainer}>
-                            <UserIcon className={style.userIconStyle + ' ' + style.allIconStyle} />
-                        </div>
-                    </NavLink>
+                    <HeaderNavLink
+                        path="/profile"
+                        ItemIcon={<InfoIcon className={style.navIconStyle + ' ' + style.allIconStyle} />}
+                        isLogo={false}
+                    />
+                    <HeaderNavLink
+                        path="/profile"
+                        ItemIcon={<BellIcon className={style.navIconStyle + ' ' + style.allIconStyle} />}
+                        isLogo={false}
+                    />
+                    <HeaderNavLink
+                        path="/profile"
+                        ItemIcon={<ThemeIcon className={style.navIconStyle + ' ' + style.allIconStyle} />}
+                        isLogo={false}
+                    />                    
+                    <HeaderNavLink
+                        path="/profile"
+                        ItemIcon={<SettingsIcon className={style.navIconStyle + ' ' + style.allIconStyle} />}
+                        isLogo={false}
+                    />
+                    <HeaderNavLink
+                        path="/profile"
+                        ItemIcon={<UserIcon className={style.userIconStyle + ' ' + style.allIconStyle} />}
+                        isLogo={true}
+                    />
+
                 </MuiList>
             </Box>
         </header>
     );
-};
+})

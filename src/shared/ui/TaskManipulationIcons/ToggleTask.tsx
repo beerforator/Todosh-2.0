@@ -1,8 +1,9 @@
 import React from 'react';
+
 import { Checkbox } from '@mui/material';
+import { ToggleEmptyIcon, ToggleFullIcon } from '../Icons/TaskIcon';
 
 import style from '@/app/styles/IconStyles.module.scss'
-import { ToggleEmptyIcon, ToggleFullIcon } from '../Icons/TaskIcon';
 
 interface ToggleTaskProps {
     size: 'small' | 'medium';
@@ -11,9 +12,7 @@ interface ToggleTaskProps {
     handleToggle: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const ToggleTask = React.memo((props: ToggleTaskProps) => {
-    const { size, isCompleted, isLettingToggle, handleToggle } = props;
-
+export const ToggleTask = React.memo(({size, isCompleted, isLettingToggle, handleToggle}: ToggleTaskProps) => {
     // if (isLettingToggle) {
     //     const spinnerSize = size === 'small' ? 8 : 24
     //     return <CircularProgress

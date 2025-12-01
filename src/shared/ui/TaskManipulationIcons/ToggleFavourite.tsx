@@ -11,9 +11,7 @@ interface ToggleFavouriteProps {
     handleToggle: (e: React.MouseEvent) => void;
 }
 
-export const ToggleFavourite = React.memo((props: ToggleFavouriteProps) => {
-    const { size, isFavourite, isSettingToggle, handleToggle } = props;
-
+export const ToggleFavourite = React.memo(({size, isFavourite, isSettingToggle, handleToggle}: ToggleFavouriteProps) => {
     // if (isSettingToggle) {
     //     const spinnerSize = size === 'small' ? 16 : 16
     //     return <CircularProgress size={spinnerSize} sx={{ p: '12px' }} />;
@@ -31,8 +29,8 @@ export const ToggleFavourite = React.memo((props: ToggleFavouriteProps) => {
                 : style.taskIconStyle}
         >
             {isFavourite
-                ? <StarEmptyIcon />
-                : <StarFullIcon />}
+                ? <StarFullIcon />
+                : <StarEmptyIcon />}
         </IconButton>
     )
 })

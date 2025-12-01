@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
+import { useSelector } from 'react-redux';
+
 import { updateTaskApi } from '../../app/services/taskServices/updateTaskApi';
 import { useApiRequest } from '@/shared/hooks/useApiRequest';
-import { useSelector } from 'react-redux';
 import { tasksSelectors } from '@/app/providers/store/slices/tasksSlice';
 import { RootState } from '@/app/providers/store/types';
 import { ToggleFavourite } from '@/shared/ui/TaskManipulationIcons/ToggleFavourite';

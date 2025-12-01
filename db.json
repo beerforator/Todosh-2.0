@@ -2,14 +2,14 @@
   "tasks": [
     {
       "id": "6",
-      "title": "Оплатить счета за интернет ",
+      "title": "Оплатить счета за интернеты",
       "userOwnerId": "user-1",
       "listOwnerId": "list-1",
       "isCompleted": false,
       "isFavourite": true,
-      "order": 1574649690631.6245,
-      "startDate": "2025-11-12T21:00:00.001Z",
-      "endDate": "2025-11-15T21:00:00.000Z",
+      "order": 1764187285541,
+      "startDate": "2025-10-28T21:00:00.001Z",
+      "endDate": "2025-11-02T21:00:00.000Z",
       "description": ""
     },
     {
@@ -20,7 +20,7 @@
       "listOwnerId": "list-1",
       "isCompleted": false,
       "isFavourite": false,
-      "order": 1764187285551,
+      "order": 1764187285536,
       "endDate": "2025-12-01T21:00:00.000Z",
       "description": "ЕСЛИ БУДУТ ПРОБЛЕМЫ С НИЖНИМ ОТСТУПОМ КАК У САЙДБАРА\n\nТО ПЕРЕПИШЕМ ПАНЕЛЬ ПОД RELATIVE\n\n\n\n\n\n"
     },
@@ -47,18 +47,6 @@
       "order": -233.5,
       "startDate": "2025-11-15T21:00:00.001Z",
       "endDate": "2025-11-17T21:00:00.000Z"
-    },
-    {
-      "id": "c411",
-      "title": "Текст1",
-      "description": "Тестируем описание пишу подлиннее, чтобы ощутить сворачивание Опа Вот оно!",
-      "startDate": "2025-11-22T21:00:00.001Z",
-      "endDate": "2025-11-24T21:00:00.000Z",
-      "userOwnerId": "user-1",
-      "listOwnerId": "list-1",
-      "isCompleted": false,
-      "isFavourite": false,
-      "order": 1764187285531
     },
     {
       "id": "0814",
@@ -129,8 +117,8 @@
       "isCompleted": true,
       "isFavourite": false,
       "order": 1762679887890,
-      "startDate": "2025-11-22T21:00:00.001Z",
-      "endDate": "2025-11-24T21:00:00.000Z"
+      "startDate": "2025-11-28T21:00:00.001Z",
+      "endDate": "2025-11-30T07:02:07.183Z"
     },
     {
       "id": "95f6",
@@ -223,20 +211,8 @@
       "isCompleted": false,
       "isFavourite": false,
       "order": 1762679887910,
-      "startDate": null,
-      "endDate": null
-    },
-    {
-      "id": "42af",
-      "title": "dsadsqsqd11dsa",
-      "description": "",
-      "userOwnerId": "user-1",
-      "listOwnerId": "list-1",
-      "isCompleted": false,
-      "isFavourite": false,
-      "order": 1622034089356.4683,
-      "startDate": "2025-11-27T21:00:00.001Z",
-      "endDate": "2025-11-29T06:09:06.876Z"
+      "startDate": "2025-11-28T21:00:00.001Z",
+      "endDate": "2025-11-30T07:02:08.174Z"
     },
     {
       "id": "6c0e",
@@ -318,9 +294,21 @@
       "endDate": "2025-11-29T06:09:05.522Z",
       "userOwnerId": "user-1",
       "listOwnerId": "list-1",
-      "isCompleted": false,
+      "isCompleted": true,
       "isFavourite": false,
-      "order": 1598341889994.0464
+      "order": 1616111039515.8628
+    },
+    {
+      "id": "16f4",
+      "title": "Задачи по проге на завтра",
+      "description": "Первая часть дня будет посвящена настройке и работе с кодом\n1. заглушки страниц (профиль + настройки, страница приветствия, страница логина, дашборд) + стейт, особое отображение сайдбара в профиле\n2. улучшению стейта (запоминание настроек пользователя, открытия и закрытия нескольких элементов)\n*3. Желательно допилить функционал панели задач\n\nВторая часть дня - творческая\n1. константы: типы для умных списков, новые цвета листов, новые цвета фонов\n2. дизайны для календаря\n3. дизайны для дашборда\n4. дизайны для профиля\n5. дизайны для страницы знакомства",
+      "startDate": "2025-11-30T21:00:00.001Z",
+      "endDate": "2025-12-01T21:00:00.000Z",
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-1",
+      "isCompleted": false,
+      "isFavourite": true,
+      "order": 1764532121819
     }
   ],
   "lists": [
@@ -332,7 +320,7 @@
     },
     {
       "id": "list-1",
-      "name": "Покупки",
+      "name": "ПокупкN",
       "userOwnerId": "user-1",
       "color": "#F44336"
     },

@@ -1,6 +1,7 @@
 import React from 'react';
+
 import { Task } from '@/shared/types/entities';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { DraggableAttributes } from '@dnd-kit/core';
 import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import { DataLogicFormatRender } from '../../../shared/lib/formatDateRender';
@@ -10,14 +11,16 @@ import styleT from '@/app/styles/MainContentStyles/TasksPage.module.scss'
 interface TaskCardProps {
     task: Task,
     color?: string,
+    isPanePersistent: boolean,
+
     featureSlot?: React.ReactNode,
     actionsSlot?: React.ReactNode,
-    isDragging: boolean,
     hoverActionsSlot?: React.ReactNode,
+
+    isDragging: boolean,
     dndAttributes?: DraggableAttributes,
     dndListeners?: SyntheticListenerMap | undefined,
     isHovered: boolean,
-    isPanePersistent: boolean
 }
 
 export const TaskCard = React.memo(({ task, color, featureSlot, actionsSlot, isDragging, hoverActionsSlot, dndAttributes, dndListeners, isHovered, isPanePersistent }: TaskCardProps) => {
@@ -41,7 +44,6 @@ export const TaskCard = React.memo(({ task, color, featureSlot, actionsSlot, isD
                     {featureSlot}
 
                     <div
-                        // style={contentStyles}
                         className={styleT.taskCard_textContent}
                         {...dndAttributes}
                         {...dndListeners}
@@ -94,20 +96,10 @@ interface TaskTitleProps {
 }
 
 export const TaskText = (props: TaskTitleProps) => {
-    const { text, isCompleted, variant, type } = props
+    const { text, isCompleted, type } = props
 
     return (
         <Typography
-            // variant={variant}
-            // sx={{
-            //     ml: 1,
-            //     whiteSpace: 'nowrap',
-            //     overflow: 'hidden',
-            //     textOverflow: 'ellipsis',
-            //     textDecoration: isCompleted ? 'line-through' : 'none',
-            //     opacity: isCompleted ? 0.6 : 1,
-            //     flexGrow: 1
-            // }}
             className={styleT.cardItemText}
             style={type === 'title' ? { maxWidth: '250px' } : { maxWidth: '330px', fontSize: '10px' }}
         >

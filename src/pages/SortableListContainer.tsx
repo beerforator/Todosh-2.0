@@ -14,10 +14,7 @@ interface SortableListContainerProps {
     disabled?: boolean
 }
 
-export const SortableListContainer = (props: SortableListContainerProps) => {
-    const { items, onDragEnd, children, disabled = false } = props;
-
-
+export const SortableListContainer = ({items, onDragEnd, children, disabled = false}: SortableListContainerProps) => {
     const sensors = useSensors(
         useSensor(PointerSensor),
         useSensor(KeyboardSensor)

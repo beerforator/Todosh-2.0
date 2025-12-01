@@ -1,4 +1,3 @@
-// src/widgets/ListHeader/ListHeader.tsx
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '@/app/providers/store/types';
@@ -23,27 +22,22 @@ import { AllTasksIcon, InboxIcon, TodayIcon } from '@/shared/ui/Icons/SidebarIco
 import { MoreIcon } from '@/shared/ui/Icons/HeaderIcons';
 
 export const ListHeader = React.memo(() => {
-    // console.log('ListHeader')
     const dispatch: AppDispatch = useDispatch();
 
-    // Получаем ID текущего списка и сам объект списка
     const selectedListId = useSelector((state: RootState) => state.lists.selectedListId);
     const selectedList = useSelector((state: RootState) =>
         selectedListId ? listsSelectors.selectById(state, selectedListId) : undefined
     );
 
-    // Состояние для редактирования названия
     const [isEditing, setIsEditing] = useState(false);
     const [listName, setListName] = useState('');
-
     const [colorPickerAnchorEl, setColorPickerAnchorEl] = useState<null | HTMLElement>(null);
-
-    // Состояние для меню "три точки"
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const isMenuOpen = Boolean(anchorEl);
-
     const [isLoading, setIsLoading] = useState(false)
+
     const [setUpdateList, isSettingUpdateList] = useApiRequest(updateListApi, {})
+
+    const isMenuOpen = Boolean(anchorEl);
 
     useEffect(() => {
         if (selectedList) {
@@ -80,7 +74,6 @@ export const ListHeader = React.memo(() => {
             setIsLoading(true);
             try {
                 await dispatch(deleteListApi(selectedList.id)).unwrap();
-                // После успешного удаления, переключаемся на "Все задачи" для лучшего UX
                 dispatch(selectList(ALL_TASKS_LIST_ID));
             } catch (error) {
                 console.error('Failed to delete list:', error);
@@ -111,7 +104,6 @@ export const ListHeader = React.memo(() => {
 
     const handleOpenColorPicker = (event: React.MouseEvent<HTMLElement>) => {
         setColorPickerAnchorEl(event.currentTarget);
-        // handleCloseMenu(); // Закрываем основное меню
     };
     const handleCloseColorPicker = () => {
         setColorPickerAnchorEl(null);
@@ -129,7 +121,6 @@ export const ListHeader = React.memo(() => {
         handleCloseMenu();
     };
 
-    // ИСПРАВЛЕННАЯ ВЕРСИЯ:
     if (selectedListId === 'all') {
         return (
             <>
@@ -163,24 +154,9 @@ export const ListHeader = React.memo(() => {
         )
     }
 
-    // Показываем "Загрузку", только если ID есть, а самого объекта листа еще нет
     if (!selectedList) {
         return <Typography variant="h4" gutterBottom>Загрузка...</Typography>
     }
-
-    const modalStyles = {
-        position: 'absolute' as 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-    };
-
-    // + ' ' + styleT.glass
 
     return (
         <>
@@ -227,19 +203,16 @@ export const ListHeader = React.memo(() => {
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
-                <Box sx={{ display: 'flex', p: 1, gap: 1 }}> {/* Добавил gap для отступов */}
+                <Box sx={{ display: 'flex', p: 1, gap: 1 }}>
                     {TAG_COLORS.map(color => (
                         <IconButton
                             key={color}
                             onClick={() => handleColorSelect(color)}
-                            // 1. КОПИРУЕМ СТИЛИ ИЗ МОДАЛЬНОГО ОКНА ПРЯМО СЮДА
                             sx={{
                                 width: 32,
                                 height: 32,
                                 backgroundColor: color,
-                                // Добавляем подсветку для текущего цвета списка
                                 border: selectedList?.color === color ? '2px solid #000' : '2px solid transparent',
-                                // Убираем стандартное поведение затемнения при наведении для красоты
                                 '&:hover': {
                                     backgroundColor: color,
                                     opacity: 0.8

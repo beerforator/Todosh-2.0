@@ -1,30 +1,27 @@
-// src/entities/Task/ui/SortableTaskCard.tsx
 import React, { useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
+
 import { Task } from '@/shared/types/entities';
 import { useSortable } from '@dnd-kit/sortable';
 import { TaskCard } from './ui/TaskCard';
 import { RootState } from '@/app/providers/store/types';
-import { useSelector } from 'react-redux';
 import { listsSelectors } from '@/app/providers/store/slices/listsSlice';
 
-// Описываем, какие пропсы принимает наш компонент
 interface SortableTaskCardProps {
-    task: Task;
-    color?: string;
-    // "Слот" - это место, куда мы сможем вставить другую JSX-разметку.
-    // Сюда мы позже вставим наш "умный" чекбокс из слоя features.
-    featureSlot?: React.ReactNode;
-    actionsSlot?: React.ReactNode;
-    hoverActionsSlot?: React.ReactNode;
-    isPanePersistent: boolean
+    task: Task,
+    isPanePersistent: boolean,
+
+    featureSlot: React.ReactNode,
+    actionsSlot: React.ReactNode,
+    hoverActionsSlot: React.ReactNode
 }
 
-export const SortableTaskCard = React.memo(({ task, color, ...props }: SortableTaskCardProps) => {
-    const [isHovered, setIsHovered] = useState(false);
-
+export const SortableTaskCard = React.memo(({ task, isPanePersistent, featureSlot, actionsSlot, hoverActionsSlot }: SortableTaskCardProps) => {
     const selectedList = useSelector((state: RootState) =>
         task.listOwnerId ? listsSelectors.selectById(state, task.listOwnerId) : undefined
     );
+
+    const [isHovered, setIsHovered] = useState(false);
 
     const handleMouseEnter = useCallback(() => {
         setIsHovered(true)
@@ -51,22 +48,29 @@ export const SortableTaskCard = React.memo(({ task, color, ...props }: SortableT
         // opacity: isDragging ? 0 : 1,
     };
 
-    const placeholderStyle: React.CSSProperties = {
-        backgroundColor: '#e0e0e0',
-        border: '1px dashed #999',
-        opacity: 0.6,
-    };
-
     return (
-        // Мы "оборачиваем" нашу TaskCard в div, к которому применяем все магические атрибуты
         <div
             ref={setNodeRef}
-            style={style}
             {...attributes}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+
+            style={style} // !!!
         >
-            <TaskCard task={task} color={selectedList?.color} isDragging={isDragging}{...props} dndAttributes={attributes} dndListeners={listeners} isHovered={isHovered} />
+            <TaskCard
+                task={task}
+                color={selectedList?.color}
+                isPanePersistent={isPanePersistent}
+
+                featureSlot={featureSlot}
+                actionsSlot={actionsSlot}
+                hoverActionsSlot={hoverActionsSlot}
+
+                isDragging={isDragging}
+                dndAttributes={attributes}
+                dndListeners={listeners}
+                isHovered={isHovered}
+            />
         </div>
     );
 })

@@ -1,10 +1,11 @@
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { useCallback } from 'react';
+
 import { updateTaskApi } from '../../app/services/taskServices/updateTaskApi';
 import { useApiRequest } from '@/shared/hooks/useApiRequest';
-import { useCallback } from 'react';
 import { tasksSelectors } from '@/app/providers/store/slices/tasksSlice';
 import { RootState } from '@/app/providers/store/types';
-import { useSelector } from 'react-redux';
-import React from 'react';
 import { ToggleTask } from '@/shared/ui/TaskManipulationIcons/ToggleTask';
 
 interface ToggleTaskContainerProps {

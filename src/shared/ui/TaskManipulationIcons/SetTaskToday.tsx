@@ -1,6 +1,6 @@
 import React from "react";
-import { CircularProgress, IconButton } from '@mui/material';
-import TodayIcon from '@mui/icons-material/Today';
+
+import { IconButton } from '@mui/material';
 import { TodayTaskIcon } from "../Icons/TaskIcon";
 
 import style from '@/app/styles/IconStyles.module.scss'
@@ -10,9 +10,7 @@ interface SetTaskTodayProps {
     isSettingTaskOnToday: boolean
 }
 
-export const SetTaskToday = React.memo((props: SetTaskTodayProps) => {
-    const { handleSetToday, isSettingTaskOnToday } = props;
-
+export const SetTaskToday = React.memo(({ handleSetToday, isSettingTaskOnToday }: SetTaskTodayProps) => {
     // if (isSettingTaskOnToday) {
     //     const spinnerSize = 8
     //     return <CircularProgress size={spinnerSize} style={{ margin: '12px' }} />

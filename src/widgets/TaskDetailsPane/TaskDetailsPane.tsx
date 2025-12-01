@@ -20,11 +20,10 @@ import { SetTaskTodayPaneContainer } from "@/features/SetTaskToday/SetTaskTodayP
 
 interface TaskDetailsPaneProps {
     taskId: string,
-    width: number;
     variant: "temporary" | "persistent" | "permanent" | undefined
 }
 
-export const TaskDetailsPane = React.memo(({ taskId, width, variant }: TaskDetailsPaneProps) => {
+export const TaskDetailsPane = React.memo(({ taskId, variant }: TaskDetailsPaneProps) => {
     const dispatch: AppDispatch = useDispatch()
     const editingTask = useSelector((state: RootState) => taskId ? tasksSelectors.selectById(state, taskId) : undefined)
     const allLists = useSelector(listsSelectors.selectAll);
@@ -106,14 +105,16 @@ export const TaskDetailsPane = React.memo(({ taskId, width, variant }: TaskDetai
                                         disabled={isSettingFetchTasks}
                                         rows={1}
                                     />
-                                    {/* <MemoizedListSelect
-                                        value={selectedListId}
-                                        onChange={handleListChange}
-                                        disabled={isSettingFetchTasks}
-                                        lists={allLists}
-                                    /> */}
                                 </div>
                                 <ToggleFavouriteContainer taskId={editingTask.id} />
+                            </div>
+                            <div>
+                                <MemoizedListSelect
+                                    value={selectedListId}
+                                    onChange={handleListChange}
+                                    disabled={isSettingFetchTasks}
+                                    lists={allLists}
+                                />
                             </div>
                             <div className={styleP.paneDate}>
                                 <SetTaskTodayPaneContainer taskId={editingTask.id} />
@@ -136,7 +137,7 @@ export const TaskDetailsPane = React.memo(({ taskId, width, variant }: TaskDetai
                                 isSaving={isSettingFetchTasks}
                                 handleSave={handleSave}
                                 taskDates={taskDates}
-                                // className={styleP.paneFooter}
+                            // className={styleP.paneFooter}
                             />
                         </Box>
                     ) : (

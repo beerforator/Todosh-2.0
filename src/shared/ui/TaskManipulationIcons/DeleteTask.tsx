@@ -1,6 +1,6 @@
-import { CircularProgress, IconButton } from "@mui/material";
 import React from "react";
-import DeleteIcon from '@mui/icons-material/Delete';
+
+import { CircularProgress, IconButton } from "@mui/material";
 import { TrashIcon } from "../Icons/TaskIcon";
 
 import style from '@/app/styles/IconStyles.module.scss'

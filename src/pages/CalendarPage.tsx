@@ -25,6 +25,7 @@ import styleC from '@/app/styles/MainContentStyles/CalendarPage.module.scss'
 import styleMC from '@/app/styles/MainContentStyles/MainContent.module.scss'
 
 import { AllTasksIcon } from '@/shared/ui/Icons/SidebarIcons';
+import { TaskCardCalendarProvider } from '@/entities/Task/TaskCardCalendarProvider';
 
 export const CalendarPage = () => {
     // console.log('CalendarPage')
@@ -80,7 +81,9 @@ export const CalendarPage = () => {
                     //     ? allLists.find(l => l.id === task.listOwnerId)?.color
                     //     : '#000000',
                     extendedProps: {
-                        task
+                        task,
+                        selectedListId,
+                        isSettingUpdateDates
                     },
                     allDay: true
                 }
@@ -144,10 +147,18 @@ export const CalendarPage = () => {
 
     // Рендер эвента
 
+//    const selectedList = useSelector((state: RootState) =>
+//         selectedListId ? listsSelectors.selectById(state, selectedListId) : undefined
+//     );
+
     const renderEventContent = (eventInfo: EventContentArg) => {
         const task: Task = eventInfo.event.extendedProps.task
 
         if (isSettingUpdateDates) return
+
+        // const color = allTasks.find(t => t.id === task.id)?.listOwnerId
+        //     ? allLists.find(l => l.id === task.listOwnerId)?.color
+        //     : '#000000',
 
         return (
             <div className={styleC.calendarEvent}>
@@ -176,7 +187,7 @@ export const CalendarPage = () => {
 
     // alert()
 
-    /* 
+    /* ПРАВКИ
     
     Сделаны общие стили - вынес что-то в AppRouter, что-то в родительские компоненты. 
     
@@ -186,6 +197,8 @@ export const CalendarPage = () => {
     внешний вид календаря поприятнее, переопределить сильнее его базовые стили.
     
     ВАЖНО! Календарь не растягивается при сворачивании сайдбара
+
+    ВАЖНО!! При перемещении и растягивании задачи они не отрисовываются
 
     */
 
@@ -225,7 +238,7 @@ export const CalendarPage = () => {
 
                     // Кастомный контент
                     ref={calendarRef}
-                    eventContent={renderEventContent}
+                    eventContent={TaskCardCalendarProvider}
                 />
                 {isModalOpen && (
                     <CalendarCreateModal

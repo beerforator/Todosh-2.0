@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { List as MuiList, Box } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-
 import { useDispatch, useSelector } from 'react-redux';
 import { ALL_TASKS_LIST_ID, listsSelectors, selectList } from '@/app/providers/store/slices/listsSlice';
 import { AppDispatch, RootState } from '@/app/providers/store/types';
@@ -47,6 +46,11 @@ export const UnifiedSidebar = React.memo(() => {
 
     const handleToggleCollapse = useCallback(() => {
         setIsCollapsed(prev => !prev)
+        
+        // Костыль !!!
+        setTimeout(() => {
+            window.dispatchEvent(new Event('resize'));
+        }, 110);
     }, []);
 
     const handleHover = useCallback(() => {

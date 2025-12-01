@@ -1,7 +1,8 @@
-import { useCallback } from 'react';
-import { AppDispatch } from '@/app/providers/store/types';
-import { useDispatch } from 'react-redux';
 import React from 'react';
+import { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { AppDispatch } from '@/app/providers/store/types';
 import { startEditingTask } from '@/app/services/UISlice/UISlice';
 import { ToggleEditPane } from '@/shared/ui/TaskManipulationIcons/ToggleEditPane';
 

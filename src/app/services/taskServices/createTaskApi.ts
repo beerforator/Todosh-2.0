@@ -29,6 +29,8 @@ export const createTaskApi = createAsyncThunk<Task, CreateTaskArg>(
             order: Date.now()
         }
 
+        console.log(newTaskData)
+
         try {
             const response = await baseApi.post<Task>(`tasks/`, newTaskData)
             return response

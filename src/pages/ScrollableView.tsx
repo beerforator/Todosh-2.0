@@ -55,8 +55,6 @@ export const ScrollableView = React.memo(({ viewType, tasksContainerRef, tasksAr
 
     const emptyRows = useEmptyRows(tasksContainerRef, tasksInList);
 
-    console.log(emptyRows)
-
     return (
         <>
             {(viewType === "list" && !!tasksArray) &&
@@ -74,7 +72,6 @@ export const ScrollableView = React.memo(({ viewType, tasksContainerRef, tasksAr
                             <MemoizedTaskCardWrapper
                                 key={task.id}
                                 task={task}
-                                color={selectedListId}
                                 isPanePersistent={isPanePersistent}
                             />
                         ))}
@@ -96,7 +93,6 @@ export const ScrollableView = React.memo(({ viewType, tasksContainerRef, tasksAr
                                 <MemoizedTaskCardWrapper
                                     key={task.id}
                                     task={task}
-                                    color={selectedListId}
                                     isPanePersistent={isPanePersistent}
                                 />
                             ))}

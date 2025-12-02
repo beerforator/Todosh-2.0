@@ -28,6 +28,7 @@ import { AddPlusIcon } from "@/shared/ui/Icons/SidebarIcons"
 import { useEmptyRows } from "@/shared/hooks/useEmptyRows"
 import { EmptyTaskRow } from "@/shared/ui/EmptyRows/EmptyRow"
 import { ScrollableView } from "./ScrollableView"
+import { isToday } from "@/shared/lib/dataFunctions"
 
 type ListView = {
     type: 'list';
@@ -69,14 +70,14 @@ export const TasksPage = () => {
     // Рендер
 
     const formattedTasks = useMemo((): ViewContent => {
-        const isToday = (someDate: Date | null | undefined): boolean => {
-            if (!someDate) return false;
-            const today = new Date();
-            const date = new Date(someDate);
-            return date.getDate() === today.getDate() &&
-                date.getMonth() === today.getMonth() &&
-                date.getFullYear() === today.getFullYear();
-        };
+        // const isToday = (someDate: Date | null | undefined): boolean => {
+        //     if (!someDate) return false;
+        //     const today = new Date();
+        //     const date = new Date(someDate);
+        //     return date.getDate() === today.getDate() &&
+        //         date.getMonth() === today.getMonth() &&
+        //         date.getFullYear() === today.getFullYear();
+        // };
 
         if (selectedListId === ALL_TASKS_LIST_ID) {
             const groupedTasks = allLists.reduce((acc, list) => {
@@ -98,7 +99,7 @@ export const TasksPage = () => {
         }
 
         if (selectedListId === TODAY_TASKS_LIST_ID) {
-            const tasks = allTasks.filter(task => isToday(task.startDate)).slice().sort((a, b) => a.order - b.order);
+            const tasks = allTasks.filter(task => isToday(task.startDate, task.endDate)).slice().sort((a, b) => a.order - b.order);
             return { type: 'list', content: tasks, isDndEnabled: false };
         }
 

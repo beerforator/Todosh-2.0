@@ -27,10 +27,13 @@
     border-radius: 11px;
     border-bottom-right-radius: 12px;
     border-top-right-radius: 12px;
+    background-color: $color-paper-block;
     // border: 1px solid $color-border;
 
     padding-left: 3*$spacing1;
     // margin-right: $spacing4;
+
+    transition: transform .1s ease-in-out;
 }
 
 .draggableTask {

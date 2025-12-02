@@ -2,34 +2,34 @@
   "tasks": [
     {
       "id": "6",
-      "title": "Оплатить счета за интернеты",
+      "title": "1",
       "userOwnerId": "user-1",
-      "listOwnerId": "list-1",
+      "listOwnerId": "8ae0",
       "isCompleted": false,
       "isFavourite": true,
-      "order": 1764187285526,
-      "startDate": "2025-10-28T21:00:00.001Z",
-      "endDate": "2025-11-02T21:00:00.000Z",
+      "order": 1764359703677.5,
+      "startDate": null,
+      "endDate": null,
       "description": ""
     },
     {
       "id": "8",
-      "title": "Заказать корм для кота1",
+      "title": "Заказать корм для котичка",
       "userOwnerId": "user-1",
-      "startDate": "2025-11-30T21:00:00.001Z",
+      "startDate": "2025-12-01T21:00:00.001Z",
       "listOwnerId": "list-1",
       "isCompleted": false,
-      "isFavourite": true,
-      "order": 1764187285536,
-      "endDate": "2025-12-02T08:46:33.576Z",
-      "description": "ЕСЛИ БУДУТ ПРОБЛЕМЫ С НИЖНИМ ОТСТУПОМ КАК У САЙДБАРА\n\nТО ПЕРЕПИШЕМ ПАНЕЛЬ ПОД RELATIVE\n\n\n\n\n\n"
+      "isFavourite": false,
+      "order": 1764445912708.25,
+      "endDate": "2025-12-03T18:34:15.382Z",
+      "description": "Текст немного покороче\n"
     },
     {
       "id": "ff98",
       "title": "Доделать приложение",
       "description": "1. Сделать выбор даты окончания задачи (растягивание задачи)\n2. Запоминать сортировку\n3. Добавление листов",
-      "startDate": "2025-11-29T21:00:00.001Z",
-      "endDate": "2025-12-01T21:00:00.000Z",
+      "startDate": null,
+      "endDate": null,
       "userOwnerId": "user-1",
       "listOwnerId": "list-2",
       "isCompleted": true,
@@ -110,15 +110,15 @@
     },
     {
       "id": "7c18",
-      "title": "Вот пишу чтобы быdqqло больше разных задач",
+      "title": "Вот пишу чтобы ффвйв",
       "description": "qdq\ndq\n11\ndw\n",
       "userOwnerId": "user-1",
-      "listOwnerId": "list-inbox",
+      "listOwnerId": "1e3a",
       "isCompleted": true,
       "isFavourite": false,
       "order": 1762679887890,
-      "startDate": "2025-11-28T21:00:00.001Z",
-      "endDate": "2025-11-30T07:02:07.183Z"
+      "startDate": "2025-12-01T21:00:00.001Z",
+      "endDate": "2025-12-03T18:24:30.717Z"
     },
     {
       "id": "95f6",
@@ -129,8 +129,8 @@
       "isCompleted": false,
       "isFavourite": true,
       "order": 1762680003690,
-      "startDate": "2025-11-01T21:00:00.001Z",
-      "endDate": "2025-11-03T21:00:00.000Z"
+      "startDate": "2025-11-02T21:00:00.001Z",
+      "endDate": "2025-11-04T21:00:00.000Z"
     },
     {
       "id": "ba69",
@@ -161,7 +161,7 @@
       "title": "Будет обертка и разметка",
       "description": "",
       "userOwnerId": "user-1",
-      "listOwnerId": "list-inbox",
+      "listOwnerId": "8acf",
       "isCompleted": false,
       "isFavourite": false,
       "order": 1762680051073,
@@ -200,14 +200,16 @@
       "listOwnerId": "list-inbox",
       "isCompleted": true,
       "isFavourite": false,
-      "order": 1762680084297
+      "order": 1762680084297,
+      "startDate": "2025-12-01T21:00:00.001Z",
+      "endDate": "2025-12-03T18:32:27.946Z"
     },
     {
       "id": "f183",
       "title": "Кстати стили будет идти через SCSS - модули и обязательно разделены на файлы",
       "description": "",
       "userOwnerId": "user-1",
-      "listOwnerId": "list-inbox",
+      "listOwnerId": "1e3a",
       "isCompleted": false,
       "isFavourite": false,
       "order": 1762679887910,
@@ -287,28 +289,16 @@
       "endDate": "2025-11-29T17:29:45.019Z"
     },
     {
-      "id": "a899",
-      "title": "New buy",
-      "description": "",
-      "startDate": "2025-11-27T21:00:00.001Z",
-      "endDate": "2025-11-29T06:09:05.522Z",
-      "userOwnerId": "user-1",
-      "listOwnerId": "list-1",
-      "isCompleted": true,
-      "isFavourite": true,
-      "order": 1764187285538.5
-    },
-    {
       "id": "16f4",
       "title": "Задачи по проге на завтра",
       "description": "Первая часть дня будет посвящена настройке и работе с кодом\n1. заглушки страниц (профиль + настройки, страница приветствия, страница логина, дашборд) + стейт, особое отображение сайдбара в профиле\n2. улучшению стейта (запоминание настроек пользователя, открытия и закрытия нескольких элементов)\n*3. Желательно допилить функционал панели задач\n\nВторая часть дня - творческая\n1. константы: типы для умных списков, новые цвета листов, новые цвета фонов\n2. дизайны для календаря\n3. дизайны для дашборда\n4. дизайны для профиля\n5. дизайны для страницы знакомства",
-      "startDate": "2025-11-30T21:00:00.001Z",
-      "endDate": "2025-12-01T21:00:00.000Z",
+      "startDate": "2025-12-01T21:00:00.001Z",
+      "endDate": "2025-12-03T18:31:43.676Z",
       "userOwnerId": "user-1",
       "listOwnerId": "list-1",
-      "isCompleted": true,
+      "isCompleted": false,
       "isFavourite": true,
-      "order": 1764532121819
+      "order": 1764445912718.25
     }
   ],
   "lists": [

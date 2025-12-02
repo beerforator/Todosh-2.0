@@ -12,6 +12,7 @@ interface TaskCardProps {
     task: Task,
     color?: string,
     isPanePersistent: boolean,
+    editingTaskId: string,
 
     featureSlot?: React.ReactNode,
     actionsSlot?: React.ReactNode,
@@ -23,15 +24,19 @@ interface TaskCardProps {
     isHovered: boolean,
 }
 
-export const TaskCard = React.memo(({ task, color, featureSlot, actionsSlot, isDragging, hoverActionsSlot, dndAttributes, dndListeners, isHovered, isPanePersistent }: TaskCardProps) => {
+export const TaskCard = React.memo(({ task, color, featureSlot, actionsSlot, isDragging, hoverActionsSlot, dndAttributes, dndListeners, isHovered, isPanePersistent, editingTaskId }: TaskCardProps) => {
     return (
         <div className={isDragging
             ? (styleT.draggableTask + ' ' + styleT.taskCard_color_container)
             : (styleT.taskCard_color_container)
         }
             style={color === '#808080'
-                ? { backgroundColor: '#F1FAFF' }
-                : { backgroundColor: color }}
+                ? editingTaskId === task.id ? { transform: 'scale(1.02)', backgroundColor: '#F1FAFF' } : { backgroundColor: '#F1FAFF' }
+                : editingTaskId === task.id ? { transform: 'scale(1.02)', backgroundColor: color} : { backgroundColor: color }}
+
+            // style={
+            //     editingTaskId === task.id ? { transform: 'scale(1.02)' } : {}
+            // }
         >
             <div
                 className={'paperBlock ' + styleT.taskCard_container}

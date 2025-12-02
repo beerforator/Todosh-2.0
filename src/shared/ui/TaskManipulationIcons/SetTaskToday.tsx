@@ -7,10 +7,11 @@ import style from '@/app/styles/IconStyles.module.scss'
 
 interface SetTaskTodayProps {
     handleSetToday: (e: React.MouseEvent) => void;
-    isSettingTaskOnToday: boolean
+    isSettingTaskOnToday: boolean,
+    disabled?: boolean
 }
 
-export const SetTaskToday = React.memo(({ handleSetToday, isSettingTaskOnToday }: SetTaskTodayProps) => {
+export const SetTaskToday = React.memo(({ handleSetToday, isSettingTaskOnToday, disabled }: SetTaskTodayProps) => {
     // if (isSettingTaskOnToday) {
     //     const spinnerSize = 8
     //     return <CircularProgress size={spinnerSize} style={{ margin: '12px' }} />
@@ -19,7 +20,7 @@ export const SetTaskToday = React.memo(({ handleSetToday, isSettingTaskOnToday }
     return (
         <IconButton
             onClick={handleSetToday}
-            disabled={isSettingTaskOnToday}
+            disabled={isSettingTaskOnToday || disabled}
             className={style.taskIconStyle}
         >
             <TodayTaskIcon />

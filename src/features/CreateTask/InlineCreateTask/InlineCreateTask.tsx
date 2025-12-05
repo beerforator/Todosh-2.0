@@ -7,6 +7,7 @@ import style from '@/app/styles/IconStyles.module.scss'
 import styleT from '@/app/styles/MainContentStyles/TasksPage.module.scss'
 import { AddPlusIcon } from "@/shared/ui/Icons/SidebarIcons";
 import { TaskText } from "@/entities/Task/ui/TaskCard";
+import { SMART_LIST_IDS } from "@/shared/config/smartLists";
 
 interface InlineCreateTaskProps {
     listId: string | null;
@@ -30,7 +31,7 @@ export const InlineCreateTask = ({ listId, onClose, onClick, isFormVisible }: In
 
         let listOwnerId
 
-        if (listId === 'all' || listId === 'today')
+        if (listId === SMART_LIST_IDS.ALL || listId === SMART_LIST_IDS.TODAY)
             listOwnerId = ''
         else
             listOwnerId = listId
@@ -38,10 +39,12 @@ export const InlineCreateTask = ({ listId, onClose, onClick, isFormVisible }: In
         let startDate = undefined
         let endDate = undefined
 
-        if (listId === 'today') {
+        if (listId === SMART_LIST_IDS.TODAY) {
             const today = new Date();
             endDate = new Date(today);
             startDate = today
+
+            console.log(`Data for filter Today is \n${startDate} \n${endDate}`)
         }
 
         let payload = {

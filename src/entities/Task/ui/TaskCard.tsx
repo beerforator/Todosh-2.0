@@ -4,7 +4,7 @@ import { Task } from '@/shared/types/entities';
 import { Typography } from '@mui/material';
 import { DraggableAttributes } from '@dnd-kit/core';
 import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
-import { DataLogicFormatRender } from '../../../shared/lib/formatDateRender';
+import { DataLogicFormatRender } from '../../../shared/ui/formatDateRender';
 
 import styleT from '@/app/styles/MainContentStyles/TasksPage.module.scss'
 

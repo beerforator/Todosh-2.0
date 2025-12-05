@@ -13,18 +13,6 @@
       "description": ""
     },
     {
-      "id": "8",
-      "title": "Заказать корм для котичка",
-      "userOwnerId": "user-1",
-      "startDate": "2025-12-01T21:00:00.001Z",
-      "listOwnerId": "list-1",
-      "isCompleted": false,
-      "isFavourite": false,
-      "order": 1764445912708.25,
-      "endDate": "2025-12-03T18:34:15.382Z",
-      "description": "Текст немного покороче\n"
-    },
-    {
       "id": "ff98",
       "title": "Доделать приложение",
       "description": "1. Сделать выбор даты окончания задачи (растягивание задачи)\n2. Запоминать сортировку\n3. Добавление листов",
@@ -125,7 +113,7 @@
       "title": "Будем тестировать производительнстqьasc",
       "description": "xdaqsdcaaqwdqsdsacqsdqdqscsaqsdqdaq",
       "userOwnerId": "user-1",
-      "listOwnerId": "list-inbox",
+      "listOwnerId": "list-2",
       "isCompleted": false,
       "isFavourite": true,
       "order": 1762680003690,
@@ -291,14 +279,136 @@
     {
       "id": "16f4",
       "title": "Задачи по проге на завтра",
-      "description": "Первая часть дня будет посвящена настройке и работе с кодом\n1. заглушки страниц (профиль + настройки, страница приветствия, страница логина, дашборд) + стейт, особое отображение сайдбара в профиле\n2. улучшению стейта (запоминание настроек пользователя, открытия и закрытия нескольких элементов)\n*3. Желательно допилить функционал панели задач\n\nВторая часть дня - творческая\n1. константы: типы для умных списков, новые цвета листов, новые цвета фонов\n2. дизайны для календаря\n3. дизайны для дашборда\n4. дизайны для профиля\n5. дизайны для страницы знакомства",
-      "startDate": "2025-12-01T21:00:00.001Z",
-      "endDate": "2025-12-03T18:31:43.676Z",
+      "description": "Первая часть дня будет посвящена настройке и работе с кодом\n[ ] 1. заглушки страниц (профиль + настройки, страница приветствия, страница логина, дашборд) + стейт, особое отображение сайдбара в профиле\n[+] 2. улучшению стейта (запоминание настроек пользователя, открытия и закрытия нескольких элементов)\n[+] *3. Желательно допилить функционал панели задач\n \nВторая часть дня - творческая\n[ ] 1. константы: типы для умных списков, новые цвета листов, новые цвета фонов\n[ ] 2. дизайны для календаря\n[ ] 3. дизайны для дашборда\n[ ] 4. дизайны для профиля\n[ ] 5. дизайны для страницы знакомства",
+      "startDate": "2025-12-03T21:00:00.001Z",
+      "endDate": "2025-12-04T21:00:00.000Z",
       "userOwnerId": "user-1",
       "listOwnerId": "list-1",
       "isCompleted": false,
       "isFavourite": true,
-      "order": 1764445912718.25
+      "order": 1764687010010.625
+    },
+    {
+      "id": "3188",
+      "title": "a",
+      "description": "",
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-inbox",
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 1764921509264
+    },
+    {
+      "id": "8a8e",
+      "title": ",",
+      "description": "",
+      "userOwnerId": "user-1",
+      "listOwnerId": "1e3a",
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 1764921515175
+    },
+    {
+      "id": "14d9",
+      "title": "б",
+      "description": "",
+      "userOwnerId": "user-1",
+      "listOwnerId": "1e3a",
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 1764921517943
+    },
+    {
+      "id": "e6e2",
+      "title": "Работа",
+      "description": "",
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-2",
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 1764921530279
+    },
+    {
+      "id": "5d51",
+      "title": "ПОДАРКИ НА НГ",
+      "description": "",
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-1",
+      "isCompleted": false,
+      "isFavourite": true,
+      "order": 1764445912698.25,
+      "startDate": "2025-12-04T21:00:00.001Z",
+      "endDate": "2025-12-06T09:58:43.024Z"
+    },
+    {
+      "id": "c0d3",
+      "title": "dqdq",
+      "description": "",
+      "userOwnerId": "user-1",
+      "listOwnerId": "2002",
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 1764922157090
+    },
+    {
+      "id": "013f",
+      "title": "1",
+      "description": "",
+      "userOwnerId": "user-1",
+      "listOwnerId": "2002",
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 1764922157080
+    },
+    {
+      "id": "034b",
+      "title": "2",
+      "description": "",
+      "userOwnerId": "user-1",
+      "listOwnerId": "8acf",
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 1764922162007
+    },
+    {
+      "id": "015b",
+      "title": "ф",
+      "description": "",
+      "userOwnerId": "user-1",
+      "listOwnerId": "fb9d",
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 1764923150793
+    },
+    {
+      "id": "c678",
+      "title": "q",
+      "description": "",
+      "userOwnerId": "user-1",
+      "listOwnerId": "7889",
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 1764924111960
+    },
+    {
+      "id": "dc05",
+      "title": "Задачи по проге после готового дизайна",
+      "description": "[ ] 1.Чекнуть че я там понаписал в константах scss, подправить и унифицировать\n[ ] 2. \n[ ] 3. ",
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-1",
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 1764928107323
+    },
+    {
+      "id": "3e3d",
+      "title": "Еще парочка слов",
+      "description": "По структуре файлов все гуд.\nНе нравится только суть папки src/entities - там сейчас лежат якобы разметки для основных сущностей, но по сути это можно пихнуть в shared\n\n+ перерисовки элементов сайдбара\n\n+ новый баг с датами при клике на \"добавить в сегодня\"",
+      "userOwnerId": "user-1",
+      "listOwnerId": "list-1",
+      "isCompleted": false,
+      "isFavourite": false,
+      "order": 1764928638211
     }
   ],
   "lists": [
@@ -310,9 +420,9 @@
     },
     {
       "id": "list-1",
-      "name": "ПокупкN",
+      "name": "Покупки",
       "userOwnerId": "user-1",
-      "color": "#F44336"
+      "color": "#2196F3"
     },
     {
       "id": "list-2",
@@ -333,12 +443,6 @@
       "userOwnerId": "user-1"
     },
     {
-      "id": "b353",
-      "name": "daddqqdsq",
-      "color": "#FF9800",
-      "userOwnerId": "user-1"
-    },
-    {
       "id": "8acf",
       "name": "fssdasa1",
       "color": "#FFEB3B",
@@ -346,8 +450,20 @@
     },
     {
       "id": "2002",
-      "name": "11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "name": "яяяяяя",
       "color": "#795548",
+      "userOwnerId": "user-1"
+    },
+    {
+      "id": "fb9d",
+      "name": "выффвйсчя",
+      "color": "#9C27B0",
+      "userOwnerId": "user-1"
+    },
+    {
+      "id": "7889",
+      "name": "a",
+      "color": "#F44336",
       "userOwnerId": "user-1"
     }
   ],
@@ -355,7 +471,11 @@
     {
       "id": "user-1",
       "email": "test@example.com",
-      "username": "Test User"
+      "username": "Test User",
+      "settings": {
+        "theme": "light",
+        "backgroundGradient": "linear-gradient(270deg, #DEE9EF 0%, #DEE6ED 100%)"
+      }
     }
   ]
 }

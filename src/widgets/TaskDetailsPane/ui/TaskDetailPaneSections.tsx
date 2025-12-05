@@ -1,6 +1,6 @@
 import React from "react";
 
-import { DataLogicFormatRender } from "@/shared/lib/formatDateRender";
+import { DataLogicFormatRender } from "@/shared/ui/formatDateRender";
 import { List } from "@/shared/types/entities";
 import { FormControl, IconButton, ListItemIcon, MenuItem, Select, Typography } from "@mui/material";
 import { ListCircleIcon } from "@/shared/ui/ListCircleIcon";

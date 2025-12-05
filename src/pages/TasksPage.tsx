@@ -1,44 +1,37 @@
+import React from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+
 import { AppDispatch, RootState } from "@/app/providers/store/types"
 import { fetchTasksApi } from "@/app/services/taskServices/fetchTasksApi"
 import { List, Task } from "@/shared/types/entities"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
 
-import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { DragEndEvent } from '@dnd-kit/core';
 
-import { Box, Button, ListItemIcon, Typography } from "@mui/material"
 import { InlineCreateTask } from "@/features/CreateTask/InlineCreateTask/InlineCreateTask"
-import AddIcon from '@mui/icons-material/Add';
-import { ALL_TASKS_LIST_ID, listsSelectors, TODAY_TASKS_LIST_ID } from "@/app/providers/store/slices/listsSlice"
+import { listsSelectors } from "@/app/providers/store/slices/listsSlice"
 import { updateTaskApi } from "@/app/services/taskServices/updateTaskApi"
 import { ListHeader } from "@/widgets/ListHeader/ListHeader"
 import { tasksSelectors } from "@/app/providers/store/slices/tasksSlice"
 import { useApiRequest } from "@/shared/hooks/useApiRequest"
-import React from "react"
-import { SectionTitle } from "@/shared/ui/SectionTitle"
-import { MemoizedTaskCardWrapper } from "@/entities/Task/MemoizedTaskCardWrapper"
 
-import style from '@/app/styles/IconStyles.module.scss'
+import { isToday } from "@/shared/lib/dataFunctions"
+import { SMART_LIST_IDS } from "@/shared/config/smartLists"
+
 import styleT from '@/app/styles/MainContentStyles/TasksPage.module.scss'
 import styleMC from '@/app/styles/MainContentStyles/MainContent.module.scss'
+import { ScrollableView } from "@/shared/ui/ScrollableView"
 
-import { TaskText } from "@/entities/Task/ui/TaskCard"
-import { AddPlusIcon } from "@/shared/ui/Icons/SidebarIcons"
-import { useEmptyRows } from "@/shared/hooks/useEmptyRows"
-import { EmptyTaskRow } from "@/shared/ui/EmptyRows/EmptyRow"
-import { ScrollableView } from "./ScrollableView"
-import { isToday } from "@/shared/lib/dataFunctions"
-
-type ListView = {
+export type ListView = {
     type: 'list';
     content: Task[];
     isDndEnabled: boolean;
+    listName?: string;
 };
 
 type GroupedView = {
     type: 'grouped';
-    content: Record<string, { listName: string; tasks: Task[] }>;
+    content: ListView[];
     isDndEnabled: boolean;
 };
 
@@ -70,16 +63,7 @@ export const TasksPage = () => {
     // Рендер
 
     const formattedTasks = useMemo((): ViewContent => {
-        // const isToday = (someDate: Date | null | undefined): boolean => {
-        //     if (!someDate) return false;
-        //     const today = new Date();
-        //     const date = new Date(someDate);
-        //     return date.getDate() === today.getDate() &&
-        //         date.getMonth() === today.getMonth() &&
-        //         date.getFullYear() === today.getFullYear();
-        // };
-
-        if (selectedListId === ALL_TASKS_LIST_ID) {
+        if (selectedListId === SMART_LIST_IDS.ALL) {
             const groupedTasks = allLists.reduce((acc, list) => {
                 const tasksInList = allTasks
                     .filter(task => task.listOwnerId === list.id)
@@ -87,18 +71,20 @@ export const TasksPage = () => {
                     .sort((a, b) => a.order - b.order);
 
                 if (tasksInList.length > 0) {
-                    acc[list.id] = {
-                        listName: list.name,
-                        tasks: tasksInList,
-                    };
+                    acc.push({
+                        type: 'list',
+                        content: tasksInList,
+                        isDndEnabled: false,
+                        listName: list.name
+                    });
                 }
                 return acc;
-            }, {} as Record<string, { listName: string; tasks: Task[] }>);
+            }, [] as ListView[]);
 
             return { type: 'grouped', content: groupedTasks, isDndEnabled: false };
         }
 
-        if (selectedListId === TODAY_TASKS_LIST_ID) {
+        if (selectedListId === SMART_LIST_IDS.TODAY) {
             const tasks = allTasks.filter(task => isToday(task.startDate, task.endDate)).slice().sort((a, b) => a.order - b.order);
             return { type: 'list', content: tasks, isDndEnabled: false };
         }

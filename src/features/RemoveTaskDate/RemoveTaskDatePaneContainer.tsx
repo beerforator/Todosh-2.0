@@ -29,7 +29,7 @@ export const RemoveTaskDatePaneContainer = React.memo(({ taskId }: RemoveTaskDat
             disabled={isLettingRemoveDate}
             className={styleP.dateButton}
         >
-            <DelDateIcon/>
+            <DelDateIcon />
             <ListItemText className={styleP.paneText} primary={"Remove task date"} />
         </button>
     );

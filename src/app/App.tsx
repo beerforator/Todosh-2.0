@@ -1,45 +1,33 @@
 import { ThemeProvider as MuiThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import { AppRouter } from "./providers/router/AppRouter"
+import { LocalStorageSync } from "@/features/LocalStorageSync/LocalStorageSync";
+import { useSelector } from "react-redux";
+import { RootState } from "./providers/store/types";
+import { useMemo } from "react";
 
-function App() {
-    console.log('Render App')
-    return (
-        <MuiThemeProvider theme={theme}>
-            <CssBaseline />
-            <AppRouter />
-        </MuiThemeProvider>
-    )
-}
-
-const theme = createTheme({
-    // Здесь мы можем задавать глобальные переменные для MUI
-    // palette: {
-    //     primary: {
-    //         main: '#193173', // Наш основной синий
-    //     },
-    //     background: {
-    //         // default: '#E6E7ED', // Наш фон
-    //         // paper: '#ECF0F3',   // Фон для "бумажных" элементов (карточки, сайдбар)
-    //     }
-    // },
+const getDesignTokens = (mode: 'light' | 'dark', gradient: string) => ({
+    palette: {
+        mode, // 'light' или 'dark' - MUI сам сделает магию!
+        primary: {
+            main: '#2962FF',
+        },
+        background: {
+            // default: mode === 'light' ? '#E6E7ED' : '#121212', // Разные фоны
+            // paper: mode === 'light' ? '#ECF0F3' : '#1E1E1E',
+        },
+        text: {
+            primary: mode === 'light' ? '#343A40' : '#ffffff',
+        }
+    },
     typography: {
-        // ЗАДАЕМ ШРИФТ ДЛЯ ВСЕГО ПРИЛОЖЕНИЯ
         fontFamily: [
-            // '-apple-system',
             'Roboto',
-            // 'BlinkMacSystemFont',
-            // '"Segoe UI"',
-            // '"Helvetica Neue"',
-            // 'Arial',
             'sans-serif',
         ].join(','),
-        // Можно задать размеры для h1, h2, body1 и т.д.
         h4: {
             fontWeight: 600,
         },
     },
-    // spacing: 8,
-    // 2. А ЗДЕСЬ - ГЛОБАЛЬНО ПЕРЕОПРЕДЕЛЯЕМ СТИЛИ КОМПОНЕНТОВ
     components: {
         MuiCssBaseline: {
             styleOverrides: `
@@ -52,16 +40,25 @@ const theme = createTheme({
                     margin: 0;
                     padding: 0;
                 }
+
+                :root {
+                    --backgroundGradient: ${gradient};
+                    
+                    --textColor: ${mode === 'light' ? '#050711' : '#ffffff'};
+                }
+
+                body {
+                    background: var(--backgroundGradient) !important;
+                    background-attachment: fixed !important;
+                    color: var(--textColor) !important;
+                    
+                    transition: background 3.3s ease, color 0.3s ease;
+                }
             `,
         },
-        // Переопределяем ВСЕ ListItemButton
         MuiListItemButton: {
             styleOverrides: {
                 root: {
-                    // borderRadius: '8px',
-                    // Добавляем !important для гарантии
-                    // margin: '4px 0 !important',
-                    // padding: '8px 16px !important',
                     margin: 0,
                     padding: 0,
                 },
@@ -70,10 +67,6 @@ const theme = createTheme({
         MuiButton: {
             styleOverrides: {
                 root: {
-                    // borderRadius: '8px',
-                    // Добавляем !important для гарантии
-                    // margin: '4px 0 !important',
-                    // padding: '8px 16px !important',
                     margin: 0,
                     padding: 0,
                     minWidth: 0,
@@ -84,10 +77,6 @@ const theme = createTheme({
         MuiIconButton: {
             styleOverrides: {
                 root: {
-                    // borderRadius: '8px',
-                    // Добавляем !important для гарантии
-                    // margin: '4px 0 !important',
-                    // padding: '8px 16px !important',
                     margin: 0,
                     padding: 0,
                     minWidth: 0,
@@ -98,24 +87,15 @@ const theme = createTheme({
         MuiPopover: {
             styleOverrides: {
                 root: {
-                    // borderRadius: '8px',
-                    // Добавляем !important для гарантии
-                    // margin: '4px 0 !important',
-                    // padding: '8px 16px !important',
                     margin: 0,
                     padding: 0,
                     width: "200px",
-                    // overflow: "hidden",
                 },
             },
         },
         MuiMenu: {
             styleOverrides: {
                 root: {
-                    // borderRadius: '8px',
-                    // Добавляем !important для гарантии
-                    // margin: '4px 0 !important',
-                    // padding: '8px 16px !important',
                     margin: 0,
                     padding: 0,
                     width: "200px",
@@ -125,10 +105,6 @@ const theme = createTheme({
         MuiDrawer: {
             styleOverrides: {
                 root: {
-                    // borderRadius: '8px',
-                    // Добавляем !important для гарантии
-                    // margin: '4px 0 !important',
-                    // padding: '8px 16px !important',
                     margin: 0,
                     padding: 0,
                     minWidth: 0,
@@ -140,10 +116,6 @@ const theme = createTheme({
         MuiInputBase: {
             styleOverrides: {
                 root: {
-                    // borderRadius: '8px',
-                    // Добавляем !important для гарантии
-                    // margin: '4px 0 !important',
-                    // padding: '8px 16px !important',
                     margin: 0,
                     padding: 0,
                     minWidth: 0
@@ -153,23 +125,14 @@ const theme = createTheme({
         MuiCheckbox: {
             styleOverrides: {
                 root: {
-                    // borderRadius: '8px',
-                    // Добавляем !important для гарантии
-                    // margin: '4px 0 !important',
-                    // padding: '8px 16px !important',
                     margin: 0,
                     padding: 0,
-                    // minWidth: 0
                 },
             },
         },
         MuiOutlinedInput: {
             styleOverrides: {
                 root: {
-                    // borderRadius: '8px',
-                    // Добавляем !important для гарантии
-                    // margin: '4px 0 !important',
-                    // padding: '8px 16px !important',
                     margin: 0,
                     paddingRight: "8px",
                     minWidth: 0,
@@ -189,30 +152,9 @@ const theme = createTheme({
                 },
             },
         },
-        // MuiNotchedOutlined: {
-        //     styleOverrides: {
-        //         root: {
-        //             // borderRadius: '8px',
-        //             // Добавляем !important для гарантии
-        //             // margin: '4px 0 !important',
-        //             // padding: '8px 16px !important',
-        //             margin: 0,
-        //             // paddingRight: "10px",
-        //             minWidth: 0,
-        //             borderRadius: '8px',
-        //             outline: 'none',
-        //             border: 'none',
-        //             backgroundColor: '#E0E8EF',
-        //             borderWidth: 0
-        //         },
-        //     },
-        // },
         MuiListItemText: {
             styleOverrides: {
                 root: {
-                    // Добавляем !important для гарантии
-                    // margin: '4px 0 !important',
-                    // padding: '8px 16px !important',
                     margin: 0,
                     padding: 0,
                 },
@@ -221,25 +163,20 @@ const theme = createTheme({
         MuiListItemIcon: {
             styleOverrides: {
                 root: {
-                    // Добавляем !important для гарантии
-                    // margin: '4px 0 !important',
-                    // padding: '8px 16px !important',
                     margin: 0,
                     padding: 0,
                     minWidth: 0
                 },
             },
         },
-        // Переопределяем ВСЕ Typography
         MuiTypography: {
             styleOverrides: {
                 root: {
-                    margin: 0, // Можно добавить, если нужно
+                    margin: 0,
                     padding: 0,
                 },
             },
         },
-        // Можно добавить сброс для чего угодно, например, для MuiList
         MuiList: {
             styleOverrides: {
                 root: {
@@ -256,14 +193,203 @@ const theme = createTheme({
                 }
             },
         },
-        // MuiListItemButton: {
-        //     styleOverrides: {
-        //         root: {
-        //             margin: 0,
-        //             padding: 0,
-        //         },
-        //     },
-        // },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                }
+            }
+        },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                },
+            },
+        },
+    },
+});
+
+function App() {
+    const settings = useSelector((state: RootState) => state.settings);
+
+    // 2. Создаем тему "на лету", когда mode меняется
+    const theme = useMemo(() =>
+        createTheme(getDesignTokens(settings.theme, settings.backgroundGradient)),
+        [settings.theme, settings.backgroundGradient]);
+
+    return (
+        <MuiThemeProvider theme={theme}>
+            <CssBaseline />
+            <LocalStorageSync />
+            <AppRouter />
+        </MuiThemeProvider>
+    )
+}
+
+const theme = createTheme({
+    typography: {
+        fontFamily: [
+            'Roboto',
+            'sans-serif',
+        ].join(','),
+        h4: {
+            fontWeight: 600,
+        },
+    },
+    components: {
+        MuiCssBaseline: {
+            styleOverrides: `
+                div {
+                    margin: 0;
+                    padding: 0;
+                }
+
+                p {
+                    margin: 0;
+                    padding: 0;
+                }
+            `,
+        },
+        MuiListItemButton: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                },
+            },
+        },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                    minWidth: 0,
+                    position: 'absolute'
+                },
+            },
+        },
+        MuiIconButton: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                    minWidth: 0,
+                    color: 'none'
+                },
+            },
+        },
+        MuiPopover: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                    width: "200px",
+                },
+            },
+        },
+        MuiMenu: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                    width: "200px",
+                },
+            },
+        },
+        MuiDrawer: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                    minWidth: 0,
+                    width: 0,
+                    height: 0
+                },
+            },
+        },
+        MuiInputBase: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                    minWidth: 0
+                },
+            },
+        },
+        MuiCheckbox: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                },
+            },
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    paddingRight: "8px",
+                    minWidth: 0,
+                    width: '100%',
+                    borderRadius: '8px',
+                    outline: 'none',
+                    border: 'none',
+                    backgroundColor: '#E0E8EF',
+                    borderWidth: 0
+                },
+            },
+        },
+        MuiInputAdornment: {
+            styleOverrides: {
+                root: {
+                    width: '30px',
+                },
+            },
+        },
+        MuiListItemText: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                },
+            },
+        },
+        MuiListItemIcon: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                    minWidth: 0
+                },
+            },
+        },
+        MuiTypography: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                },
+            },
+        },
+        MuiList: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                }
+            }
+        },
+        MuiListItem: {
+            styleOverrides: {
+                root: {
+                    margin: 0,
+                    padding: 0,
+                }
+            },
+        },
         MuiPaper: {
             styleOverrides: {
                 root: {

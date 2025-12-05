@@ -1,38 +1,33 @@
+import React from "react";
 import { useSelector } from 'react-redux';
-import { RootState } from '@/app/providers/store/types';
 import { TaskDetailsPane } from './TaskDetailsPane';
+import { useDispatch } from "react-redux"
+import { useCallback, useEffect, useState } from "react";
 
 import { AppDispatch } from "@/app/providers/store/types"
-import { Box, Drawer, ListItemText, Typography } from "@mui/material"
-import { useDispatch } from "react-redux"
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { RootState } from '@/app/providers/store/types';
+import { Task } from '@/shared/types/entities';
 import { stopEditingTask } from "../../app/services/UISlice/UISlice";
 import { updateTaskApi } from "@/app/services/taskServices/updateTaskApi";
 import { listsSelectors } from "@/app/providers/store/slices/listsSlice";
-import { ToggleFavouriteContainer } from "@/features/ToggleFavourite/ToggleFavouriteContainer";
-import { RemoveTaskDatePaneContainer } from "@/features/RemoveTaskDate/RemoveTaskDatePaneContainer";
-import { ToggleTaskContainer } from "@/features/ToggleTask/ToggleTaskContainer";
-import { DeleteTaskContainer } from "@/features/DeleteTask/DeleteTaskContainer";
 import { tasksSelectors } from "@/app/providers/store/slices/tasksSlice";
 import { useApiRequest } from "@/shared/hooks/useApiRequest";
-import React from "react";
-import { MemoizedListSelect, PaneFooter, PaneHeader } from "./ui/TaskDetailPaneSections";
-import { MemoizedTextField } from "@/shared/ui/MemoizedTextField";
 
 import styleP from '@/app/styles/TaskDetailsPane.module.scss'
 
 export const TaskDetailsPaneContainer = () => {
-    console.log('Перенести сетевые запросы и функции СЮДА из ребенка')
-    console.log('Панель деталей пока не трогал см коммент')
+    console.log('!!!!!!!!!!!!!!!!Панель деталей см коммент')
 
     /* ПРАВКИ
     
-    1. Нужно добавить выбор листа
-    2. Дизейблить кнопки дат
-    3. Перенести логику в контейнер
-    4. Классы стилей - проверить названия
-    5. Закрывать панель при переходе на страницу (можно удалить стейт изменения задачи)
-    6. САМОЕ ГЛАВНОЕ - убрать кнопку и посылать запросы на сервак в фоне или при потере фокуса
+   [+] 1. Нужно добавить выбор листа
+   [+] 2. Дизейблить кнопки дат
+   [+] 3. Перенести логику в контейнер
+   [+] 4. Классы стилей - проверить названия
+   [+] 5. Закрывать панель при переходе на страницу (можно удалить стейт изменения задачи)
+   [+] 6. САМОЕ ГЛАВНОЕ - убрать кнопку и посылать запросы на сервак в фоне или при потере фокуса
+    
+   !!! Есть небольшой баг из-за отсутствия дизейбла полей
 
     */
 
@@ -47,57 +42,56 @@ export const TaskDetailsPaneContainer = () => {
     const [selectedListId, setSelectedListId] = useState('');
 
     const [setSave, isSettingFetchTasks] = useApiRequest(updateTaskApi, {
-        onFinally: () => { handleClose() }
+        // onFinally: () => { handleClose() }
+        useExternalLoading: true
     })
 
     useEffect(() => {
         if (editingTask) {
             setTitle(editingTask.title)
-            setDescription(editingTask.description || '')
+            setDescription(editingTask.description)
             setSelectedListId(editingTask.listOwnerId);
         } else {
             handleClose()
         }
     }, [editingTask])
 
+    useEffect(() => {
+        if (!editingTask) return;
+
+        const handler = setTimeout(() => {
+
+            const changes: Partial<Task> = {};
+            if (title !== editingTask.title) changes.title = title;
+            if (description !== editingTask.description) changes.description = description;
+            if (selectedListId !== editingTask.listOwnerId) changes.listOwnerId = selectedListId;
+
+            if (Object.keys(changes).length > 0) {
+                setSave({ taskId: editingTask.id, changes })
+            }
+        }, 500);
+
+        return () => {
+            clearTimeout(handler);
+        };
+
+    }, [title, description, selectedListId, editingTaskId, editingTask, setSave]);
+
     const handleClose = useCallback(() => {
         dispatch(stopEditingTask())
     }, [dispatch])
 
-    const handleSave = useCallback(async () => {
-        if (!editingTaskId) return
-
-        const payload = {
-            taskId: editingTaskId,
-            changes: {
-                title: title,
-                description: description,
-                listOwnerId: selectedListId
-            }
-        }
-
-        setSave(payload)
-    }, [editingTaskId, title, description, selectedListId, setSave])
-
-    const handleListChange = useCallback((e: any) => {
+    const handleListChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedListId(e.target.value)
     }, [])
 
-    const handleTitleChange = useCallback((e: any) => {
+    const handleTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value)
     }, [])
 
-    const handleDescriptionChange = useCallback((e: any) => {
+    const handleDescriptionChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setDescription(e.target.value)
     }, [])
-
-    // const taskDates = useMemo(() => ({
-    //     start: editingTask?.startDate,
-    //     end: editingTask?.endDate,
-    // }), [editingTask?.startDate, editingTask?.endDate]);
-
-
-    alert('Не работают хендлеры')
 
     if (!editingTask) {
         return null;
@@ -111,15 +105,18 @@ export const TaskDetailsPaneContainer = () => {
             <TaskDetailsPane
                 task={editingTask}
                 allLists={allLists}
-                selectedListId={selectedListId}
                 variant={detailsPaneMode}
 
+                selectedListId={selectedListId}
+                stateTitle={title}
+                stateDescription={description}
+
+
                 handleClose={handleClose}
-                handleSave={handleSave}
+                // handleSave={handleSave}
                 handleListChange={handleListChange}
                 handleTitleChange={handleTitleChange}
                 handleDescriptionChange={handleDescriptionChange}
-                // taskDates={taskDates}
 
                 isSettingFetchTasks={isSettingFetchTasks}
             />

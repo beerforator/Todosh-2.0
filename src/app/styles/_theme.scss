@@ -1,3 +1,11 @@
+/* Переменные под пользователя*/
+:root {
+  --backgroundGradient: linear-gradient(270deg, #DEE9EF 0%, #DEE6ED 100%);
+
+  --textColor: #050711;
+}
+
+
 /* === Цвета === */
 $color-text: #050711;
 $color-icons: #050711;
@@ -15,7 +23,7 @@ $color-warm-grey: #C8D0D7;
 /* === Gradient === */
 // linear-gradient(270deg, #DEE9EF 0%, #DEE6ED 100%);
 // linear-gradient(270deg, #d5988b 0%, #f4d5f6 100%)
-$gradient-appBackground: linear-gradient(270deg, #DEE9EF 0%, #DEE6ED 100%);
+// $gradient-appBackground: var(--backgroundGradient);
 
 
 

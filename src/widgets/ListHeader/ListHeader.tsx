@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '@/app/providers/store/types';
-import { ALL_TASKS_LIST_ID, listsSelectors, selectList } from '@/app/providers/store/slices/listsSlice';
+import { listsSelectors, selectList } from '@/app/providers/store/slices/listsSlice';
 import { Box, Typography, IconButton, Menu, MenuItem, TextField, CircularProgress, Popover, ListItemIcon, ListItemText } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { updateListApi } from '@/app/services/listServices/updateListApi';
@@ -20,6 +20,7 @@ import styleMC from '@/app/styles/MainContentStyles/MainContent.module.scss'
 
 import { AllTasksIcon, InboxIcon, TodayIcon } from '@/shared/ui/Icons/SidebarIcons';
 import { MoreIcon } from '@/shared/ui/Icons/HeaderIcons';
+import { SMART_LIST_IDS, SMART_LISTS } from '@/shared/config/smartLists';
 
 export const ListHeader = React.memo(() => {
     const dispatch: AppDispatch = useDispatch();
@@ -74,7 +75,7 @@ export const ListHeader = React.memo(() => {
             setIsLoading(true);
             try {
                 await dispatch(deleteListApi(selectedList.id)).unwrap();
-                dispatch(selectList(ALL_TASKS_LIST_ID));
+                dispatch(selectList(SMART_LIST_IDS.ALL));
             } catch (error) {
                 console.error('Failed to delete list:', error);
             } finally {
@@ -121,13 +122,13 @@ export const ListHeader = React.memo(() => {
         handleCloseMenu();
     };
 
-    if (selectedListId === 'all') {
+    if (selectedListId === SMART_LIST_IDS.ALL) {
         return (
             <>
                 <ListItemIcon>
                     <AllTasksIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />
                 </ListItemIcon>
-                <Typography variant="h4" gutterBottom>Все задачи</Typography>
+                <Typography variant="h4" gutterBottom>{SMART_LISTS[0].label}</Typography>
             </>
         )
     }
@@ -143,13 +144,13 @@ export const ListHeader = React.memo(() => {
         );
     }
 
-    if (selectedListId === 'today') {
+    if (selectedListId === SMART_LIST_IDS.TODAY) {
         return (
             <>
                 <ListItemIcon>
                     <TodayIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />
                 </ListItemIcon>
-                <Typography variant="h4" gutterBottom>Today</Typography>
+                <Typography variant="h4" gutterBottom>{SMART_LISTS[1].label}</Typography>
             </>
         )
     }
@@ -203,7 +204,7 @@ export const ListHeader = React.memo(() => {
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
-                <Box sx={{ display: 'flex', p: 1, gap: 1 }}>
+                <Box sx={{ display: 'block', p: 1, gap: 1 }}>
                     {TAG_COLORS.map(color => (
                         <IconButton
                             key={color}

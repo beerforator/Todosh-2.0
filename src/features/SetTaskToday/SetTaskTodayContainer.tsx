@@ -5,10 +5,11 @@ import { useApiRequest } from '@/shared/hooks/useApiRequest';
 import { SetTaskToday } from '@/shared/ui/TaskManipulationIcons/SetTaskToday';
 
 interface SetTaskTodayContainerProps {
-    taskId: string;
+    taskId: string,
+    disabled?: boolean
 }
 
-export const SetTaskTodayContainer = React.memo(({ taskId }: SetTaskTodayContainerProps) => {
+export const SetTaskTodayContainer = React.memo(({ taskId, disabled }: SetTaskTodayContainerProps) => {
     const [setTaskOnToday, isSettingTaskOnToday] = useApiRequest(updateTaskApi, {})
 
     // const isCompleted = useSelector((state: RootState) =>
@@ -34,6 +35,7 @@ export const SetTaskTodayContainer = React.memo(({ taskId }: SetTaskTodayContain
         <SetTaskToday
             handleSetToday={handleSetToday}
             isSettingTaskOnToday={isSettingTaskOnToday}
+            disabled={disabled}
         />
     );
 })

@@ -1,25 +1,30 @@
 import { AppDispatch } from "@/app/providers/store/types";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 
 interface ApiRequestOptions {
     preTry?: () => void,
     onTry?: () => void,
-    onFinally?: () => void
+    onFinally?: () => void,
+    useExternalLoading?: boolean
 }
 
 export const useApiRequest = (asyncAction: any, options: ApiRequestOptions = {}) => {
     const dispatch: AppDispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
-    const { preTry, onTry, onFinally } = options;
+    const { preTry, onTry, onFinally, useExternalLoading } = options;
 
-    const request = async (payload: any) => {
+    const request = useCallback(async (payload: any) => {
         if (preTry) {
             preTry();
         }
 
         if (isLoading) return;
-        setIsLoading(true);
+
+        if (!useExternalLoading) {
+            setIsLoading(true);
+        }
+
         try {
             if (onTry) {
                 onTry();
@@ -31,12 +36,14 @@ export const useApiRequest = (asyncAction: any, options: ApiRequestOptions = {})
             console.error(`API Request ${asyncAction} Failed: ${error}`);
             throw error;
         } finally {
-            if (onFinally) { // Используется в модалке календара
+            if (onFinally) {
                 onFinally();
             }
-            setIsLoading(false);
+            if (!useExternalLoading) {
+                setIsLoading(false);
+            }
         }
-    };
+    }, [dispatch, asyncAction, preTry, onTry, onFinally, useExternalLoading])
 
     return [request, isLoading] as const;
 };

@@ -1,4 +1,3 @@
-import { ALL_TASKS_LIST_ID, TODAY_TASKS_LIST_ID } from "@/app/providers/store/slices/listsSlice";
 import { ListCircleIcon } from "@/shared/ui/ListCircleIcon";
 import { ListItemIcon, ListItemText } from "@mui/material";
 import React from "react";
@@ -12,6 +11,7 @@ import {
     LogoIcon, DashboardPageIcon, CalendarPageIcon, TasksPageIcon,
     AllTasksIcon, TodayIcon, InboxIcon, AddPlusIcon, ChevronLIcon
 } from '@/shared/ui/Icons/SidebarIcons';
+import { SMART_LIST_IDS } from "@/shared/config/smartLists";
 
 export const MemoizedNavLinks = React.memo(({ isCollapsed }: any) => {
     return (
@@ -66,18 +66,18 @@ export const MemoizedFilterList = React.memo(({ allList, selectedListId, isColla
         <>
             <FilterItem
                 label="All Tasks"
-                listId={ALL_TASKS_LIST_ID}
+                listId={SMART_LIST_IDS.ALL}
                 ItemIcon={<AllTasksIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />}
-                isSelected={selectedListId === ALL_TASKS_LIST_ID}
+                isSelected={selectedListId === SMART_LIST_IDS.ALL}
                 isCollapsed={isCollapsed}
                 onClick={handleListClick}
             />
 
             <FilterItem
                 label="Today"
-                listId={TODAY_TASKS_LIST_ID}
+                listId={SMART_LIST_IDS.TODAY}
                 ItemIcon={<TodayIcon className={style.filterIconStyle + ' ' + style.allIconStyle} />}
-                isSelected={selectedListId === TODAY_TASKS_LIST_ID}
+                isSelected={selectedListId === SMART_LIST_IDS.TODAY}
                 isCollapsed={isCollapsed}
                 onClick={handleListClick}
             />

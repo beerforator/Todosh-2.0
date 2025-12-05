@@ -1,41 +1,25 @@
-import { AppDispatch, RootState } from "@/app/providers/store/types"
-import { fetchTasksApi } from "@/app/services/taskServices/fetchTasksApi"
-import { List, Task } from "@/shared/types/entities"
-import { RefObject, useCallback, useEffect, useRef, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { Task } from "@/shared/types/entities"
+import { RefObject } from "react"
 
-import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { DragEndEvent } from '@dnd-kit/core';
 
-import { Box, Button, ListItemIcon, Typography } from "@mui/material"
-import { InlineCreateTask } from "@/features/CreateTask/InlineCreateTask/InlineCreateTask"
-import AddIcon from '@mui/icons-material/Add';
-import { ALL_TASKS_LIST_ID, listsSelectors, TODAY_TASKS_LIST_ID } from "@/app/providers/store/slices/listsSlice"
-import { updateTaskApi } from "@/app/services/taskServices/updateTaskApi"
-import { ListHeader } from "@/widgets/ListHeader/ListHeader"
-import { tasksSelectors } from "@/app/providers/store/slices/tasksSlice"
-import { useApiRequest } from "@/shared/hooks/useApiRequest"
+import { Typography } from "@mui/material"
 import React from "react"
-import { SectionTitle } from "@/shared/ui/SectionTitle"
 import { MemoizedTaskCardWrapper } from "@/entities/Task/MemoizedTaskCardWrapper"
 
-
-
-import style from '@/app/styles/IconStyles.module.scss'
 import styleT from '@/app/styles/MainContentStyles/TasksPage.module.scss'
 
-import { TaskText } from "@/entities/Task/ui/TaskCard"
-import { AddPlusIcon } from "@/shared/ui/Icons/SidebarIcons"
 import { useEmptyRows } from "@/shared/hooks/useEmptyRows"
 import { EmptyTaskRow } from "@/shared/ui/EmptyRows/EmptyRow"
-import { SortableListContainer } from "./SortableListContainer"
+import { ListView } from "@/pages/TasksPage";
+import { SortableListContainer } from "./SortableListContainer";
 
 interface ScrollableViewProps {
     viewType: string;
     tasksContainerRef: RefObject<HTMLElement | null>,
 
     tasksArray?: Task[],
-    groupedTasks?: Record<string, { listName: string; tasks: Task[]; }>,
+    groupedTasks?: ListView[],
 
     isDndEnabled: boolean,
     handleDragEnd?: (event: DragEndEvent) => void,
@@ -81,15 +65,15 @@ export const ScrollableView = React.memo(({ viewType, tasksContainerRef, tasksAr
 
             {(viewType === "grouped" && !!groupedTasks) &&
                 <>
-                    {Object.values(groupedTasks).map(({ listName, tasks }) => (
+                    {groupedTasks.map((group) => (
                         <div
-                            key={listName}
+                            key={group.listName}
                             className={!isPanePersistent
                                 ? (styleT.tagView)
                                 : (styleT.tagView + ' ' + styleT.collapsed)}
                         >
-                            <Typography variant="h5" gutterBottom>{listName}</Typography>
-                            {tasks.map((task: Task) => (
+                            <Typography variant="h5" gutterBottom>{group.listName}</Typography>
+                            {group.content.map((task: Task) => (
                                 <MemoizedTaskCardWrapper
                                     key={task.id}
                                     task={task}

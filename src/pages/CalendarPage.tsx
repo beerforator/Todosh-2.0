@@ -10,7 +10,7 @@ import { updateTaskApi } from '@/app/services/taskServices/updateTaskApi';
 import { CalendarCreateModal } from '@/features/CreateTask/TaskModal/CalendarCreateModal';
 import { Task } from '@/shared/types/entities';
 import { startEditingTask } from '@/app/services/UISlice/UISlice';
-import { ALL_TASKS_LIST_ID, listsSelectors, TODAY_TASKS_LIST_ID } from '@/app/providers/store/slices/listsSlice';
+import { listsSelectors } from '@/app/providers/store/slices/listsSlice';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { Box, ListItemIcon, Typography } from '@mui/material';
 import { tasksSelectors } from '@/app/providers/store/slices/tasksSlice';
@@ -26,6 +26,7 @@ import styleMC from '@/app/styles/MainContentStyles/MainContent.module.scss'
 
 import { AllTasksIcon } from '@/shared/ui/Icons/SidebarIcons';
 import { TaskCardCalendarProvider } from '@/entities/Task/TaskCardCalendarProvider';
+import { SMART_LIST_IDS } from '@/shared/config/smartLists';
 
 export const CalendarPage = () => {
     // console.log('CalendarPage')
@@ -47,7 +48,7 @@ export const CalendarPage = () => {
         const calendarApi = calendarRef.current?.getApi();
         if (!calendarApi) return;
 
-        if (selectedListId === TODAY_TASKS_LIST_ID) {
+        if (selectedListId === SMART_LIST_IDS.TODAY) {
             calendarApi.gotoDate(new Date());
         } else {
             calendarApi.changeView('dayGridMonth')
@@ -61,7 +62,7 @@ export const CalendarPage = () => {
     }, [setFetchTasks, tasksLoadingStatus])
 
     const calendarEvents = useMemo(() => {
-        const filteredTasks = selectedListId === ALL_TASKS_LIST_ID || selectedListId === TODAY_TASKS_LIST_ID
+        const filteredTasks = selectedListId === SMART_LIST_IDS.ALL || selectedListId === SMART_LIST_IDS.TODAY
             ? allTasks
             : allTasks.filter(task => task.listOwnerId === selectedListId);
 

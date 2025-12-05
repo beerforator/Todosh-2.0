@@ -5,9 +5,7 @@ import { updateListApi } from '@/app/services/listServices/updateListApi';
 import { fetchListsApi } from '@/app/services/listServices/fetchListsApi';
 import { createListApi } from '@/app/services/listServices/createListApi';
 import { deleteListApi } from '@/app/services/listServices/deleteListApi';
-
-export const ALL_TASKS_LIST_ID = 'all';
-export const TODAY_TASKS_LIST_ID = 'today';
+import { SMART_LIST_IDS } from '@/shared/config/smartLists';
 
 const listsAdapter = createEntityAdapter<List>({
     selectId: (list) => list.id,
@@ -22,7 +20,7 @@ interface ListsState {
 const initialState = listsAdapter.getInitialState<ListsState>({
     loading: 'idle',
     error: null,
-    selectedListId: 'list-1' //ALL_TASKS_LIST_ID
+    selectedListId: SMART_LIST_IDS.ALL
 });
 
 export const listsSlice = createSlice({

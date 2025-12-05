@@ -11,7 +11,7 @@ interface SetTaskTodayPaneContainerProps {
     taskId: string;
 }
 
-export const SetTaskTodayPaneContainer = React.memo(({ taskId }: SetTaskTodayPaneContainerProps) => {
+export const SetTaskTodayPaneContainer = React.memo(({ taskId}: SetTaskTodayPaneContainerProps) => {
     const [setTaskOnToday, isSettingTaskOnToday] = useApiRequest(updateTaskApi, {})
 
     // const isCompleted = useSelector((state: RootState) =>

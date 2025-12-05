@@ -21,6 +21,8 @@ export const SortableTaskCard = React.memo(({ task, isPanePersistent, featureSlo
         task.listOwnerId ? listsSelectors.selectById(state, task.listOwnerId) : undefined
     );
 
+    const { editingTaskId, detailsPaneMode } = useSelector((state: RootState) => state.uiReducer);
+
     const [isHovered, setIsHovered] = useState(false);
 
     const handleMouseEnter = useCallback(() => {
@@ -61,7 +63,8 @@ export const SortableTaskCard = React.memo(({ task, isPanePersistent, featureSlo
                 task={task}
                 color={selectedList?.color}
                 isPanePersistent={isPanePersistent}
-
+                editingTaskId={editingTaskId}
+                
                 featureSlot={featureSlot}
                 actionsSlot={actionsSlot}
                 hoverActionsSlot={hoverActionsSlot}
